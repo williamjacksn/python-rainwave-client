@@ -6,8 +6,13 @@ import artist
 
 class RainwaveChannel(object):
 
-    simple_properties = [u'description', u'id', u'name', u'oggstream',
-        u'stream']
+    simple_properties = [
+        u'description',
+        u'id',
+        u'name',
+        u'oggstream',
+        u'stream'
+    ]
 
     def __init__(self, client, raw_info):
         self._client = client
@@ -22,7 +27,8 @@ class RainwaveChannel(object):
     @property
     def albums(self):
         if not hasattr(self, u'_raw_albums'):
-            self._raw_albums = self._client.call(u'async/{}/all_albums'.format(self.id))
+            path = u'async/{}/all_albums'.format(self.id)
+            self._raw_albums = self._client.call(path)
         if not hasattr(self, u'_albums'):
             self._albums = []
             for raw_album in self._raw_albums[u'playlist_all_albums']:
@@ -33,7 +39,8 @@ class RainwaveChannel(object):
     @property
     def artists(self):
         if not hasattr(self, u'_raw_artists'):
-            self._raw_artists = self._client.call(u'async/{}/artist_list'.format(self.id))
+            path = u'async/{}/artist_list'.format(self.id)
+            self._raw_artists = self._client.call(path)
         if not hasattr(self, u'_artists'):
             self._artists = []
             for raw_artist in self._raw_artists[u'artist_list']:
@@ -70,10 +77,10 @@ class RainwaveChannel(object):
         return d[u'playlist_album']
 
     def _get_artist_raw_info(self, artist_id):
-        raw_artist = {}
+        raw_info = {}
         for artist in self.artists:
             if artist.id == artist_id:
-                raw_artist = artist._raw_info
+                raw_info = artist._raw_info
         args = {u'artist_id': artist_id}
         d = self._client.call(u'async/{}/artist_detail'.format(self.id), args)
-        return dict(raw_artist.items() + d[u'artist_detail'].items())
+        return dict(raw_info.items() + d[u'artist_detail'].items())

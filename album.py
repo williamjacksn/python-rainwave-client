@@ -4,13 +4,30 @@ import song
 
 class RainwaveAlbum(object):
 
-    simple_properties = [u'favourite', u'id', u'lowest_oa', u'name',
-        u'rating_avg', u'rating_user']
+    simple_properties = [
+        u'favourite',
+        u'id',
+        u'lowest_oa',
+        u'name',
+        u'rating_avg',
+        u'rating_user'
+    ]
 
-    extended_properties = [u'fav_count', u'lastplayed', u'rating_count',
-        u'rating_histogram', u'rating_rank', u'request_rank', u'timesdefeated',
-        u'timesplayed', u'timesplayed_rank', u'timeswon', u'totalrequests',
-        u'totalvotes', u'vote_rank']
+    extended_properties = [
+        u'fav_count',
+        u'lastplayed',
+        u'rating_count',
+        u'rating_histogram',
+        u'rating_rank',
+        u'request_rank',
+        u'timesdefeated',
+        u'timesplayed',
+        u'timesplayed_rank',
+        u'timeswon',
+        u'totalrequests',
+        u'totalvotes',
+        u'vote_rank'
+    ]
 
     def __init__(self, channel, raw_info):
         self._channel = channel
@@ -42,8 +59,10 @@ class RainwaveAlbum(object):
         if not hasattr(self, u'_cooldown_groups'):
             self._cooldown_groups = []
             for raw_cdg in self._raw_info[u'album_genres']:
-                new_cdg = cooldown.RainwaveCooldownGroup(self._channel, raw_cdg[u'genre_id'], raw_cdg[u'genre_name'])
-                self._cooldown_groups.append(new_cdg)
+                id = raw_cdg[u'genre_id']
+                name = raw_cdg[u'genre_name']
+                cdg = cooldown.RainwaveCooldownGroup(self._channel, id, name)
+                self._cooldown_groups.append(cdg)
         return self._cooldown_groups
 
     @property
