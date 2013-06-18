@@ -37,8 +37,3 @@ class RainwaveArtist(object):
                 new_song = song.RainwaveSong(new_album, raw_song)
                 self._songs.append(new_song)
         return self._songs
-
-# channel -> artist_list -> artist
-## numsongs, id, name
-# channel -> album -> song -> artist
-## id, lastplayed, name
