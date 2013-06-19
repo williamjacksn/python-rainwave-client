@@ -78,3 +78,9 @@ class RainwaveAlbum(object):
                 new_song = song.RainwaveSong(self, raw_song)
                 self._songs.append(new_song)
         return self._songs
+
+    def get_song_by_id(self, id):
+        for song in self.songs:
+            if song.id == id:
+                return song
+        raise IndexError(u'Album does not contain song with id: {}'.format(id))
