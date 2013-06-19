@@ -58,6 +58,13 @@ class RainwaveChannel(object):
             if self._do_sync:
                 self._raw_timeline = d
 
+    def get_album_by_id(self, id):
+        for album in self.albums:
+            if album.id == id:
+                return album
+        error = u'Channel does not contain album with id: {}'.format(id)
+        raise IndexError(error)
+
     def start_sync(self):
         self.stop_sync()
         self._sync_thread = threading.Thread(target=self._do_sync_thread)
