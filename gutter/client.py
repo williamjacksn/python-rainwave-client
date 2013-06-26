@@ -4,8 +4,12 @@ import channel
 
 
 class RainwaveClient(object):
-    '''A RainwaveClient object provides a simple interface to the Rainwave API
-    (see http://rainwave.cc/api/ for details about the API)'''
+    '''A :class:`RainwaveClient <RainwaveClient>` object provides a simple
+    interface to the Rainwave API (see http://rainwave.cc/api/ for details
+    about the API)
+
+    :param user_id: User ID to use when communicating with the API
+    :param key: API key to use when communicating withe the API'''
 
     def __init__(self, user_id=0, key=u''):
         self.base_url = u'http://rainwave.cc/'
@@ -14,11 +18,24 @@ class RainwaveClient(object):
         self.req = requests.Session()
 
     def __repr__(self):
-        return u'RainwaveClient(user_id={}, key={})'.format(self.user_id, repr(self.key))
+        msg = u'RainwaveClient(user_id={}, key={})'
+        return msg.format(self.user_id, repr(self.key))
 
     def call(self, path, args=dict()):
-        '''Make a direct call to the API if you know the necessary path and
-        arguments'''
+        '''Makes a direct call to the API if you know the necessary path and
+        arguments
+
+        :param path: URL path of the API method to call
+        :param args: (optional) Dictionary of any arguments required by the API
+            method
+
+        Usage::
+
+          >>> from gutter import RainwaveClient
+          >>> rw = RainwaveClient(5049, u'abcde12345')
+          >>> rw.call(u'async/1/album', {u'album_id': 1})
+          {u'playlist_album': {u'album_name': u'Wild Arms', ...}}
+        '''
 
         final_url = self.base_url + path.lstrip(u'/')
         if u'user_id' not in args and self.user_id:
@@ -38,6 +55,9 @@ class RainwaveClient(object):
 
     @property
     def channels(self):
+        '''A List of :class:`RainwaveChannel <RainwaveChannel>` objects
+        associated with this :class:`RainwaveClient <RainwaveClient>`'''
+
         if not hasattr(self, u'_raw_channels'):
             if self.user_id and self.key:
                 args = {u'user_id': self.user_id, u'key': self.key}
