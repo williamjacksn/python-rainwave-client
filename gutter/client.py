@@ -11,8 +11,19 @@ class RainwaveClient(object):
     :param key: API key to use when communicating with the API.
     '''
 
+    #: URL upon which all API calls are based.
+    base_url = u'http://rainwave.cc/'
+
+    #: User ID to use when communicating with the API. Find your User ID at
+    #: http://rainwave.cc/auth/.
+    user_id = 0
+
+    #: API key to use when communicating with the API. Find your API key at
+    #: http://rainwave.cc/auth/.
+    key = u''
+
     def __init__(self, user_id=0, key=u''):
-        self.base_url = u'http://rainwave.cc/'
+
         self.user_id = user_id
         self.key = key
         self.req = requests.Session()
