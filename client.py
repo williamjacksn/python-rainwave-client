@@ -7,11 +7,14 @@ class RainwaveClient(object):
     '''A RainwaveClient object provides a simple interface to the Rainwave API
     (see http://rainwave.cc/api/ for details about the API)'''
 
-    def __init__(self):
+    def __init__(self, user_id=0, key=u''):
         self.base_url = u'http://rainwave.cc/'
-        self.user_id = 0
-        self.key = u''
+        self.user_id = user_id
+        self.key = key
         self.req = requests.Session()
+
+    def __repr__(self):
+        return u'RainwaveClient(user_id={}, key={})'.format(self.user_id, repr(self.key))
 
     def call(self, path, args=dict()):
         '''Make a direct call to the API if you know the necessary path and
