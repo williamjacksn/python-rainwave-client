@@ -24,6 +24,9 @@ class RainwaveChannel(object):
         else:
             raise AttributeError
 
+    def __repr__(self):
+        return u'RainwaveChannel({})'.format(self.name)
+
     @property
     def albums(self):
         if not hasattr(self, u'_raw_albums'):
