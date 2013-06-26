@@ -5,30 +5,34 @@ import artist
 
 
 class RainwaveChannel(object):
+    '''A :class:`RainwaveChannel` object represents one channel on the Rainwave
+    network.
 
-    simple_properties = [
-        u'description',
-        u'id',
-        u'name',
-        u'oggstream',
-        u'stream'
-    ]
+    .. note::
+
+        You should not instantiate an object of this class directly, but rather
+        obtain one from :attr:`RainwaveClient.channels`.
+
+    :param client: the :class:`RainwaveClient` parent object.
+    :param raw_info: a dictionary of information provided by the API that
+        describes this channel.
+    '''
 
     def __init__(self, client, raw_info):
         self._client = client
         self._raw_info = raw_info
 
-    def __getattr__(self, name):
-        if name in self.simple_properties:
-            return self._raw_info[name]
-        else:
-            raise AttributeError
-
     def __repr__(self):
         return u'RainwaveChannel({})'.format(self.name)
 
+    def __str__(self):
+        return u'{}, {}'.format(self.name, self.description)
+
     @property
     def albums(self):
+        '''A list of :class:`RainwaveAlbum` objects in the playlist of this
+        channel.'''
+
         if not hasattr(self, u'_raw_albums'):
             path = u'async/{}/all_albums'.format(self.id)
             self._raw_albums = self._client.call(path)
@@ -41,6 +45,9 @@ class RainwaveChannel(object):
 
     @property
     def artists(self):
+        '''A list of :class:`RainwaveArtist` objects in the playlist of this
+        channel.'''
+
         if not hasattr(self, u'_raw_artists'):
             path = u'async/{}/artist_list'.format(self.id)
             self._raw_artists = self._client.call(path)
@@ -50,6 +57,31 @@ class RainwaveChannel(object):
                 new_artist = artist.RainwaveArtist(self, raw_artist)
                 self._artists.append(new_artist)
         return self._artists
+
+    @property
+    def description(self):
+        '''A description of the channel.'''
+        return self._raw_info[u'description']
+
+    @property
+    def id(self):
+        '''The ID of the channel.'''
+        return self._raw_info[u'id']
+
+    @property
+    def name(self):
+        '''The name of the channel.'''
+        return self._raw_info[u'name']
+
+    @property
+    def oggstream(self):
+        '''The URL of the OGG stream for the channel.'''
+        return self._raw_info[u'oggstream']
+
+    @property
+    def stream(self):
+        '''The URL of the MP3 stream for the channel.'''
+        return self._raw_info[u'stream']
 
     def _do_sync_thread(self):
         self._do_sync = True
@@ -62,6 +94,14 @@ class RainwaveChannel(object):
                 self._raw_timeline = d
 
     def get_album_by_id(self, id):
+        '''Returns a :class:`RainwaveAlbum` for the given album ID. Raises an
+        :exc:`IndexError` if there is no album with the given ID in the
+        playlist of this channel.
+
+        :param id: ID of the desired album.
+        :type id: int
+        '''
+
         for album in self.albums:
             if album.id == id:
                 return album
@@ -69,12 +109,16 @@ class RainwaveChannel(object):
         raise IndexError(error)
 
     def start_sync(self):
+        '''Begin syncing the timeline for this channel.'''
+
         self.stop_sync()
         self._sync_thread = threading.Thread(target=self._do_sync_thread)
         self._sync_thread.daemon = True
         self._sync_thread.start()
 
     def stop_sync(self):
+        '''Stop syncing the timeline for this channel.'''
+
         self._do_sync = False
         if hasattr(self, u'_sync_thread'):
             del self._sync_thread
