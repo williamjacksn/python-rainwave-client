@@ -4,12 +4,12 @@ import channel
 
 
 class RainwaveClient(object):
-    '''A :class:`RainwaveClient <RainwaveClient>` object provides a simple
-    interface to the Rainwave API (see http://rainwave.cc/api/ for details
-    about the API)
+    '''A :class:`RainwaveClient` object provides a simple interface to the
+    Rainwave API (see http://rainwave.cc/api/ for details about the API).
 
-    :param user_id: User ID to use when communicating with the API
-    :param key: API key to use when communicating withe the API'''
+    :param user_id: User ID to use when communicating with the API.
+    :param key: API key to use when communicating with the API.
+    '''
 
     def __init__(self, user_id=0, key=u''):
         self.base_url = u'http://rainwave.cc/'
@@ -23,11 +23,11 @@ class RainwaveClient(object):
 
     def call(self, path, args=dict()):
         '''Makes a direct call to the API if you know the necessary path and
-        arguments
+        arguments.
 
-        :param path: URL path of the API method to call
+        :param path: URL path of the API method to call.
         :param args: (optional) Dictionary of any arguments required by the API
-            method
+            method.
 
         Usage::
 
@@ -55,8 +55,8 @@ class RainwaveClient(object):
 
     @property
     def channels(self):
-        '''A List of :class:`RainwaveChannel <RainwaveChannel>` objects
-        associated with this :class:`RainwaveClient <RainwaveClient>`'''
+        '''A List of :class:`RainwaveChannel` objects associated with this
+        :class:`RainwaveClient` object.'''
 
         if not hasattr(self, u'_raw_channels'):
             if self.user_id and self.key:
