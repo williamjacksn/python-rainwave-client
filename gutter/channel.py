@@ -95,8 +95,8 @@ class RainwaveChannel(object):
             else:
                 d = self._client.call(u'sync/{}/init'.format(self.id))
             if self._do_sync:
-                post_sync.send(self, raw_timeline=d)
                 self._raw_timeline = d
+                post_sync.send(self, raw_timeline=d)
 
     def get_album_by_id(self, id):
         '''Returns a :class:`RainwaveAlbum` for the given album ID. Raises an
