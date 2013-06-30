@@ -15,7 +15,6 @@ To use, either register a callable using your target signal's
         ## do something here
 '''
 
-from functools import wraps
 import threading
 
 class Signal(object):
