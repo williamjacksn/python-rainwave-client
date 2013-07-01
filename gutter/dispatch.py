@@ -17,11 +17,12 @@ To use, either register a callable using your target signal's
 
 import threading
 
+
 class Signal(object):
     '''
     A signal is triggered each time a particular event happens.
     '''
-    
+
     def __init__(self):
         self.receivers = set()
         self.lock = threading.Lock()
@@ -49,6 +50,7 @@ class Signal(object):
 
         for receiver in self.receivers:
             receiver(signal=self, sender=sender, **kwargs)
+
 
 def receiver(signal, **kwargs):
     '''Decorator for registering a signal.'''

@@ -2,10 +2,11 @@ import threading
 
 import album
 import artist
-from .dispatch import Signal
+import dispatch
 
-pre_sync = Signal()
-post_sync = Signal()
+pre_sync = dispatch.Signal()
+post_sync = dispatch.Signal()
+
 
 class RainwaveChannel(object):
     '''A :class:`RainwaveChannel` object represents one channel on the Rainwave
