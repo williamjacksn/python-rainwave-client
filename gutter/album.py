@@ -77,8 +77,8 @@ class RainwaveAlbum(object):
 
     @property
     def lastplayed(self):
-        '''A :class:`datetime` object specifying the most recent date and time
-        when a song in the album played.'''
+        '''A :class:`datetime.datetime` object specifying the most recent date
+        and time when a song in the album played.'''
         if u'album_lastplayed' not in self._raw_info:
             self._extend()
         ts = self._raw_info[u'album_lastplayed']
@@ -86,10 +86,10 @@ class RainwaveAlbum(object):
 
     @property
     def lowest_cd(self):
-        '''A :class:`datetime` object specifying the earliest date and time a
-        song in the album will be out of cooldown and available to play. If any
-        song in the album is already available, :attr:`lowest_cd` will be in
-        the past.'''
+        '''A :class:`datetime.datetime` object specifying the earliest date and
+        time a song in the album will be out of cooldown and available to play.
+        If any song in the album is already available, :attr:`lowest_cd` will
+        be in the past.'''
         ts = self._raw_info[u'album_lowest_oa']
         return datetime.datetime.utcfromtimestamp(ts)
 
