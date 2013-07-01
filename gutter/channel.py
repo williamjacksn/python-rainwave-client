@@ -2,7 +2,10 @@ import threading
 
 import album
 import artist
+from .dispatch import Signal
 
+pre_sync = Signal()
+post_sync = Signal()
 
 class RainwaveChannel(object):
     '''A :class:`RainwaveChannel` object represents one channel on the Rainwave
@@ -86,12 +89,14 @@ class RainwaveChannel(object):
     def _do_sync_thread(self):
         self._do_sync = True
         while self._do_sync:
+            pre_sync.send(self)
             if hasattr(self, u'_raw_timeline'):
                 d = self._client.call(u'sync/{}/sync'.format(self.id))
             else:
                 d = self._client.call(u'sync/{}/init'.format(self.id))
             if self._do_sync:
                 self._raw_timeline = d
+                post_sync.send(self, raw_timeline=d)
 
     def get_album_by_id(self, id):
         '''Returns a :class:`RainwaveAlbum` for the given album ID. Raises an
