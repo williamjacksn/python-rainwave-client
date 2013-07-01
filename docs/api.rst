@@ -9,7 +9,10 @@ Classes
 -------
 
 .. autoclass:: RainwaveClient
-   :members:
+    :members:
 
 .. autoclass:: RainwaveChannel
-   :members:
+    :members:
+
+.. autoclass:: RainwaveAlbum
+    :members:
