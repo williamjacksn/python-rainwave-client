@@ -3,21 +3,40 @@ import song
 
 
 class RainwaveArtist(object):
+    '''A :class:`RainwaveArtist` object represents one artist.
 
-    simple_properties = [u'id', u'name']
+    .. note::
+
+        You should not instantiate an object of this class directly, but rather
+        obtain one from :attr:`RainwaveChannel.artists` or
+        :attr:`RainwaveSong.artists`.
+
+    :param channel: the parent :class:`RainwaveChannel` object.
+    :param raw_info: a dictionary of information provided by the API that
+        describes the artist.'''
 
     def __init__(self, channel, raw_info):
         self._channel = channel
         self._raw_info = raw_info
 
-    def __getattr__(self, name):
-        if name in self.simple_properties:
-            return self._raw_info[u'artist_{}'.format(name)]
-        else:
-            raise AttributeError
+    def __repr__(self):
+        return u'RainwaveArtist({})'.format(self.name)
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def id(self):
+        '''The ID of the artist.'''
+        return self._raw_info[u'artist_id']
+
+    @property
+    def name(self):
+        '''The name of the artist.'''
 
     @property
     def numsongs(self):
+        '''The number of songs attributed to the artist.'''
         if u'artist_numsongs' not in self._raw_info:
             more_info = self._channel._get_artist_raw_info(self.id)
             self._raw_info = dict(self._raw_info.items() + more_info.items())
@@ -25,6 +44,7 @@ class RainwaveArtist(object):
 
     @property
     def songs(self):
+        '''A list of :class:`RainwaveSong` objects attributed to the artist.'''
         if u'songs' not in self._raw_info:
             more_info = self._channel._get_artist_raw_info(self.id)
             self._raw_info = dict(self._raw_info.items() + more_info.items())

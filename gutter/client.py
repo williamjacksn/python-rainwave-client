@@ -1,24 +1,23 @@
-import requests
-
 import channel
+import requests
 
 
 class RainwaveClient(object):
     '''A :class:`RainwaveClient` object provides a simple interface to the
     Rainwave API (see http://rainwave.cc/api/ for details about the API).
 
-    :param user_id: User ID to use when communicating with the API.
-    :param key: API key to use when communicating with the API.
+    :param user_id: the User ID to use when communicating with the API.
+    :param key: the API key to use when communicating with the API.
     '''
 
-    #: URL upon which all API calls are based.
+    #: The URL upon which all API calls are based.
     base_url = u'http://rainwave.cc/'
 
-    #: User ID to use when communicating with the API. Find your User ID at
+    #: The User ID to use when communicating with the API. Find your User ID at
     #: http://rainwave.cc/auth/.
     user_id = 0
 
-    #: API key to use when communicating with the API. Find your API key at
+    #: The API key to use when communicating with the API. Find your API key at
     #: http://rainwave.cc/auth/.
     key = u''
 
@@ -36,9 +35,10 @@ class RainwaveClient(object):
         '''Makes a direct call to the API if you know the necessary path and
         arguments.
 
-        :param path: URL path of the API method to call.
-        :param args: (optional) Dictionary of any arguments required by the API
-            method.
+        :param path: the URL path of the API method to call.
+        :type path: str
+        :param args: (optional) any arguments required by the API method.
+        :type args: dict
 
         Usage::
 
@@ -66,7 +66,7 @@ class RainwaveClient(object):
 
     @property
     def channels(self):
-        '''A List of :class:`RainwaveChannel` objects associated with this
+        '''A list of :class:`RainwaveChannel` objects associated with this
         :class:`RainwaveClient` object.'''
 
         if not hasattr(self, u'_raw_channels'):

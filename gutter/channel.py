@@ -19,7 +19,7 @@ class RainwaveChannel(object):
 
     :param client: the :class:`RainwaveClient` parent object.
     :param raw_info: a dictionary of information provided by the API that
-        describes this channel.
+        describes the channel.
     '''
 
     def __init__(self, client, raw_info):
@@ -34,7 +34,7 @@ class RainwaveChannel(object):
 
     @property
     def albums(self):
-        '''A list of :class:`RainwaveAlbum` objects in the playlist of this
+        '''A list of :class:`RainwaveAlbum` objects in the playlist of the
         channel.'''
 
         if not hasattr(self, u'_raw_albums'):
@@ -49,7 +49,7 @@ class RainwaveChannel(object):
 
     @property
     def artists(self):
-        '''A list of :class:`RainwaveArtist` objects in the playlist of this
+        '''A list of :class:`RainwaveArtist` objects in the playlist of the
         channel.'''
 
         if not hasattr(self, u'_raw_artists'):
@@ -102,9 +102,9 @@ class RainwaveChannel(object):
     def get_album_by_id(self, id):
         '''Returns a :class:`RainwaveAlbum` for the given album ID. Raises an
         :exc:`IndexError` if there is no album with the given ID in the
-        playlist of this channel.
+        playlist of the channel.
 
-        :param id: ID of the desired album.
+        :param id: the ID of the desired album.
         :type id: int
         '''
 
@@ -115,7 +115,7 @@ class RainwaveChannel(object):
         raise IndexError(error)
 
     def start_sync(self):
-        '''Begin syncing the timeline for this channel.'''
+        '''Begin syncing the timeline for the channel.'''
 
         self.stop_sync()
         self._sync_thread = threading.Thread(target=self._do_sync_thread)
@@ -123,7 +123,7 @@ class RainwaveChannel(object):
         self._sync_thread.start()
 
     def stop_sync(self):
-        '''Stop syncing the timeline for this channel.'''
+        '''Stop syncing the timeline for the channel.'''
 
         self._do_sync = False
         if hasattr(self, u'_sync_thread'):
