@@ -20,10 +20,10 @@ class RainwaveArtist(object):
         self._raw_info = raw_info
 
     def __repr__(self):
-        return u'RainwaveArtist({})'.format(self.name)
+        return u'RainwaveArtist({})'.format(self.name).encode(u'utf-8')
 
     def __str__(self):
-        return self.name
+        return self.name.encode(u'utf-8')
 
     @property
     def id(self):
@@ -33,6 +33,7 @@ class RainwaveArtist(object):
     @property
     def name(self):
         '''The name of the artist.'''
+        return self._raw_info[u'artist_name']
 
     @property
     def numsongs(self):

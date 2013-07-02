@@ -21,10 +21,12 @@ class RainwaveAlbum(object):
         self._raw_info = raw_info
 
     def __repr__(self):
-        return u'RainwaveAlbum({} // {})'.format(self._channel.name, self.name)
+        msg = u'RainwaveAlbum({} // {})'
+        return msg.format(self._channel.name, self.name).encode(u'utf-8')
 
     def __str__(self):
-        return u'{} // {}'.format(self._channel.name, self.name)
+        msg = u'{} // {}'
+        return msg.format(self._channel.name, self.name).encode(u'utf-8')
 
     def _extend(self):
         self._raw_info = self._channel._get_album_raw_info(self.id)
