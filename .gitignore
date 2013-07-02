@@ -1,3 +1,4 @@
 *.pyc
 *.pyproj
+*.suo
 docs/_build
