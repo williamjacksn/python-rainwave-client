@@ -1,2 +1,3 @@
 *.pyc
+*.pyproj
 docs/_build
