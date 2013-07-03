@@ -3,6 +3,7 @@ import threading
 import album
 import artist
 import dispatch
+import schedule
 
 pre_sync = dispatch.Signal()
 post_sync = dispatch.Signal()
@@ -87,6 +88,31 @@ class RainwaveChannel(object):
         '''The URL of the MP3 stream for the channel.'''
         return self._raw_info[u'stream']
 
+    @property
+    def schedule_current(self):
+        '''The current :class:`RainwaveSchedule` for the channel.'''
+        if not hasattr(self, '_schedule_current'):
+            self._do_async_get()
+        return self._schedule_current
+    
+    @property
+    def schedule_history(self):
+        '''A list of the past :class:`RainwaveSchedule` objects for the channel.'''
+        if not hasattr(self, '_schedule_history'):
+            self._do_async_get()
+        return self._schedule_history
+    
+    @property
+    def schedule_next(self):
+        '''A list of the next :class:`RainwaveSchedule` objects for the channel.'''
+        if not hasattr(self, '_schedule_next'):
+            self._do_async_get()
+        return self._schedule_next
+
+    def _do_async_get(self):
+        d = self._client.call(u'/async/{}/get'.format(self.id))
+        self._cache_raw_timeline(d)
+
     def _do_sync_thread(self):
         self._do_sync = True
         while self._do_sync:
@@ -96,8 +122,20 @@ class RainwaveChannel(object):
             else:
                 d = self._client.call(u'sync/{}/init'.format(self.id))
             if self._do_sync:
-                self._raw_timeline = d
-                post_sync.send(self, raw_timeline=d)
+                self._cache_raw_timeline(d)
+                post_sync.send(self, channel=self)
+
+    def _cache_raw_timeline(self, raw_timeline):
+        def new_schedule(raw_sched):
+            return schedule.RainwaveSchedule(self._client, self, raw_sched)
+        self._raw_timeline = raw_timeline
+        self._schedule_current = new_schedule(raw_timeline[u'sched_current'])
+        self._schedule_next = []
+        self._schedule_history = []
+        for raw_sched in raw_timeline[u'sched_next']:
+            self._schedule_next.append(new_schedule(raw_sched))
+        for raw_sched in raw_timeline[u'sched_history']:
+            self._schedule_history.append(new_schedule(raw_sched))
 
     def get_album_by_id(self, id):
         '''Returns a :class:`RainwaveAlbum` for the given album ID. Raises an
