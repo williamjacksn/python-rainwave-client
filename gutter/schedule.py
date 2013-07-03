@@ -1,6 +1,7 @@
+import datetime
+
 import album
 import song
-import datetime
 
 class RainwaveSchedule(object):
     '''A :class:`RainwaveSchedule` object represents a voting event on a
@@ -9,7 +10,9 @@ class RainwaveSchedule(object):
     .. note::
 
         You should not instantiate an object of this class directly, but rather
-        obtain one from :attr:`RainwaveChannel.schedule_current`.
+        obtain one from :attr:`RainwaveChannel.schedule_current`,
+        :attr:`RainwaveChannel.schedule_next`, or
+        :attr:`RainwaveChannel.schedule_history`.
 
     :param client: the :class:`RainwaveClient` parent object.
     :param channel: the :class:`RainwaveChannel` the schedule belongs to
@@ -31,7 +34,7 @@ class RainwaveSchedule(object):
     @property
     def starttime(self):
         '''The start time of the voting event in UTC time.'''
-        ts = self._raw_info.get(u'sched_starttime')
+        ts = self._raw_info[u'sched_starttime']
         return datetime.datetime.utcfromtimestamp(ts)
     
     @property
