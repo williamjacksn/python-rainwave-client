@@ -28,6 +28,12 @@ class RainwaveSong(object):
         self.album = album
         self._raw_info = raw_info
 
+    def __repr__(self):
+        return u'RainwaveSong({})'.format(str(self))
+
+    def __str__(self):
+        return u'{} - {}'.format(self.title, self.album)
+
     def __getattr__(self, name):
         if name in self.simple_properties:
             if u'song_{}'.format(name) not in self._raw_info:
