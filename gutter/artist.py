@@ -10,17 +10,14 @@ class RainwaveArtist(object):
         You should not instantiate an object of this class directly, but rather
         obtain one from :attr:`RainwaveChannel.artists` or
         :attr:`RainwaveSong.artists`.
-
-    :param channel: the parent :class:`RainwaveChannel` object.
-    :param raw_info: a dictionary of information provided by the API that
-        describes the artist.'''
+    '''
 
     def __init__(self, channel, raw_info):
         self._channel = channel
         self._raw_info = raw_info
 
     def __repr__(self):
-        return u'RainwaveArtist({})'.format(self.name).encode(u'utf-8')
+        return '<RainwaveArtist [{}]>'.format(self)
 
     def __str__(self):
         return self.name.encode(u'utf-8')

@@ -10,33 +10,32 @@ class RainwaveAlbum(object):
 
         You should not instantiate an object of this class directly, but rather
         obtain one from :attr:`RainwaveChannel.albums`.
-
-    :param channel: the :class:`RainwaveChannel` parent object.
-    :param raw_info: a dictionary of information provided by the API that
-        describes the album.
     '''
 
+    #: The :class:`RainwaveChannel` object the album belongs to.
+    channel = None
+
     def __init__(self, channel, raw_info):
-        self._channel = channel
+        self.channel = channel
         self._raw_info = raw_info
 
     def __repr__(self):
-        msg = u'RainwaveAlbum({} // {})'
-        return msg.format(self._channel.name, self.name).encode(u'utf-8')
+        msg = u'<RainwaveAlbum [{} // {}]>'
+        return msg.format(self.channel.name, self.name).encode(u'utf-8')
 
     def __str__(self):
         msg = u'{} // {}'
-        return msg.format(self._channel.name, self.name).encode(u'utf-8')
+        return msg.format(self.channel.name, self.name).encode(u'utf-8')
 
     def _extend(self):
-        self._raw_info = self._channel._get_album_raw_info(self.id)
+        self._raw_info = self.channel._get_album_raw_info(self.id)
 
     @property
     def art(self):
         '''The URL of the cover art for the album.'''
         if u'album_art' not in self._raw_info:
             self._extend()
-        base_url = self._channel._client.base_url
+        base_url = self.channel._client.base_url
         return base_url + self._raw_info[u'album_art'].lstrip(u'/')
 
     @property
@@ -50,7 +49,7 @@ class RainwaveAlbum(object):
             for raw_cdg in self._raw_info[u'album_genres']:
                 id = raw_cdg[u'genre_id']
                 name = raw_cdg[u'genre_name']
-                cdg = cooldown.RainwaveCooldownGroup(self._channel, id, name)
+                cdg = cooldown.RainwaveCooldownGroup(self.channel, id, name)
                 self._cooldown_groups.append(cdg)
         return self._cooldown_groups
 
@@ -225,7 +224,7 @@ class RainwaveAlbum(object):
         :exc:`IndexError` if there is no song with the given ID in the
         album.
 
-        :param id: ID of the desired song.
+        :param id: the ID of the desired song.
         :type id: int
         '''
 

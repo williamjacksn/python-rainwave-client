@@ -28,3 +28,15 @@ Developer Interface
 
 .. autoclass:: RainwaveArtist
     :members:
+
+:class:`RainwaveSong` Objects
+-----------------------------
+
+.. autoclass:: RainwaveSong
+    :members:
+
+:class:`RainwaveSchedule` Objects
+---------------------------------
+
+.. autoclass:: RainwaveSchedule
+    :members:

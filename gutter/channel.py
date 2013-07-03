@@ -28,7 +28,7 @@ class RainwaveChannel(object):
         self._raw_info = raw_info
 
     def __repr__(self):
-        return u'RainwaveChannel({})'.format(self.name)
+        return u'<RainwaveChannel [{}]>'.format(self.name)
 
     def __str__(self):
         return u'{}, {}'.format(self.name, self.description)
@@ -94,17 +94,19 @@ class RainwaveChannel(object):
         if not hasattr(self, '_schedule_current'):
             self._do_async_get()
         return self._schedule_current
-    
+
     @property
     def schedule_history(self):
-        '''A list of the past :class:`RainwaveSchedule` objects for the channel.'''
+        '''A list of the past :class:`RainwaveSchedule` objects for the
+        channel.'''
         if not hasattr(self, '_schedule_history'):
             self._do_async_get()
         return self._schedule_history
-    
+
     @property
     def schedule_next(self):
-        '''A list of the next :class:`RainwaveSchedule` objects for the channel.'''
+        '''A list of the next :class:`RainwaveSchedule` objects for the
+        channel.'''
         if not hasattr(self, '_schedule_next'):
             self._do_async_get()
         return self._schedule_next
@@ -150,6 +152,21 @@ class RainwaveChannel(object):
             if album.id == id:
                 return album
         error = u'Channel does not contain album with id: {}'.format(id)
+        raise IndexError(error)
+
+    def get_artist_by_id(self, id):
+        '''Returns a :class:`RainwaveArtist` for the given artist ID. Raises an
+        :exc:`IndexError` if there is no artist with the given ID in the
+        playlist of the channel.
+
+        :param id: the ID of the desired artist.
+        :type id: int
+        '''
+
+        for artist in self.artists:
+            if artist.id == id:
+                return artist
+        error = u'Channel does not contain artist with id: {}'.format(id)
         raise IndexError(error)
 
     def start_sync(self):

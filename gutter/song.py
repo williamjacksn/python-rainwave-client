@@ -3,44 +3,36 @@ import datetime
 
 
 class RainwaveSong(object):
+    '''A :class:`RainwaveSong` object represents one song.
 
-    simple_properties = [
-        u'available',
-        u'favourite',
-        u'id',
-        u'rating_avg',
-        u'rating_count',
-        u'rating_id',
-        u'rating_sid',
-        u'rating_user',
-        u'secondslong',
-        u'timesdefeated',
-        u'timesplayed',
-        u'timeswon',
-        u'title',
-        u'totalrequests',
-        u'totalvotes',
-        u'url',
-        u'urltext'
-    ]
+    .. note::
+
+        You should not instantiate an object of this class directly, but rather
+        obtain one from :attr:`RainwaveAlbum.songs`,
+        :attr:`RainwaveArtist.songs`, or some other object.
+    '''
+
+    #: The :class:`RainwaveAlbum` object the song belongs to.
+    album = None
 
     def __init__(self, album, raw_info):
         self.album = album
         self._raw_info = raw_info
 
     def __repr__(self):
-        return u'RainwaveSong({})'.format(str(self))
+        # This is not a unicode literal because:
+        # * str.format() automatically calls str() on self,
+        # * __repr__() must return a string, not a unicode, and
+        # * This library targets Python 2.7.
+        return '<RainwaveSong [{}]>'.format(self)
 
     def __str__(self):
-        return u'{} - {}'.format(self.title, self.album)
-
-    def __getattr__(self, name):
-        if name in self.simple_properties:
-            if u'song_{}'.format(name) not in self._raw_info:
-                self._extend()
-            return self._raw_info[u'song_{}'.format(name)]
-        else:
-            raise AttributeError
+        # This is not a unicode literal because:
+        # * __str__() must return a string, not a unicode.
+        title = self.title.encode(u'utf-8')
+        artist_string = self.artist_string.encode(u'utf-8')
+        msg = '{} // {} // {}'
+        return msg.format(self.album, title, artist_string)
 
     def _extend(self):
         for song in self.album.songs:
@@ -52,49 +44,194 @@ class RainwaveSong(object):
 
     @property
     def addedon(self):
+        '''The UTC date and time the song was added to the playlist (a
+        :class:`datetime.datetime` object).'''
         if u'song_addedon' not in self._raw_info:
             self._extend()
         ts = self._raw_info[u'song_addedon']
         return datetime.datetime.utcfromtimestamp(ts)
 
     @property
+    def artist_string(self):
+        '''A single string with the names of all artists for the song.'''
+        return u', '.join([artist.name for artist in self.artists])
+
+    @property
     def artists(self):
+        '''A list of :class:`RainwaveArtist` objects the song is attributed
+        to.'''
         if not hasattr(self, u'_artists'):
             self._artists = []
             if u'artists' not in self._raw_info:
                 self._extend()
             for raw_artist in self._raw_info[u'artists']:
-                channel = self.album._channel
+                channel = self.album.channel
                 new_artist = artist.RainwaveArtist(channel, raw_artist)
                 self._artists.append(new_artist)
         return self._artists
 
     @property
+    def available(self):
+        '''A boolean representing whether the song is available to play or
+        not.'''
+        if u'song_available' not in self._raw_info:
+            self._extend()
+        return self._raw_info[u'song_available']
+
+    @property
     def channel_id(self):
-        return self.sid
+        '''The :attr:`RainwaveChannel.id` of the channel the song belongs
+        to.'''
+        return self.album.channel.id
 
     @property
     def fav(self):
+        '''See :attr:`favourite`.'''
         return self.favourite
 
     @property
+    def favourite(self):
+        '''A boolean representing whether the song is marked as a favourite or
+        not.'''
+        if u'song_favourite' not in self._raw_info:
+            self._extend()
+        return self._raw_info[u'song_favourite']
+
+    @property
+    def id(self):
+        '''The ID of the song.'''
+        return self._raw_info[u'song_id']
+
+    @property
     def lastplayed(self):
+        '''The UTC date and time the song last played (a
+        :class:`datetime.datetime` object).'''
         if u'song_lastplayed' not in self._raw_info:
             self._extend()
         ts = self._raw_info[u'song_lastplayed']
         return datetime.datetime.utcfromtimestamp(ts)
 
     @property
+    def rating_avg(self):
+        '''The average of all ratings given to the song by all listeners.'''
+        if u'song_rating_avg' not in self._raw_info:
+            self._extend()
+        return self._raw_info[u'song_rating_avg']
+
+    @property
     def rating_channel_id(self):
-        return self.rating_sid
+        '''The :attr:`RainwaveChannel.id` of the home channel for the song.
+        This could be different from :attr:`channel_id` if the song is in the
+        playlist of multiple channels.'''
+        if u'song_rating_sid' not in self._raw_info:
+            self._extend()
+        return self._raw_info[u'song_rating_sid']
+
+    @property
+    def rating_count(self):
+        '''The total number of ratings given to the song by all listeners.'''
+        if u'song_rating_count' not in self._raw_info:
+            self._extend()
+        return self._raw_info[u'song_rating_count']
+
+    @property
+    def rating_id(self):
+        '''The rating ID of the song. If a song appears on multiple channels,
+        the :class:`RainwaveSong` objects will share a common :attr:`rating_id`
+        so that when the song is rated on one channel the rating will be linked
+        to the song on other channels.'''
+        if u'song_rating_id' not in self._raw_info:
+            self._extend()
+        return self._raw_info[u'song_rating_id']
+
+    @property
+    def rating_sid(self):
+        '''See :attr:`rating_channel_id`.'''
+        return self.rating_channel_id
+
+    @property
+    def rating_user(self):
+        '''The rating given to the song by the listener authenticating to the
+        API.'''
+        if u'song_rating_user' not in self._raw_info:
+            self._extend()
+        return self._raw_info[u'song_rating_user']
 
     @property
     def releasetime(self):
+        '''The UTC date and time the song will be out of cooldown and available
+        to play. If the song is already available, :attr:`releasetime` will be
+        in the past.'''
         if u'song_releasetime' not in self._raw_info:
             self._extend()
         ts = self._raw_info[u'song_releasetime']
         return datetime.datetime.utcfromtimestamp(ts)
 
     @property
+    def secondslong(self):
+        '''The length of the song in seconds.'''
+        if u'song_secondslong' not in self._raw_info:
+            self._extend()
+        return self._raw_info[u'song_secondslong']
+
+    @property
     def sid(self):
-        return self._raw_info[u'sid']
+        '''See :attr:`channel_id`.'''
+        return self.channel_id
+
+    @property
+    def timesdefeated(self):
+        '''The number of times the song lost an election.'''
+        if u'song_timesdefeated' not in self._raw_info:
+            self._extend()
+        return self._raw_info[u'song_timesdefeated']
+
+    @property
+    def timesplayed(self):
+        '''The number of times the song has played.'''
+        if u'song_timesplayed' not in self._raw_info:
+            self._extend()
+        return self._raw_info[u'song_timesplayed']
+
+    @property
+    def timeswon(self):
+        '''The number of times the song won an election.'''
+        if u'song_timeswon' not in self._raw_info:
+            self._extend()
+        return self._raw_info[u'song_timeswon']
+
+    @property
+    def title(self):
+        '''The title of the song.'''
+        if u'song_title' not in self._raw_info:
+            self._extend()
+        return self._raw_info[u'song_title']
+
+    @property
+    def totalrequests(self):
+        '''The total number of times the song has been requested by any
+        listener.'''
+        if u'song_totalrequests' not in self._raw_info:
+            self._extend()
+        return self._raw_info[u'song_totalrequests']
+
+    @property
+    def totalvotes(self):
+        '''The total number of election votes the song has received.'''
+        if u'song_totalvotes' not in self._raw_info:
+            self._extend()
+        return self._raw_info[u'song_totalvotes']
+
+    @property
+    def url(self):
+        '''The URL of more information about the song.'''
+        if u'song_url' not in self._raw_info:
+            self._extend()
+        return self._raw_info[u'song_url']
+
+    @property
+    def urltext(self):
+        '''The link text that corresponds with :attr:`url`.'''
+        if u'song_urltext' not in self._raw_info:
+            self._extend()
+        return self._raw_info[u'song_urltext']
