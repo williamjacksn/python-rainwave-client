@@ -35,7 +35,7 @@ class RainwaveAlbum(object):
         '''The URL of the cover art for the album.'''
         if u'album_art' not in self._raw_info:
             self._extend()
-        base_url = self.channel._client.base_url
+        base_url = self.channel.client.base_url
         return base_url + self._raw_info[u'album_art'].lstrip(u'/')
 
     @property
@@ -232,3 +232,6 @@ class RainwaveAlbum(object):
             if song.id == id:
                 return song
         raise IndexError(u'Album does not contain song with id: {}'.format(id))
+
+    def rate_song(self, song_id, rating):
+        return self.channel.rate_song(song_id, rating)

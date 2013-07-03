@@ -23,8 +23,11 @@ class RainwaveChannel(object):
         describes the channel.
     '''
 
+    #: The :class:`RainwaveClient` object that belongs to the channel.
+    client = None
+
     def __init__(self, client, raw_info):
-        self._client = client
+        self.client = client
         self._raw_info = raw_info
 
     def __repr__(self):
@@ -40,7 +43,7 @@ class RainwaveChannel(object):
 
         if not hasattr(self, u'_raw_albums'):
             path = u'async/{}/all_albums'.format(self.id)
-            self._raw_albums = self._client.call(path)
+            self._raw_albums = self.client.call(path)
         if not hasattr(self, u'_albums'):
             self._albums = []
             for raw_album in self._raw_albums[u'playlist_all_albums']:
@@ -55,7 +58,7 @@ class RainwaveChannel(object):
 
         if not hasattr(self, u'_raw_artists'):
             path = u'async/{}/artist_list'.format(self.id)
-            self._raw_artists = self._client.call(path)
+            self._raw_artists = self.client.call(path)
         if not hasattr(self, u'_artists'):
             self._artists = []
             for raw_artist in self._raw_artists[u'artist_list']:
@@ -112,7 +115,7 @@ class RainwaveChannel(object):
         return self._schedule_next
 
     def _do_async_get(self):
-        d = self._client.call(u'/async/{}/get'.format(self.id))
+        d = self.client.call(u'/async/{}/get'.format(self.id))
         self._cache_raw_timeline(d)
 
     def _do_sync_thread(self):
@@ -120,16 +123,16 @@ class RainwaveChannel(object):
         while self._do_sync:
             pre_sync.send(self)
             if hasattr(self, u'_raw_timeline'):
-                d = self._client.call(u'sync/{}/sync'.format(self.id))
+                d = self.client.call(u'sync/{}/sync'.format(self.id))
             else:
-                d = self._client.call(u'sync/{}/init'.format(self.id))
+                d = self.client.call(u'sync/{}/init'.format(self.id))
             if self._do_sync:
                 self._cache_raw_timeline(d)
                 post_sync.send(self, channel=self)
 
     def _cache_raw_timeline(self, raw_timeline):
         def new_schedule(raw_sched):
-            return schedule.RainwaveSchedule(self._client, self, raw_sched)
+            return schedule.RainwaveSchedule(self.client, self, raw_sched)
         self._raw_timeline = raw_timeline
         self._schedule_current = new_schedule(raw_timeline[u'sched_current'])
         self._schedule_next = []
@@ -169,6 +172,10 @@ class RainwaveChannel(object):
         error = u'Channel does not contain artist with id: {}'.format(id)
         raise IndexError(error)
 
+    def rate_song(self, song_id, rating):
+        args = {u'song_id': song_id, u'rating': rating}
+        return self.client.call(u'async/{}/rate'.format(self.id), args)
+
     def start_sync(self):
         '''Begin syncing the timeline for the channel.'''
 
@@ -188,7 +195,7 @@ class RainwaveChannel(object):
 
     def _get_album_raw_info(self, album_id):
         args = {u'album_id': album_id}
-        d = self._client.call(u'async/{}/album'.format(self.id), args)
+        d = self.client.call(u'async/{}/album'.format(self.id), args)
         return d[u'playlist_album']
 
     def _get_artist_raw_info(self, artist_id):
@@ -197,5 +204,5 @@ class RainwaveChannel(object):
             if artist.id == artist_id:
                 raw_info = artist._raw_info
         args = {u'artist_id': artist_id}
-        d = self._client.call(u'async/{}/artist_detail'.format(self.id), args)
+        d = self.client.call(u'async/{}/artist_detail'.format(self.id), args)
         return dict(raw_info.items() + d[u'artist_detail'].items())

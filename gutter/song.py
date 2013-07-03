@@ -112,6 +112,25 @@ class RainwaveSong(object):
         return datetime.datetime.utcfromtimestamp(ts)
 
     @property
+    def rating(self):
+        '''The rating given to the song by the listener authenticating to the
+        API. Change the rating by assigning a new value to this attribute.'''
+        if u'song_rating_user' not in self._raw_info:
+            self._extend()
+        return self._raw_info[u'song_rating_user']
+
+    @rating.setter
+    def rating(self, value):
+        d = self.album.rate_song(self.id, value)
+        if u'rate_result' in d:
+            if d[u'rate_result'][u'code'] == 1:
+                self._raw_info[u'song_rating_user'] = value
+            else:
+                raise Exception(d[u'rate_result'][u'text'])
+        else:
+            raise Exception(d[u'error'][u'text'])
+
+    @property
     def rating_avg(self):
         '''The average of all ratings given to the song by all listeners.'''
         if u'song_rating_avg' not in self._raw_info:
@@ -151,11 +170,8 @@ class RainwaveSong(object):
 
     @property
     def rating_user(self):
-        '''The rating given to the song by the listener authenticating to the
-        API.'''
-        if u'song_rating_user' not in self._raw_info:
-            self._extend()
-        return self._raw_info[u'song_rating_user']
+        '''See :attr:`rating`.'''
+        return self.rating
 
     @property
     def releasetime(self):
