@@ -1,9 +1,8 @@
-import threading
-
 import album
 import artist
 import dispatch
 import schedule
+import threading
 
 pre_sync = dispatch.Signal()
 post_sync = dispatch.Signal()
@@ -17,10 +16,6 @@ class RainwaveChannel(object):
 
         You should not instantiate an object of this class directly, but rather
         obtain one from :attr:`RainwaveClient.channels`.
-
-    :param client: the :class:`RainwaveClient` parent object.
-    :param raw_info: a dictionary of information provided by the API that
-        describes the channel.
     '''
 
     #: The :class:`RainwaveClient` object that belongs to the channel.
@@ -29,12 +24,47 @@ class RainwaveChannel(object):
     def __init__(self, client, raw_info):
         self.client = client
         self._raw_info = raw_info
+        self._do_sync = False
 
     def __repr__(self):
-        return u'<RainwaveChannel [{}]>'.format(self.name)
+        return '<RainwaveChannel [{}]>'.format(self.name)
 
     def __str__(self):
-        return u'{}, {}'.format(self.name, self.description)
+        return '{}, {}'.format(self.name, self.description)
+
+    def _do_async_get(self):
+        d = self.client.call(u'/async/{}/get'.format(self.id))
+        self._raw_timeline = d
+
+    def _do_sync_thread(self):
+        self._do_sync = True
+        while self._do_sync:
+            pre_sync.send(self)
+            if hasattr(self, u'_raw_timeline'):
+                d = self.client.call(u'sync/{}/sync'.format(self.id))
+            else:
+                d = self.client.call(u'sync/{}/init'.format(self.id))
+            if self._do_sync:
+                self._cache_raw_timeline(d)
+                post_sync.send(self, channel=self)
+
+    def _get_album_raw_info(self, album_id):
+        args = {u'album_id': album_id}
+        d = self.client.call(u'async/{}/album'.format(self.id), args)
+        return d[u'playlist_album']
+
+    def _get_artist_raw_info(self, artist_id):
+        raw_info = {}
+        for artist in self.artists:
+            if artist.id == artist_id:
+                raw_info = artist._raw_info
+        args = {u'artist_id': artist_id}
+        d = self.client.call(u'async/{}/artist_detail'.format(self.id), args)
+        return dict(raw_info.items() + d[u'artist_detail'].items())
+
+    def _new_schedule(self, raw_schedule):
+        if raw_schedule[u'sched_type'] == 0:
+            return schedule.RainwaveElection(self, raw_schedule)
 
     @property
     def albums(self):
@@ -87,60 +117,38 @@ class RainwaveChannel(object):
         return self._raw_info[u'oggstream']
 
     @property
-    def stream(self):
-        '''The URL of the MP3 stream for the channel.'''
-        return self._raw_info[u'stream']
-
-    @property
     def schedule_current(self):
         '''The current :class:`RainwaveSchedule` for the channel.'''
-        if not hasattr(self, '_schedule_current'):
+        if not self._do_sync:
             self._do_async_get()
-        return self._schedule_current
+        return self._new_schedule(self._raw_timeline[u'sched_current'])
 
     @property
     def schedule_history(self):
         '''A list of the past :class:`RainwaveSchedule` objects for the
         channel.'''
-        if not hasattr(self, '_schedule_history'):
+        if not self._do_sync:
             self._do_async_get()
-        return self._schedule_history
+        sched_history = []
+        for raw_sched in self._raw_timeline[u'sched_history']:
+            sched_history.append(self._new_schedule(raw_sched))
+        return sched_history
 
     @property
     def schedule_next(self):
         '''A list of the next :class:`RainwaveSchedule` objects for the
         channel.'''
-        if not hasattr(self, '_schedule_next'):
+        if not self._do_sync:
             self._do_async_get()
-        return self._schedule_next
+        sched_next = []
+        for raw_sched in self._cache_raw_timeline[u'sched_next']:
+            sched_next.append(self._new_schedule(raw_sched))
+        return sched_next
 
-    def _do_async_get(self):
-        d = self.client.call(u'/async/{}/get'.format(self.id))
-        self._cache_raw_timeline(d)
-
-    def _do_sync_thread(self):
-        self._do_sync = True
-        while self._do_sync:
-            pre_sync.send(self)
-            if hasattr(self, u'_raw_timeline'):
-                d = self.client.call(u'sync/{}/sync'.format(self.id))
-            else:
-                d = self.client.call(u'sync/{}/init'.format(self.id))
-            if self._do_sync:
-                self._cache_raw_timeline(d)
-                post_sync.send(self, channel=self)
-
-    def _cache_raw_timeline(self, raw_timeline):
-        def new_schedule(raw_sched):
-            return schedule.RainwaveSchedule(self.client, self, raw_sched)
-        self._raw_timeline = raw_timeline
-        self._schedule_current = new_schedule(raw_timeline[u'sched_current'])
-        self._schedule_next = []
-        self._schedule_history = []
-        for raw_sched in raw_timeline[u'sched_next']:
-            self._schedule_next.append(new_schedule(raw_sched))
-        for raw_sched in raw_timeline[u'sched_history']:
-            self._schedule_history.append(new_schedule(raw_sched))
+    @property
+    def stream(self):
+        '''The URL of the MP3 stream for the channel.'''
+        return self._raw_info[u'stream']
 
     def get_album_by_id(self, id):
         '''Returns a :class:`RainwaveAlbum` for the given album ID. Raises an
@@ -192,17 +200,3 @@ class RainwaveChannel(object):
             del self._sync_thread
         if hasattr(self, u'_raw_timeline'):
             del self._raw_timeline
-
-    def _get_album_raw_info(self, album_id):
-        args = {u'album_id': album_id}
-        d = self.client.call(u'async/{}/album'.format(self.id), args)
-        return d[u'playlist_album']
-
-    def _get_artist_raw_info(self, artist_id):
-        raw_info = {}
-        for artist in self.artists:
-            if artist.id == artist_id:
-                raw_info = artist._raw_info
-        args = {u'artist_id': artist_id}
-        d = self.client.call(u'async/{}/artist_detail'.format(self.id), args)
-        return dict(raw_info.items() + d[u'artist_detail'].items())

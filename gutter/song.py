@@ -251,3 +251,36 @@ class RainwaveSong(object):
         if u'song_urltext' not in self._raw_info:
             self._extend()
         return self._raw_info[u'song_urltext']
+
+
+class RainwaveCandidate(RainwaveSong):
+    '''A :class:`RainwaveCandidate` object is a subclass of
+    :class:`RainwaveSong` representing a song that is a candidate in an
+    election.'''
+
+    def __init__(self, album, raw_info):
+        super(RainwaveCandidate, self).__init__(album, raw_info)
+
+    def __repr__(self):
+        return '<RainwaveCandidate [{}]>'.format(self)
+
+    @property
+    def elec_entry_id(self):
+        return self._raw_info[u'elec_entry_id']
+
+    @property
+    def isconflict(self):
+        '''A boolean representing whether the candidate conflicts with a
+        listener's request.'''
+        return self._raw_info[u'elec_isrequest'] in (0, 1)
+
+    @property
+    def isrequest(self):
+        '''A boolean representing whether the candidate is a listener request
+        or not.'''
+        return self._raw_info[u'elec_isrequest'] in (3, 4)
+
+    @property
+    def votes(self):
+        '''The number of votes this candidate received in the election.'''
+        return self._raw_info[u'elec_votes']
