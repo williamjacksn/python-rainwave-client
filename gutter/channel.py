@@ -45,7 +45,7 @@ class RainwaveChannel(object):
             else:
                 d = self.client.call(u'sync/{}/init'.format(self.id))
             if self._do_sync:
-                self._cache_raw_timeline(d)
+                self._raw_timeline = d
                 post_sync.send(self, channel=self)
 
     def _get_album_raw_info(self, album_id):
@@ -141,7 +141,7 @@ class RainwaveChannel(object):
         if not self._do_sync:
             self._do_async_get()
         sched_next = []
-        for raw_sched in self._cache_raw_timeline[u'sched_next']:
+        for raw_sched in self._raw_timeline[u'sched_next']:
             sched_next.append(self._new_schedule(raw_sched))
         return sched_next
 
