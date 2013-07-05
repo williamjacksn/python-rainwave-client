@@ -252,3 +252,7 @@ class RainwaveChannel(object):
             del self._sync_thread
         if hasattr(self, u'_raw_timeline'):
             del self._raw_timeline
+
+    def vote(self, elec_entry_id):
+        args = {u'elec_entry_id': elec_entry_id}
+        return self.client.call(u'async/{}/vote'.format(self.id), args)

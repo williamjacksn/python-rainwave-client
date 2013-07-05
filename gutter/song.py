@@ -275,6 +275,7 @@ class RainwaveCandidate(RainwaveSong):
 
     @property
     def elec_entry_id(self):
+        '''The election entry ID for this candidate. Used for voting.'''
         return self._raw_info[u'elec_entry_id']
 
     @property
@@ -302,3 +303,14 @@ class RainwaveCandidate(RainwaveSong):
     def votes(self):
         '''The number of votes this candidate received in the election.'''
         return self._raw_info[u'elec_votes']
+
+    def vote(self):
+        '''Cast a vote for the candidate.'''
+        d = self.album.channel.vote(self.elec_entry_id)
+        if u'vote_result' in d:
+            if d[u'vote_result'][u'code'] == 1:
+                return
+            else:
+                raise Exception(d[u'vote_result'][u'text'])
+        else:
+            raise Exception(d[u'error'][u'text'])
