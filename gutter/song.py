@@ -92,10 +92,25 @@ class RainwaveSong(object):
     @property
     def favourite(self):
         '''A boolean representing whether the song is marked as a favourite or
-        not.'''
+        not. Change whether the song is a favourite by assigning a boolean
+        value to this attribute.'''
         if u'song_favourite' not in self._raw_info:
             self._extend()
         return self._raw_info[u'song_favourite']
+
+    @favourite.setter
+    def favourite(self, value):
+        value = bool(value)
+        if value == self.favourite:
+            return
+        d = self.album.channel.fav_song(self.id, str(value).lower())
+        if u'fav_song_result' in d:
+            if d[u'fav_song_result'][u'code'] == 1:
+                self._raw_info[u'song_favourite'] = value
+            else:
+                raise Exception(d[u'fav_song_result'][u'text'])
+        else:
+            raise Exception(d[u'error'][u'text'])
 
     @property
     def id(self):

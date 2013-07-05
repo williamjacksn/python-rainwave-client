@@ -174,6 +174,14 @@ class RainwaveChannel(object):
         '''The URL of the MP3 stream for the channel.'''
         return self._raw_info[u'stream']
 
+    def fav_album(self, id, fav):
+        args = {u'album_id': id, u'fav': fav}
+        return self.client.call(u'async/{}/fav_album'.format(self.id), args)
+
+    def fav_song(self, id, fav):
+        args = {u'song_id': id, u'fav': fav}
+        return self.client.call(u'async/{}/fav_song'.format(self.id), args)
+
     def get_album_by_id(self, id):
         '''Return a :class:`RainwaveAlbum` for the given album ID. Raises an
         :exc:`IndexError` if there is no album with the given ID in the

@@ -68,8 +68,23 @@ class RainwaveAlbum(object):
     @property
     def favourite(self):
         '''A boolean representing whether the album is marked as a favourite or
-        not.'''
+        not. Change whether the album is a favourite by assigning a boolean
+        value to this attribute.'''
         return self._raw_info[u'album_favourite']
+
+    @favourite.setter
+    def favourite(self, value):
+        value = bool(value)
+        if value == self.favourite:
+            return
+        d = self.channel.fav_album(self.id, str(value).lower())
+        if u'fav_album_result' in d:
+            if d[u'fav_album_result'][u'code'] == 1:
+                self._raw_info[u'album_favourite'] = value
+            else:
+                raise Exception(d[u'fav_album_result'][u'text'])
+        else:
+            raise Exception(d[u'error'][u'text'])
 
     @property
     def id(self):
