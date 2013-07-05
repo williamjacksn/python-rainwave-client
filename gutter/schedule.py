@@ -64,3 +64,27 @@ class RainwaveElection(RainwaveSchedule):
     def songs(self):
         '''See :attr:`candidates`.'''
         return self.candidates
+
+
+class RainwaveOneTimePlay(RainwaveSchedule):
+    '''A :class:`RainwaveOneTimePlay` object is a subclass of
+    :class:`RainwaveSchedule` and represents a song added directly to the
+    timeline by a manager.'''
+
+    def __init__(self, channel, raw_info):
+        return super(RainwaveOneTimePlay, self).__init__(channel, raw_info)
+
+    def __repr__(self):
+        return '<RainwaveOneTimePlay [{}]>'.format(self.channel.name)
+
+    @property
+    def added_by(self):
+        '''The :class:`RainwaveListener` who added the song to the timeline.'''
+        return self.channel.get_listener_by_id(self._raw_info[u'user_id'])
+
+    @property
+    def song(self):
+        '''The :class:`RainwaveSong` for the event.'''
+        album_id = self._raw_info[u'song_data'][0][u'album_id']
+        tmp_album = self.channel.get_album_by_id(album_id)
+        return song.RainwaveSong(tmp_album, self._raw_info[u'song_data'][0])

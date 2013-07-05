@@ -71,6 +71,8 @@ class RainwaveChannel(object):
     def _new_schedule(self, raw_schedule):
         if raw_schedule[u'sched_type'] == 0:
             return schedule.RainwaveElection(self, raw_schedule)
+        if raw_schedule[u'sched_type'] == 4:
+            return schedule.RainwaveOneTimePlay(self, raw_schedule)
 
     @property
     def albums(self):

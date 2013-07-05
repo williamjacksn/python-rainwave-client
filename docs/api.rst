@@ -53,6 +53,12 @@ Developer Interface
 .. autoclass:: RainwaveElection
     :members:
 
+:class:`RainwaveOneTimePlay` Objects
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autoclass:: RainwaveOneTimePlay
+	:members:
+
 :class:`RainwaveListener` Objects
 ---------------------------------
 
