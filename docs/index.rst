@@ -17,7 +17,7 @@ Begin by importing the library and instantiating a RainwaveClient object:
 
 ::
 
-    >>> from gutter.client import RainwaveClient
+    >>> from gutter import RainwaveClient
     >>> rw = RainwaveClient()
 
 Obtain your Rainwave User ID and API key from http://rainwave.cc/auth/ and set them in the RainwaveClient object:
@@ -34,7 +34,7 @@ From the RainwaveClient object you can get a list of channels operating on the n
 ::
 
     >>> rw.channels
-    [RainwaveChannel(Rainwave), RainwaveChannel(OCR Radio), RainwaveChannel(Mixwave), RainwaveChannel(Bitwave), RainwaveChannel(Omniwave)]
+    [<RainwaveChannel [Rainwave]>, <RainwaveChannel [OCR Radio]>, <RainwaveChannel [Mixwave]>, <RainwaveChannel [Bitwave]>, <RainwaveChannel [Omniwave]>]
     >>> ocr = rw.channels[1]
     >>> ocr.stream
     u'http://ocstream.rainwave.cc:8000/ocremix.mp3?5049:abcde12345'
@@ -51,6 +51,5 @@ Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
 

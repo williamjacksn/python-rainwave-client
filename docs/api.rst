@@ -39,7 +39,7 @@ Developer Interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: RainwaveCandidate
-    :inherited-members:
+    :members:
 
 :class:`RainwaveSchedule` Objects
 ---------------------------------
@@ -51,4 +51,10 @@ Developer Interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: RainwaveElection
-    :inherited-members:
+    :members:
+
+:class:`RainwaveListener` Objects
+---------------------------------
+
+.. autoclass:: RainwaveListener
+	:members:

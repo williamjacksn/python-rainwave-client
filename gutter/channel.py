@@ -1,6 +1,7 @@
 import album
 import artist
 import dispatch
+import listener
 import schedule
 import threading
 
@@ -62,6 +63,11 @@ class RainwaveChannel(object):
         d = self.client.call(u'async/{}/artist_detail'.format(self.id), args)
         return dict(raw_info.items() + d[u'artist_detail'].items())
 
+    def _get_listener_raw_info(self, listener_id):
+        args = {u'listener_uid': listener_id}
+        d = self.client.call(u'async/{}/listener_detail'.format(self.id), args)
+        return d[u'listener_detail']
+
     def _new_schedule(self, raw_schedule):
         if raw_schedule[u'sched_type'] == 0:
             return schedule.RainwaveElection(self, raw_schedule)
@@ -102,9 +108,25 @@ class RainwaveChannel(object):
         return self._raw_info[u'description']
 
     @property
+    def guest_count(self):
+        '''The number of guests listening to the channel.'''
+        d = self.client.call(u'async/{}/listeners_current'.format(self.id))
+        return d[u'listeners_current'][u'guests']
+
+    @property
     def id(self):
         '''The ID of the channel.'''
         return self._raw_info[u'id']
+
+    @property
+    def listeners(self):
+        '''A list of :class:`RainwaveListener` objects listening to the
+        channel.'''
+        _listeners = []
+        d = self.client.call(u'async/{}/listeners_current'.format(self.id))
+        for raw_listener in d[u'listeners_current'][u'users']:
+            _listeners.append(listener.RainwaveListener(self, raw_listener))
+        return _listeners
 
     @property
     def name(self):
@@ -163,6 +185,21 @@ class RainwaveChannel(object):
             if album.id == id:
                 return album
         error = u'Channel does not contain album with id: {}'.format(id)
+        raise IndexError(error)
+
+    def get_album_by_name(self, name):
+        '''Returns a :class:`RainwaveAlbum` for the given album name. Raises an
+        :exc:`IndexError` if there is no album with the given ID in the
+        playlist of the channel.
+
+        :param id: the name of the desired album.
+        :type id: str
+        '''
+
+        for album in self.albums:
+            if album.name == name:
+                return album
+        error = u'Channel does not contain album with name: {}'.format(name)
         raise IndexError(error)
 
     def get_artist_by_id(self, id):
