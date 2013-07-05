@@ -219,6 +219,16 @@ class RainwaveChannel(object):
         error = u'Channel does not contain artist with id: {}'.format(id)
         raise IndexError(error)
 
+    def get_listener_by_id(self, id):
+        '''Return a :class:`RainwaveListener` for the given ID. Raises an
+        :exc:`IndexError` if there is no listener with the given ID.
+
+        :param id: the ID of the desired listener.
+        :type id: int
+        '''
+
+        return listener.RainwaveListener(self, self._get_listener_raw_info(id))
+
     def get_listener_by_name(self, name):
         '''Returns a :class:`RainwaveListener` for the given listener name.
         Raises an :exc:`IndexError` if there is no listener with the given name
