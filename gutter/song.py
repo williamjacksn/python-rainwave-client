@@ -121,7 +121,7 @@ class RainwaveSong(object):
 
     @rating.setter
     def rating(self, value):
-        d = self.album.rate_song(self.id, value)
+        d = self.album.channel.rate(self.id, value)
         if u'rate_result' in d:
             if d[u'rate_result'][u'code'] == 1:
                 self._raw_info[u'song_rating_user'] = value

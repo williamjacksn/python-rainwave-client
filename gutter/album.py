@@ -232,6 +232,3 @@ class RainwaveAlbum(object):
             if song.id == id:
                 return song
         raise IndexError(u'Album does not contain song with id: {}'.format(id))
-
-    def rate_song(self, song_id, rating):
-        return self.channel.rate_song(song_id, rating)

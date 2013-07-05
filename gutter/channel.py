@@ -232,7 +232,7 @@ class RainwaveChannel(object):
         error = u'No current listener named {}'.format(name)
         raise IndexError(error)
 
-    def rate_song(self, song_id, rating):
+    def rate(self, song_id, rating):
         args = {u'song_id': song_id, u'rating': rating}
         return self.client.call(u'async/{}/rate'.format(self.id), args)
 
