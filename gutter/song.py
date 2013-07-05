@@ -265,6 +265,15 @@ class RainwaveCandidate(RainwaveSong):
         return '<RainwaveCandidate [{}]>'.format(self)
 
     @property
+    def conflicts_with(self):
+        '''The :class:`RainwaveListener` who has a conflicting request, if the
+        candidate is a conflict. :code:`None` otherwise.'''
+        if self.isconflict:
+            name = self._raw_info[u'song_requestor']
+            return self.album.channel.get_listener_by_name(name)
+        return None
+
+    @property
     def elec_entry_id(self):
         return self._raw_info[u'elec_entry_id']
 
@@ -279,6 +288,15 @@ class RainwaveCandidate(RainwaveSong):
         '''A boolean representing whether the candidate is a listener request
         or not.'''
         return self._raw_info[u'elec_isrequest'] in (3, 4)
+
+    @property
+    def requested_by(self):
+        '''The :class:`RainwaveListener` who requested the candidate, if the
+        candidate is a request. :code:`None` otherwise.'''
+        if self.isrequest:
+            name = self._raw_info[u'song_requestor']
+            return self.album.channel.get_listener_by_name(name)
+        return None
 
     @property
     def votes(self):

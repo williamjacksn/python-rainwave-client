@@ -192,8 +192,8 @@ class RainwaveChannel(object):
         :exc:`IndexError` if there is no album with the given ID in the
         playlist of the channel.
 
-        :param id: the name of the desired album.
-        :type id: str
+        :param name: the name of the desired album.
+        :type name: str
         '''
 
         for album in self.albums:
@@ -215,6 +215,21 @@ class RainwaveChannel(object):
             if artist.id == id:
                 return artist
         error = u'Channel does not contain artist with id: {}'.format(id)
+        raise IndexError(error)
+
+    def get_listener_by_name(self, name):
+        '''Returns a :class:`RainwaveListener` for the given listener name.
+        Raises an :exc:`IndexError` if there is no listener with the given name
+        currently listening to the channel.
+
+        :param name: the name of the desired listener.
+        :type name: str
+        '''
+
+        for listener in self.listeners:
+            if listener.name == name:
+                return listener
+        error = u'No current listener named {}'.format(name)
         raise IndexError(error)
 
     def rate_song(self, song_id, rating):
