@@ -57,7 +57,7 @@ class RainwaveListener(object):
 
     @property
     def totalmindchange(self):
-        '''The total number of times the listeners changed a song rating.'''
+        '''The total number of times the listener changed a song rating.'''
         return self._get_extended(u'radio_totalmindchange')
 
     @property

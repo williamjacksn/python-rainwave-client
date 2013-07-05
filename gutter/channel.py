@@ -175,7 +175,7 @@ class RainwaveChannel(object):
         return self._raw_info[u'stream']
 
     def get_album_by_id(self, id):
-        '''Returns a :class:`RainwaveAlbum` for the given album ID. Raises an
+        '''Return a :class:`RainwaveAlbum` for the given album ID. Raises an
         :exc:`IndexError` if there is no album with the given ID in the
         playlist of the channel.
 
@@ -190,7 +190,7 @@ class RainwaveChannel(object):
         raise IndexError(error)
 
     def get_album_by_name(self, name):
-        '''Returns a :class:`RainwaveAlbum` for the given album name. Raises an
+        '''Return a :class:`RainwaveAlbum` for the given album name. Raises an
         :exc:`IndexError` if there is no album with the given ID in the
         playlist of the channel.
 
@@ -205,7 +205,7 @@ class RainwaveChannel(object):
         raise IndexError(error)
 
     def get_artist_by_id(self, id):
-        '''Returns a :class:`RainwaveArtist` for the given artist ID. Raises an
+        '''Return a :class:`RainwaveArtist` for the given artist ID. Raises an
         :exc:`IndexError` if there is no artist with the given ID in the
         playlist of the channel.
 
@@ -230,7 +230,7 @@ class RainwaveChannel(object):
         return listener.RainwaveListener(self, self._get_listener_raw_info(id))
 
     def get_listener_by_name(self, name):
-        '''Returns a :class:`RainwaveListener` for the given listener name.
+        '''Return a :class:`RainwaveListener` for the given listener name.
         Raises an :exc:`IndexError` if there is no listener with the given name
         currently listening to the channel.
 

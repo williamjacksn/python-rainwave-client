@@ -32,7 +32,7 @@ class RainwaveClient(object):
         return msg.format(self.user_id, repr(self.key))
 
     def call(self, path, args=dict()):
-        '''Makes a direct call to the API if you know the necessary path and
+        '''Make a direct call to the API if you know the necessary path and
         arguments.
 
         :param path: the URL path of the API method to call.

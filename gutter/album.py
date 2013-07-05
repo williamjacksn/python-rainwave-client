@@ -220,7 +220,7 @@ class RainwaveAlbum(object):
         return self._raw_info[u'album_vote_rank']
 
     def get_song_by_id(self, id):
-        '''Returns a :class:`RainwaveSong` for the given song ID. Raises an
+        '''Return a :class:`RainwaveSong` for the given song ID. Raises an
         :exc:`IndexError` if there is no song with the given ID in the
         album.
 

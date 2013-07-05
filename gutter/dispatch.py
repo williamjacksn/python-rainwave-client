@@ -28,7 +28,7 @@ class Signal(object):
         self.lock = threading.Lock()
 
     def connect(self, receiver):
-        '''Adds a receiver to the signal.'''
+        '''Add a receiver to the signal.'''
 
         self.lock.acquire()
         try:
@@ -37,7 +37,7 @@ class Signal(object):
             self.lock.release()
 
     def disconnect(self, receiver):
-        '''Removes a receiver from the signal.'''
+        '''Remove a receiver from the signal.'''
 
         self.lock.acquire()
         try:
@@ -46,7 +46,7 @@ class Signal(object):
             self.lock.release()
 
     def send(self, sender, **kwargs):
-        '''Sends the signal to all connected receivers.'''
+        '''Send the signal to all connected receivers.'''
 
         for receiver in self.receivers:
             receiver(signal=self, sender=sender, **kwargs)
