@@ -1,5 +1,6 @@
 import album
 import artist
+import datetime
 import dispatch
 import listener
 import schedule
@@ -26,6 +27,7 @@ class RainwaveChannel(object):
         self.client = client
         self._raw_info = raw_info
         self._do_sync = False
+        self._init_lock = threading.Lock()
 
     def __repr__(self):
         return '<RainwaveChannel [{}]>'.format(self.name)
@@ -34,20 +36,39 @@ class RainwaveChannel(object):
         return '{}, {}'.format(self.name, self.description)
 
     def _do_async_get(self):
-        d = self.client.call(u'/async/{}/get'.format(self.id))
-        self._raw_timeline = d
+        if not self.stale:
+            return
+        if self._do_sync and not hasattr(self, '_raw_timeline'):
+            ## Prevent AttributeError by waiting on _init_lock to be released
+            self._init_lock.acquire()
+            self._init_lock.release()
+        else:
+            self._init_lock.acquire()
+            d = self.client.call(u'/async/{}/get'.format(self.id))
+            self._raw_timeline = d
+            self._init_lock.release()
 
     def _do_sync_thread(self):
+        self._init_lock.acquire()
         self._do_sync = True
-        while self._do_sync:
-            pre_sync.send(self)
-            if hasattr(self, u'_raw_timeline'):
-                d = self.client.call(u'sync/{}/sync'.format(self.id))
-            else:
-                d = self.client.call(u'sync/{}/init'.format(self.id))
-            if self._do_sync:
-                self._raw_timeline = d
-                post_sync.send(self, channel=self)
+        lock_acquired = True
+        try:
+            while self._do_sync:
+                pre_sync.send(self)
+                if hasattr(self, u'_raw_timeline'):
+                    d = self.client.call(u'sync/{}/sync'.format(self.id))
+                else:
+                    d = self.client.call(u'sync/{}/init'.format(self.id))
+                if self._do_sync:
+                    self._raw_timeline = d
+                if lock_acquired:
+                    self._init_lock.release()
+                    lock_acquired = False
+                if self._do_sync:
+                    post_sync.send(self, channel=self)
+        finally:
+            if lock_acquired:
+                self._init_lock.release()
 
     def _get_album_raw_info(self, album_id):
         args = {u'album_id': album_id}
@@ -143,16 +164,14 @@ class RainwaveChannel(object):
     @property
     def schedule_current(self):
         '''The current :class:`RainwaveSchedule` for the channel.'''
-        if not self._do_sync:
-            self._do_async_get()
+        self._do_async_get()
         return self._new_schedule(self._raw_timeline[u'sched_current'])
 
     @property
     def schedule_history(self):
         '''A list of the past :class:`RainwaveSchedule` objects for the
         channel.'''
-        if not self._do_sync:
-            self._do_async_get()
+        self._do_async_get()
         sched_history = []
         for raw_sched in self._raw_timeline[u'sched_history']:
             sched_history.append(self._new_schedule(raw_sched))
@@ -162,12 +181,21 @@ class RainwaveChannel(object):
     def schedule_next(self):
         '''A list of the next :class:`RainwaveSchedule` objects for the
         channel.'''
-        if not self._do_sync:
-            self._do_async_get()
+        self._do_async_get()
         sched_next = []
         for raw_sched in self._raw_timeline[u'sched_next']:
             sched_next.append(self._new_schedule(raw_sched))
         return sched_next
+
+    @property
+    def stale(self):
+        '''True if the timeline information is out of date.'''
+        if not hasattr(self, '_raw_timeline'):
+            return True
+        now = datetime.datetime.utcnow()
+        ts = self._raw_timeline[u'sched_next'][0][u'sched_starttime']
+        ts = datetime.datetime.utcfromtimestamp(ts)
+        return now > ts
 
     @property
     def stream(self):
