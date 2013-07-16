@@ -1,5 +1,8 @@
+.DS_Store
 *.pyc
 *.pyproj
 *.sln
+*.sublime-project
+*.sublime-workspace
 *.suo
 docs/_build
