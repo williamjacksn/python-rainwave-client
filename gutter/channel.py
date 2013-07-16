@@ -1,5 +1,6 @@
 import album
 import artist
+import datetime
 import dispatch
 import listener
 import schedule
@@ -27,6 +28,11 @@ class RainwaveChannel(object):
         self._raw_info = raw_info
         self._do_sync = False
 
+        self._sched_current = dict()
+        self._sched_next = list()
+        self._sched_history = list()
+        self._sched_lock = threading.Lock()
+
     def __repr__(self):
         return '<RainwaveChannel [{}]>'.format(self.name)
 
@@ -34,19 +40,28 @@ class RainwaveChannel(object):
         return '{}, {}'.format(self.name, self.description)
 
     def _do_async_get(self):
+        if not self._stale():
+            return
         d = self.client.call(u'/async/{}/get'.format(self.id))
-        self._raw_timeline = d
+        with self._sched_lock:
+            self._sched_current = d[u'sched_current']
+            self._sched_next = d[u'sched_next']
+            self._sched_history = d[u'sched_history']
+        post_sync.send(self)
 
     def _do_sync_thread(self):
         self._do_sync = True
         while self._do_sync:
             pre_sync.send(self)
-            if hasattr(self, u'_raw_timeline'):
+            if len(self._sched_current) > 0:
                 d = self.client.call(u'sync/{}/sync'.format(self.id))
             else:
                 d = self.client.call(u'sync/{}/init'.format(self.id))
             if self._do_sync:
-                self._raw_timeline = d
+                with self._sched_lock:
+                    self._sched_current = d[u'sched_current']
+                    self._sched_next = d[u'sched_next']
+                    self._sched_history = d[u'sched_history']
                 post_sync.send(self, channel=self)
 
     def _get_album_raw_info(self, album_id):
@@ -73,6 +88,18 @@ class RainwaveChannel(object):
             return schedule.RainwaveElection(self, raw_schedule)
         if raw_schedule[u'sched_type'] == 4:
             return schedule.RainwaveOneTimePlay(self, raw_schedule)
+
+    def _stale(self):
+        '''Return True if timeline information (:attr:`schedule_current`,
+        :attr:`schedule_next`, and :attr:`schedule_history`) is missing or out
+        of date.'''
+
+        if len(self._sched_next) < 1:
+            return True
+        now = datetime.datetime.utcnow()
+        ts = self._sched_next[0][u'sched_starttime']
+        ts = datetime.datetime.utcfromtimestamp(ts)
+        return now > ts
 
     @property
     def albums(self):
@@ -143,30 +170,35 @@ class RainwaveChannel(object):
     @property
     def schedule_current(self):
         '''The current :class:`RainwaveSchedule` for the channel.'''
-        if not self._do_sync:
+        if self._stale():
             self._do_async_get()
-        return self._new_schedule(self._raw_timeline[u'sched_current'])
+        sched_current = None
+        with self._sched_lock:
+            sched_current = self._new_schedule(self._sched_current)
+        return sched_current
 
     @property
     def schedule_history(self):
         '''A list of the past :class:`RainwaveSchedule` objects for the
         channel.'''
-        if not self._do_sync:
+        if self._stale():
             self._do_async_get()
-        sched_history = []
-        for raw_sched in self._raw_timeline[u'sched_history']:
-            sched_history.append(self._new_schedule(raw_sched))
+        sched_history = list()
+        with self._sched_lock:
+            for raw_sched in self._sched_history:
+                sched_history.append(self._new_schedule(raw_sched))
         return sched_history
 
     @property
     def schedule_next(self):
         '''A list of the next :class:`RainwaveSchedule` objects for the
         channel.'''
-        if not self._do_sync:
+        if self._stale():
             self._do_async_get()
-        sched_next = []
-        for raw_sched in self._raw_timeline[u'sched_next']:
-            sched_next.append(self._new_schedule(raw_sched))
+        sched_next = list()
+        with self._sched_lock:
+            for raw_sched in self._sched_next:
+                sched_next.append(self._new_schedule(raw_sched))
         return sched_next
 
     @property
@@ -270,8 +302,6 @@ class RainwaveChannel(object):
         self._do_sync = False
         if hasattr(self, u'_sync_thread'):
             del self._sync_thread
-        if hasattr(self, u'_raw_timeline'):
-            del self._raw_timeline
 
     def vote(self, elec_entry_id):
         args = {u'elec_entry_id': elec_entry_id}
