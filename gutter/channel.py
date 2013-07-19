@@ -4,6 +4,7 @@ import datetime
 import dispatch
 import listener
 import schedule
+import song
 import threading
 
 pre_sync = dispatch.Signal()
@@ -33,6 +34,10 @@ class RainwaveChannel(object):
         self._sched_history = list()
         self._sched_lock = threading.Lock()
 
+        self._raw_requests = list()
+        self._raw_requests_user = list()
+        self._requests_lock = threading.Lock()
+
     def __repr__(self):
         return '<RainwaveChannel [{}]>'.format(self.name)
 
@@ -49,6 +54,14 @@ class RainwaveChannel(object):
             self._sched_history = d[u'sched_history']
         post_sync.send(self)
 
+    def _do_async_requests_get(self):
+        if not self._stale():
+            return
+        d = self.client.call(u'async/{}/requests_get'.format(self.id))
+        with self._requests_lock:
+            self._raw_requests = d[u'requests_all']
+            self._raw_requests_user = d[u'requests_user']
+
     def _do_sync_thread(self):
         self._do_sync = True
         while self._do_sync:
@@ -62,6 +75,9 @@ class RainwaveChannel(object):
                     self._sched_current = d[u'sched_current']
                     self._sched_next = d[u'sched_next']
                     self._sched_history = d[u'sched_history']
+                with self._requests_lock:
+                    self._raw_requests = d[u'requests_all']
+                    self._raw_requests_user = d[u'requests_user']
                 post_sync.send(self, channel=self)
 
     def _get_album_raw_info(self, album_id):
@@ -166,6 +182,21 @@ class RainwaveChannel(object):
     def oggstream(self):
         '''The URL of the OGG stream for the channel.'''
         return self._raw_info[u'oggstream']
+
+    @property
+    def requests(self):
+        '''A list of :class:`RainwaveRequest` objects in the request line of
+        the channel.'''
+        if self._stale():
+            self._do_async_requests_get()
+        rqs = list()
+        with self._requests_lock:
+            for raw_request in self._raw_requests:
+                album_id = raw_request[u'request'][u'album_id']
+                album = self.get_album_by_id(album_id)
+                rq = song.RainwaveRequest(album, raw_request)
+                rqs.append(rq)
+        return rqs
 
     @property
     def schedule_current(self):
