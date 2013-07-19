@@ -1,7 +1,3 @@
-import album
-import song
-
-
 class RainwaveArtist(object):
     '''A :class:`RainwaveArtist` object represents one artist.
 
@@ -13,7 +9,7 @@ class RainwaveArtist(object):
     '''
 
     def __init__(self, channel, raw_info):
-        self._channel = channel
+        self.channel = channel
         self._raw_info = raw_info
 
     def __repr__(self):
@@ -36,7 +32,7 @@ class RainwaveArtist(object):
     def numsongs(self):
         '''The number of songs attributed to the artist.'''
         if u'artist_numsongs' not in self._raw_info:
-            more_info = self._channel._get_artist_raw_info(self.id)
+            more_info = self.channel._get_artist_raw_info(self.id)
             self._raw_info = dict(self._raw_info.items() + more_info.items())
         return self._raw_info[u'artist_numsongs']
 
@@ -44,14 +40,14 @@ class RainwaveArtist(object):
     def songs(self):
         '''A list of :class:`RainwaveSong` objects attributed to the artist.'''
         if u'songs' not in self._raw_info:
-            more_info = self._channel._get_artist_raw_info(self.id)
+            more_info = self.channel._get_artist_raw_info(self.id)
             self._raw_info = dict(self._raw_info.items() + more_info.items())
         if not hasattr(self, u'_songs'):
             self._songs = []
             for raw_song in self._raw_info[u'songs']:
                 album_id = raw_song[u'album_id']
-                new_raw_album = self._channel._get_album_raw_info(album_id)
-                new_album = album.RainwaveAlbum(self._channel, new_raw_album)
-                new_song = song.RainwaveSong(new_album, raw_song)
-                self._songs.append(new_song)
+                album = self.channel.get_album_by_id(album_id)
+                song_id = raw_song[u'song_id']
+                song = album.get_song_by_id(song_id)
+                self._songs.append(song)
         return self._songs
