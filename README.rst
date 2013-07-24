@@ -18,6 +18,9 @@ Sphinx_.
 Installation
 ------------
 
-Clone this repository and install with this command::
+Clone this repository or `download a release`_ and unpack it. Install with this
+command::
 
     python setup.py install
+
+.. _download a release: https://github.com/williamjacksn/gutter/releases

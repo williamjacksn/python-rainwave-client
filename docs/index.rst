@@ -6,26 +6,41 @@
 Gutter
 ======
 
-Gutter is a Rainwave_ client framework for Python. The source is available at https://github.com/williamjacksn/gutter.
+Gutter is a Rainwave_ client framework for Python. The source is available at
+https://github.com/williamjacksn/gutter.
 
 .. _Rainwave: http://rainwave.cc/
+
+Installation
+------------
+
+`Clone the repository`_ or `download a release`_ and unpack it. Install with
+this command::
+
+    python setup.py install
+
+.. _Clone the repository: https://github.com/williamjacksn/gutter
+.. _download a release: https://github.com/williamjacksn/gutter/releases
 
 Getting Started
 ---------------
 
-Begin by importing the library and instantiating a :class:`RainwaveClient` object::
+Begin by importing the library and instantiating a :class:`RainwaveClient`
+object::
 
     >>> from gutter import RainwaveClient
     >>> rw = RainwaveClient()
 
-Obtain your Rainwave User ID and API key from http://rainwave.cc/auth/ and set them in the :class:`RainwaveClient` object::
+Obtain your Rainwave User ID and API key from http://rainwave.cc/auth/ and set
+them in the :class:`RainwaveClient` object::
 
     >>> rw.user_id = 5049
     >>> rw.key = u'abcde12345'
     >>> rw
     RainwaveClient(user_id=5049, key=u'abcde12345')
 
-From the :class:`RainwaveClient` object you can get a list of channels operating on the network::
+From the :class:`RainwaveClient` object you can get a list of channels
+operating on the network::
 
     >>> rw.channels
     [<RainwaveChannel [Rainwave]>, <RainwaveChannel [OCR Radio]>, <RainwaveChannel [Mixwave]>, <RainwaveChannel [Bitwave]>, <RainwaveChannel [Omniwave]>]
