@@ -1,4 +1,4 @@
-__version__ = u'0.1.0'
+__version__ = u'0.1.1'
 __author__ = u'William Jackson'
 
 from .client import RainwaveClient
