@@ -9,7 +9,7 @@ setup(
     author_email = u'william@subtlecoolness.com',
     url = u'https://gutter.readthedocs.org/',
     description = u'Rainwave client framework',
-    packages = [u'gutter'],
+    packages = ['gutter'],
     classifiers = [
         u'Development Status :: 3 - Alpha',
         u'Intended Audience :: Developers',
