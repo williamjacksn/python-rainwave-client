@@ -120,6 +120,12 @@ class RainwaveAlbum(object):
         return self._raw_info[u'album_name']
 
     @property
+    def rating(self):
+        '''The average of all ratings given to songs in the album by only the
+        listener authenticating to the API.'''
+        return self._raw_info[u'album_rating_user']
+
+    @property
     def rating_avg(self):
         '''The average of all ratings given to songs in the album by all
         listeners.'''
@@ -155,9 +161,8 @@ class RainwaveAlbum(object):
 
     @property
     def rating_user(self):
-        '''The average of all ratings given to songs in the album by only the
-        listener authenticating to the API.'''
-        return self._raw_info[u'album_rating_user']
+        '''See :attr:`rating`.'''
+        return self.rating
 
     @property
     def request_rank(self):
