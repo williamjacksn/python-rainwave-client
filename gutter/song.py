@@ -1,4 +1,3 @@
-import artist
 import datetime
 
 
@@ -65,8 +64,9 @@ class RainwaveSong(object):
             if u'artists' not in self._raw_info:
                 self._extend()
             for raw_artist in self._raw_info[u'artists']:
+                artist_id = raw_artist[u'artist_id']
                 channel = self.album.channel
-                new_artist = artist.RainwaveArtist(channel, raw_artist)
+                new_artist = channel.get_artist_by_id(artist_id)
                 self._artists.append(new_artist)
         return self._artists
 
