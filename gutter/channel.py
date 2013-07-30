@@ -3,8 +3,8 @@ import artist
 import datetime
 import dispatch
 import listener
+import request
 import schedule
-import song
 import threading
 
 pre_sync = dispatch.Signal()
@@ -194,7 +194,7 @@ class RainwaveChannel(object):
             for raw_request in self._raw_requests:
                 album_id = raw_request[u'request'][u'album_id']
                 album = self.get_album_by_id(album_id)
-                rq = song.RainwaveRequest(album, raw_request)
+                rq = request.RainwaveRequest(album, raw_request)
                 rqs.append(rq)
         return rqs
 
@@ -248,7 +248,7 @@ class RainwaveChannel(object):
             for raw_request in self._raw_user_requests:
                 album_id = raw_request[u'album_id']
                 album = self.get_album_by_id(album_id)
-                rq = song.RainwaveUserRequest(album, raw_request)
+                rq = request.RainwaveUserRequest(album, raw_request)
                 rqs.append(rq)
         return rqs
 
