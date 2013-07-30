@@ -47,6 +47,12 @@ Developer Interface
 .. autoclass:: RainwaveRequest
     :members:
 
+:class:`RainwaveUserRequest` Objects
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autoclass:: RainwaveUserRequest
+    :members:
+
 :class:`RainwaveSchedule` Objects
 ---------------------------------
 

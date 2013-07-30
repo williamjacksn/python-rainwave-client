@@ -35,7 +35,7 @@ class RainwaveChannel(object):
         self._sched_lock = threading.Lock()
 
         self._raw_requests = list()
-        self._raw_requests_user = list()
+        self._raw_user_requests = list()
         self._requests_lock = threading.Lock()
 
     def __repr__(self):
@@ -60,7 +60,7 @@ class RainwaveChannel(object):
         d = self.client.call(u'async/{}/requests_get'.format(self.id))
         with self._requests_lock:
             self._raw_requests = d[u'requests_all']
-            self._raw_requests_user = d[u'requests_user']
+            self._raw_user_requests = d[u'requests_user']
 
     def _do_sync_thread(self):
         self._do_sync = True
@@ -77,7 +77,7 @@ class RainwaveChannel(object):
                     self._sched_history = d[u'sched_history']
                 with self._requests_lock:
                     self._raw_requests = d[u'requests_all']
-                    self._raw_requests_user = d[u'requests_user']
+                    self._raw_user_requests = d[u'requests_user']
                 post_sync.send(self, channel=self)
 
     def _get_album_raw_info(self, album_id):
@@ -237,6 +237,26 @@ class RainwaveChannel(object):
         '''The URL of the MP3 stream for the channel.'''
         return self._raw_info[u'stream']
 
+    @property
+    def user_requests(self):
+        '''A list of :class:`RainwaveRequest` objects in the listener's
+        personal request queue.'''
+        if self._stale():
+            self._do_async_requests_get()
+        rqs = list()
+        with self._requests_lock:
+            for raw_request in self._raw_user_requests:
+                album_id = raw_request[u'album_id']
+                album = self.get_album_by_id(album_id)
+                rq = song.RainwaveUserRequest(album, raw_request)
+                rqs.append(rq)
+        return rqs
+
+    def delete_request(self, id):
+        path = u'async/{}/request_delete'.format(self.id)
+        args = {u'requestq_id': id}
+        return self.client.call(path, args)
+
     def fav_album(self, id, fav):
         args = {u'album_id': id, u'fav': fav}
         return self.client.call(u'async/{}/fav_album'.format(self.id), args)
@@ -318,6 +338,11 @@ class RainwaveChannel(object):
     def rate(self, song_id, rating):
         args = {u'song_id': song_id, u'rating': rating}
         return self.client.call(u'async/{}/rate'.format(self.id), args)
+
+    def request_song(self, id):
+        path = u'async/{}/request'.format(self.id)
+        args = {u'song_id': id}
+        return self.client.call(path, args)
 
     def start_sync(self):
         '''Begin syncing the timeline for the channel.'''

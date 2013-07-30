@@ -267,6 +267,17 @@ class RainwaveSong(object):
             self._extend()
         return self._raw_info[u'song_urltext']
 
+    def request(self):
+        '''Add the song to the authenticating listener's request queue.'''
+        d = self.album.channel.request_song(self.id)
+        if u'request_result' in d:
+            if d[u'request_result'][u'code'] == 1:
+                return
+            else:
+                raise Exception(d[u'request_result'][u'text'])
+        else:
+            raise Exception(d[u'error'][u'text'])
+
 
 class RainwaveCandidate(RainwaveSong):
     '''A :class:`RainwaveCandidate` object is a subclass of
@@ -355,3 +366,23 @@ class RainwaveRequest(RainwaveSong):
         '''The :class:`RainwaveListener` who made the request.'''
         id = self._raw_info[u'request_user_id']
         return self.album.channel.get_listener_by_id(id)
+
+
+class RainwaveUserRequest(RainwaveSong):
+    '''A :class:`RainwaveUserRequest` object is a subclass of
+    :class:`RainwaveSong` representing a song in the authenticating listener's
+    requests queue.'''
+
+    def __repr__(self):
+        return '<RainwaveUserRequest [{}]>'.format(self)
+
+    @property
+    def requestq_id(self):
+        '''The request queue ID of the song in the authenticating listener's
+        request queue. Used to change, reorder, or delete a request.'''
+        return self._raw_info[u'requestq_id']
+
+    def delete(self):
+        '''Remove the requested song from the authenticating listener's request
+        queue.'''
+        self.album.channel.delete_request(self.requestq_id)
