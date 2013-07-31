@@ -36,6 +36,25 @@ class RainwaveUserRequest(song.RainwaveSong):
         return '<RainwaveUserRequest [{}]>'.format(self)
 
     @property
+    def blocked(self):
+        '''``True`` if the request is currently blocked. See
+        :attr:`blocked_by_album` and :attr:`blocked_by_group` to determine why
+        the request is blocked.'''
+        return self.blocked_by_album or self.blocked_by_group
+
+    @property
+    def blocked_by_album(self):
+        '''``True`` if the request is currently blocked because a song from the
+        same album is in an election.'''
+        return self._raw_info[u'album_electionblock']
+
+    @property
+    def blocked_by_group(self):
+        '''``True`` if the request is currently blocked because a song from the
+        same cooldown group is in an election.'''
+        return self._raw_info[u'group_electionblock']
+
+    @property
     def requestq_id(self):
         '''The request queue ID of the song in the authenticating listener's
         request queue. Used to change, reorder, or delete a request.'''
