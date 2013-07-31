@@ -1,84 +1,84 @@
 .. _api:
 
-Developer Interface
-===================
+API Objects
+===========
 
 .. module:: gutter
 
-:class:`RainwaveClient` Objects
--------------------------------
+:class:`RainwaveClient`
+-----------------------
 
 .. autoclass:: RainwaveClient
     :members:
 
-:class:`RainwaveChannel` Objects
---------------------------------
+:class:`RainwaveChannel`
+------------------------
 
 .. autoclass:: RainwaveChannel
     :members:
 
-:class:`RainwaveAlbum` Objects
-------------------------------
+:class:`RainwaveAlbum`
+----------------------
 
 .. autoclass:: RainwaveAlbum
     :members:
 
-:class:`RainwaveArtist` Objects
--------------------------------
+:class:`RainwaveArtist`
+-----------------------
 
 .. autoclass:: RainwaveArtist
     :members:
 
-:class:`RainwaveSong` Objects
------------------------------
+:class:`RainwaveSong`
+---------------------
 
 .. autoclass:: RainwaveSong
     :members:
 
-:class:`RainwaveCandidate` Objects
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+:class:`RainwaveCandidate`
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: RainwaveCandidate
     :members:
 
-:class:`RainwaveRequest` Objects
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+:class:`RainwaveRequest`
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: RainwaveRequest
     :members:
 
-:class:`RainwaveUserRequest` Objects
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+:class:`RainwaveUserRequest`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: RainwaveUserRequest
     :members:
 
-:class:`RainwaveUserRequestQueue` Objects
------------------------------------------
+:class:`RainwaveUserRequestQueue`
+---------------------------------
 
 .. autoclass:: RainwaveUserRequestQueue
     :members:
 
-:class:`RainwaveSchedule` Objects
----------------------------------
+:class:`RainwaveSchedule`
+-------------------------
 
 .. autoclass:: RainwaveSchedule
     :members:
 
-:class:`RainwaveElection` Objects
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+:class:`RainwaveElection`
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: RainwaveElection
     :members:
 
-:class:`RainwaveOneTimePlay` Objects
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+:class:`RainwaveOneTimePlay`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: RainwaveOneTimePlay
 	:members:
 
-:class:`RainwaveListener` Objects
----------------------------------
+:class:`RainwaveListener`
+-------------------------
 
 .. autoclass:: RainwaveListener
 	:members:

@@ -59,7 +59,7 @@ class RainwaveUserRequestQueue(list):
         '''Change the order of the requests in the queue.
 
         :param order: the indices of the requests in the new order.
-        :type order: iterable
+        :type order: sequence
 
         Example usage:
 
@@ -79,8 +79,8 @@ class RainwaveUserRequestQueue(list):
         >>> random.shuffle(indices)
         >>> rq.reorder(indices)
 
-        All indices must appear in :code:`order` and each index must only
-        appear once.
+        All indices must appear in ``order`` and each index must only appear
+        once.
         '''
 
         if set(order) != set(range(len(self))):

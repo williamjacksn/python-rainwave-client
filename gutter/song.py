@@ -286,7 +286,7 @@ class RainwaveCandidate(RainwaveSong):
     @property
     def conflicts_with(self):
         '''The :class:`RainwaveListener` who has a conflicting request, if the
-        candidate is a conflict. :code:`None` otherwise.'''
+        candidate is a conflict. ``None`` otherwise.'''
         if self.isconflict:
             name = self._raw_info[u'song_requestor']
             return self.album.channel.get_listener_by_name(name)
@@ -312,7 +312,7 @@ class RainwaveCandidate(RainwaveSong):
     @property
     def requested_by(self):
         '''The :class:`RainwaveListener` who requested the candidate, if the
-        candidate is a request. :code:`None` otherwise.'''
+        candidate is a request. ``None`` otherwise.'''
         if self.isrequest:
             name = self._raw_info[u'song_requestor']
             return self.album.channel.get_listener_by_name(name)
