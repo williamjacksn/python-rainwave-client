@@ -40,7 +40,7 @@ class RainwaveUserRequest(song.RainwaveSong):
         '''``True`` if the request is currently blocked. See
         :attr:`blocked_by_album` and :attr:`blocked_by_group` to determine why
         the request is blocked.'''
-        return self.blocked_by_album or self.blocked_by_group
+        return bool(self.blocked_by_album or self.blocked_by_group)
 
     @property
     def blocked_by_album(self):

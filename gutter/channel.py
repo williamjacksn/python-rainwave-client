@@ -256,13 +256,13 @@ class RainwaveChannel(object):
         path = u'async/{}/request_delete'.format(self.id)
         args = {u'requestq_id': id}
         d = self.client.call(path, args)
-        if u'request_delete_return' in d:
-            if d[u'request_delete_return'][u'code'] == 1:
+        if u'request_delete_result' in d:
+            if d[u'request_delete_result'][u'code'] == 1:
                 with self._requests_lock:
                     self._raw_user_requests = d[u'requests_user']
                 return d
             else:
-                raise Exception(d[u'request_delete_return'][u'text'])
+                raise Exception(d[u'request_delete_result'][u'text'])
         else:
             raise Exception(d[u'error'][u'text'])
 
