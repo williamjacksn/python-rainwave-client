@@ -45,3 +45,47 @@ class RainwaveUserRequest(song.RainwaveSong):
         '''Remove the requested song from the authenticating listener's request
         queue.'''
         self.album.channel.delete_request(self.requestq_id)
+
+
+class RainwaveUserRequestQueue(list):
+    '''A :class:`RainwaveUserRequestQueue` is a list-like object that supports
+    explicit reordering.'''
+
+    def __init__(self, channel):
+        super(RainwaveUserRequestQueue, self).__init__()
+        self.channel = channel
+
+    def reorder(self, order):
+        '''Change the order of the requests in the queue.
+
+        :param order: the indices of the requests in the new order.
+        :type order: iterable
+
+        Example usage:
+
+        If you have four songs in your request queue and you want to move the
+        last song to the top of the queue::
+
+        >>> from gutter import RainwaveClient
+        >>> rw = RainwaveClient(5049, u'abcde12345')
+        >>> game = rw.channels[0]
+        >>> rq = game.user_requests
+        >>> rq.reorder([3, 0, 1, 2])
+
+        To randomly shuffle your request queue::
+
+        >>> import random
+        >>> indices = range(len(game.user_requests))
+        >>> random.shuffle(indices)
+        >>> rq.reorder(indices)
+
+        All indices must appear in :code:`order` and each index must only
+        appear once.
+        '''
+
+        if set(order) != set(range(len(self))):
+            raise Exception(u'Incorrect indices.')
+        if len(order) != len(set(order)):
+            raise Exception(u'Too many indices.')
+        rqids = u','.join([str(self[i].requestq_id) for i in order])
+        self.channel.reorder_requests(rqids)

@@ -9,4 +9,5 @@ from .cooldown import RainwaveCooldownGroup
 from .schedule import RainwaveSchedule, RainwaveElection, RainwaveOneTimePlay
 from .song import RainwaveSong, RainwaveCandidate
 from .request import RainwaveRequest, RainwaveUserRequest
+from .request import RainwaveUserRequestQueue
 from .listener import RainwaveListener

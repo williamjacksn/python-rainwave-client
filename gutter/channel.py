@@ -239,11 +239,11 @@ class RainwaveChannel(object):
 
     @property
     def user_requests(self):
-        '''A list of :class:`RainwaveRequest` objects in the listener's
-        personal request queue.'''
+        '''A :class:`RainwaveUserRequestQueue` of :class:`RainwaveUserRequest`
+        objects in the listener's personal request queue.'''
         if self._stale():
             self._do_async_requests_get()
-        rqs = list()
+        rqs = request.RainwaveUserRequestQueue(self)
         with self._requests_lock:
             for raw_request in self._raw_user_requests:
                 album_id = raw_request[u'album_id']
@@ -255,7 +255,16 @@ class RainwaveChannel(object):
     def delete_request(self, id):
         path = u'async/{}/request_delete'.format(self.id)
         args = {u'requestq_id': id}
-        return self.client.call(path, args)
+        d = self.client.call(path, args)
+        if u'request_delete_return' in d:
+            if d[u'request_delete_return'][u'code'] == 1:
+                with self._requests_lock:
+                    self._raw_user_requests = d[u'requests_user']
+                return d
+            else:
+                raise Exception(d[u'request_delete_return'][u'text'])
+        else:
+            raise Exception(d[u'error'][u'text'])
 
     def fav_album(self, id, fav):
         args = {u'album_id': id, u'fav': fav}
@@ -339,10 +348,33 @@ class RainwaveChannel(object):
         args = {u'song_id': song_id, u'rating': rating}
         return self.client.call(u'async/{}/rate'.format(self.id), args)
 
+    def reorder_requests(self, order):
+        path = u'async/{}/requests_reorder'.format(self.id)
+        args = {u'order': order}
+        d = self.client.call(path, args)
+        if u'requests_reorderresult' in d:
+            if d[u'requests_reorderresult'][u'code'] == 1:
+                with self._requests_lock:
+                    self._raw_user_requests = d[u'requests_user']
+                return d
+            else:
+                raise Exception(d[u'requests_reorderresult'][u'text'])
+        else:
+            raise Exception(d[u'error'][u'text'])
+
     def request_song(self, id):
         path = u'async/{}/request'.format(self.id)
         args = {u'song_id': id}
-        return self.client.call(path, args)
+        d = self.client.call(path, args)
+        if u'request_result' in d:
+            if d[u'request_result'][u'code'] == 1:
+                with self._requests_lock:
+                    self._raw_user_requests = d[u'requests_user']
+                return d
+            else:
+                raise Exception(d[u'request_result'][u'text'])
+        else:
+            raise Exception(d[u'error'][u'text'])
 
     def start_sync(self):
         '''Begin syncing the timeline for the channel.'''

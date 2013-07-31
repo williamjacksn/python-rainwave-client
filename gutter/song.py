@@ -269,14 +269,7 @@ class RainwaveSong(object):
 
     def request(self):
         '''Add the song to the authenticating listener's request queue.'''
-        d = self.album.channel.request_song(self.id)
-        if u'request_result' in d:
-            if d[u'request_result'][u'code'] == 1:
-                return
-            else:
-                raise Exception(d[u'request_result'][u'text'])
-        else:
-            raise Exception(d[u'error'][u'text'])
+        self.album.channel.request_song(self.id)
 
 
 class RainwaveCandidate(RainwaveSong):
