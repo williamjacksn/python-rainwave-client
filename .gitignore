@@ -6,3 +6,4 @@
 *.sublime-workspace
 *.suo
 docs/_build
+MANIFEST
