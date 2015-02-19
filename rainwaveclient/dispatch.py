@@ -1,4 +1,4 @@
-'''
+"""
 Signalling framework for internal use.
 
 This is loosely inspired by the Django signalling systems, although far more
@@ -13,22 +13,20 @@ To use, either register a callable using your target signal's
     @receiver(post_sync)
     def on_post_sync(signal, sender, **kwargs):
         ## do something here
-'''
+"""
 
 import threading
 
 
-class Signal(object):
-    '''
-    A signal is triggered each time a particular event happens.
-    '''
+class Signal:
+    """A signal is triggered each time a particular event happens."""
 
     def __init__(self):
         self.receivers = set()
         self.lock = threading.Lock()
 
     def connect(self, receiver):
-        '''Add a receiver to the signal.'''
+        """Add a receiver to the signal."""
 
         self.lock.acquire()
         try:
@@ -37,7 +35,7 @@ class Signal(object):
             self.lock.release()
 
     def disconnect(self, receiver):
-        '''Remove a receiver from the signal.'''
+        """Remove a receiver from the signal."""
 
         self.lock.acquire()
         try:
@@ -46,14 +44,14 @@ class Signal(object):
             self.lock.release()
 
     def send(self, sender, **kwargs):
-        '''Send the signal to all connected receivers.'''
+        """Send the signal to all connected receivers."""
 
         for receiver in self.receivers:
             receiver(signal=self, sender=sender, **kwargs)
 
 
 def receiver(signal, **kwargs):
-    '''Decorator for registering a signal.'''
+    """Decorator for registering a signal."""
 
     def decorator(func):
         signal.connect(func, **kwargs)

@@ -1,5 +1,5 @@
-__version__ = u'0.2.1'
-__author__ = u'William Jackson'
+__version__ = '0.2.1'
+__author__ = 'William Jackson'
 
 from .client import RainwaveClient
 from .channel import RainwaveChannel

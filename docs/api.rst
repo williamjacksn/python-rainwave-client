@@ -3,7 +3,7 @@
 API Objects
 ===========
 
-.. module:: gutter
+.. module:: rainwaveclient
 
 :class:`RainwaveClient`
 -----------------------
@@ -75,10 +75,10 @@ API Objects
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: RainwaveOneTimePlay
-	:members:
+    :members:
 
 :class:`RainwaveListener`
 -------------------------
 
 .. autoclass:: RainwaveListener
-	:members:
+    :members:

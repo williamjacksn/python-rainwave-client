@@ -1,1 +1,2 @@
-requests==1.2.3
+requests==2.5.1
+Sphinx==1.3b2

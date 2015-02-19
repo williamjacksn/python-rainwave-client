@@ -1,4 +1,4 @@
-class RainwaveCooldownGroup(object):
+class RainwaveCooldownGroup:
 
     def __init__(self, channel, id, name):
         self._channel = channel

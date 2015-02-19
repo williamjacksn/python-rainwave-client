@@ -1,23 +1,23 @@
-from distutils.core import setup
+from setuptools import setup
 
-import gutter
+import rainwaveclient
 
 setup(
-    name = u'gutter',
-    version = gutter.__version__,
-    author = gutter.__author__,
-    author_email = u'william@subtlecoolness.com',
-    url = u'https://gutter.readthedocs.org/',
-    description = u'Rainwave client framework',
-    packages = ['gutter'],
-    classifiers = [
-        u'Development Status :: 3 - Alpha',
-        u'Intended Audience :: Developers',
-        u'License :: OSI Approved :: MIT License',
-        u'Natural Language :: English',
-        u'Programming Language :: Python',
-        u'Programming Language :: Python :: 2.7',
-        u'Topic :: Software Development :: Libraries'
+    name='python-rainwave-client',
+    version=rainwaveclient.__version__,
+    author=rainwaveclient.__author__,
+    author_email='william@subtlecoolness.com',
+    url='https://gutter.readthedocs.org/',
+    description='Python Rainwave client library',
+    packages=['rainwaveclient'],
+    classifiers=[
+        'Development Status :: 3 - Alpha',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 3',
+        'Topic :: Software Development :: Libraries'
     ],
-    license = open(u'LICENSE').read()
+    license=open('LICENSE').read()
 )
