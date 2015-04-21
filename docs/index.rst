@@ -6,7 +6,7 @@
 Python Rainwave Client
 ======================
 
-This is a Rainwave_ client library for Python. The source is available at
+This is a Python client library for Rainwave_. The source is available at
 https://github.com/williamjacksn/python-rainwave-client.
 
 .. _Rainwave: http://rainwave.cc/
@@ -14,13 +14,10 @@ https://github.com/williamjacksn/python-rainwave-client.
 Installation
 ------------
 
-`Clone the repository`_ or `download a release`_ and unpack it. Install with
-this command::
+Install using ``pip``::
 
-    python setup.py install
+    pip install python-rainwave-client
 
-.. _Clone the repository: https://github.com/williamjacksn/python-rainwave-client
-.. _download a release: https://github.com/williamjacksn/python-rainwave-client/releases
 
 Getting Started
 ---------------
