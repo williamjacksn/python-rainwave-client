@@ -1,4 +1,7 @@
-import requests
+import json
+import urllib.error
+import urllib.parse
+import urllib.request
 
 from . import channel
 
@@ -14,20 +17,16 @@ class RainwaveClient:
     #: The URL upon which all API calls are based.
     base_url = 'http://rainwave.cc/api4/'
 
-    #: The User ID to use when communicating with the API. Find your User ID at
-    #: http://rainwave.cc/auth/.
-    user_id = 0
+    #: The format string used to build canonical album art URLs.
+    art_fmt = 'http://rainwave.cc{}_320.jpg'
 
-    #: The API key to use when communicating with the API. Find your API key at
-    #: http://rainwave.cc/auth/.
-    key = ''
-
-    def __init__(self, user_id=0, key=''):
-        self.user_id = user_id
-        self.key = key
+    def __init__(self, user_id=None, key=None):
+        if user_id is not None:
+            self._user_id = int(user_id)
+        if key is not None:
+            self._key = key
         self._raw_channels = None
         self._channels = None
-        self.req = requests.Session()
 
     def __repr__(self):
         msg = 'RainwaveClient(user_id={!r}, key={!r})'
@@ -46,27 +45,26 @@ class RainwaveClient:
 
           >>> from rainwaveclient import RainwaveClient
           >>> rw = RainwaveClient(5049, 'abcde12345')
-          >>> rw.call('async/1/album', {'album_id': 1})
-          {'playlist_album': {'album_name': 'Wild Arms', ...}}
+          >>> rw.call('album', {'id': 1, 'sid': 5})
+          {'album': {'name': 'Bravely Default: Flying Fairy', ...}}
         """
 
+        url = '{}{}'.format(self.base_url, path.lstrip('/'))
+
         if args is None:
-            args = dict()
-        final_url = self.base_url + path.lstrip('/')
+            args = {}
         if 'user_id' not in args and self.user_id:
             args['user_id'] = self.user_id
         if 'key' not in args and self.key:
             args['key'] = self.key
 
-        if path.endswith(('/get', '/stations')):
-            d = self.req.get(final_url)
-        else:
-            d = self.req.post(final_url, params=args)
-
-        if d.ok:
-            return d.json()
-        else:
-            d.raise_for_status()
+        data = urllib.parse.urlencode(args).encode()
+        try:
+            response = urllib.request.urlopen(url, data=data)
+        except urllib.error.HTTPError as e:
+            response = e
+        body = response.read().decode()
+        return json.loads(body)
 
     @property
     def channels(self):
@@ -74,16 +72,36 @@ class RainwaveClient:
         :class:`RainwaveClient` object."""
 
         if self._raw_channels is None:
-            if self.user_id and self.key:
-                args = {'user_id': self.user_id, 'key': self.key}
-                self._raw_channels = self.call('async/1/stations_user', args)
+            d = self.call('stations')
+            if 'stations' in d:
+                self._raw_channels = d['stations']
             else:
-                self._raw_channels = self.call('async/1/stations')
+                raise Exception
 
         if self._channels is None:
             self._channels = list()
-            for raw_channel in self._raw_channels['stations']:
+            for raw_channel in self._raw_channels:
                 new_channel = channel.RainwaveChannel(self, raw_channel)
                 self._channels.append(new_channel)
 
         return self._channels
+
+    @property
+    def key(self):
+        """The API key to use when communicating with the API. Find your API
+        key at http://rainwave.cc/keys/."""
+        return self._key
+
+    @key.setter
+    def key(self, value):
+        self._key = value
+
+    @property
+    def user_id(self):
+        """The User ID to use when communicating with the API. Find your User ID
+        at http://rainwave.cc/keys/."""
+        return self._user_id
+
+    @user_id.setter
+    def user_id(self, value):
+        self._user_id = value

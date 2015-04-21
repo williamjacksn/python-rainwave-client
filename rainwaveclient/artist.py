@@ -1,4 +1,4 @@
-class RainwaveArtist:
+class RainwaveArtist(dict):
     """A :class:`RainwaveArtist` object represents one artist.
 
     .. note::
@@ -9,8 +9,8 @@ class RainwaveArtist:
     """
 
     def __init__(self, channel, raw_info):
-        self.channel = channel
-        self._raw_info = raw_info
+        self._channel = channel
+        super().__init__(raw_info)
 
     def __repr__(self):
         return '<RainwaveArtist [{}]>'.format(self)
@@ -19,35 +19,33 @@ class RainwaveArtist:
         return self.name
 
     @property
+    def channel(self):
+        """The :class:`RainwaveChannel` object associated with the artist."""
+        return self._channel
+
+    @property
     def id(self):
         """The ID of the artist."""
-        return self._raw_info['artist_id']
+        return self['id']
 
     @property
     def name(self):
         """The name of the artist."""
-        return self._raw_info['artist_name']
+        return self['name']
 
     @property
-    def numsongs(self):
+    def song_count(self):
         """The number of songs attributed to the artist."""
-        if 'artist_numsongs' not in self._raw_info:
-            more_info = self.channel._get_artist_raw_info(self.id)
-            self._raw_info = dict(self._raw_info.items() + more_info.items())
-        return self._raw_info['artist_numsongs']
+        return len(self.songs)
 
     @property
     def songs(self):
         """A list of :class:`RainwaveSong` objects attributed to the artist."""
-        if 'songs' not in self._raw_info:
-            more_info = self.channel._get_artist_raw_info(self.id)
-            self._raw_info = dict(self._raw_info.items() + more_info.items())
-        if not hasattr(self, '_songs'):
-            self._songs = []
-            for raw_song in self._raw_info['songs']:
-                album_id = raw_song['album_id']
-                album = self.channel.get_album_by_id(album_id)
-                song_id = raw_song['song_id']
-                song = album.get_song_by_id(song_id)
-                self._songs.append(song)
-        return self._songs
+        if 'song_objects' not in self:
+            self['song_objects'] = []
+            for chan_id, albums in self['all_songs'].items():
+                for album_id, album_songs in albums.items():
+                    for raw_song in album_songs:
+                        song = self.channel.get_song_by_id(raw_song['id'])
+                        self['song_objects'].append(song)
+        return self['song_objects']

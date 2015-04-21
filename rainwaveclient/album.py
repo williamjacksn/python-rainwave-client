@@ -1,10 +1,9 @@
 import datetime
 
-from . import cooldown
-from . import song
+from . import category
 
 
-class RainwaveAlbum(object):
+class RainwaveAlbum(dict):
     """A :class:`RainwaveAlbum` object represents one album.
 
     .. note::
@@ -13,132 +12,124 @@ class RainwaveAlbum(object):
         obtain one from :attr:`RainwaveChannel.albums`.
     """
 
-    #: The :class:`RainwaveChannel` object the album belongs to.
-    channel = None
-
     def __init__(self, channel, raw_info):
-        self.channel = channel
-        self._raw_info = raw_info
+        self._channel = channel
+        super().__init__(raw_info)
 
     def __repr__(self):
-        msg = '<RainwaveAlbum [{} // {}]>'
-        return msg.format(self.channel.name, self.name)
+        _repr = '<RainwaveAlbum [{} // {}]>'
+        return _repr.format(self.channel.name, self.name)
 
     def __str__(self):
-        msg = '{} // {}'
-        return msg.format(self.channel.name, self.name)
-
-    def _extend(self):
-        self._raw_info = self.channel._get_album_raw_info(self.id)
+        _str = '{} // {}'
+        return _str.format(self.channel.name, self.name)
 
     @property
     def art(self):
         """The URL of the cover art for the album."""
-        if 'album_art' not in self._raw_info:
-            self._extend()
-        base_url = self.channel.client.base_url
-        return base_url + self._raw_info['album_art'].lstrip('/')
+        return self.channel.client.art_fmt.format(self['art'])
 
     @property
-    def cooldown_groups(self):
-        """A list of :class:`RainwaveCooldownGroup` objects representing the
-        cooldown groups the songs in the album belong to."""
-        if 'album_genres' not in self._raw_info:
-            self._extend()
-        if not hasattr(self, '_cooldown_groups'):
-            self._cooldown_groups = []
-            for raw_cdg in self._raw_info['album_genres']:
-                id = raw_cdg['genre_id']
-                name = raw_cdg['genre_name']
-                cdg = cooldown.RainwaveCooldownGroup(self.channel, id, name)
-                self._cooldown_groups.append(cdg)
-        return self._cooldown_groups
+    def added_on(self):
+        """A :class:`datetime.datetime` object specifying when the album was
+        added to the playlist."""
+        return datetime.datetime.utcfromtimestamp(self['added_on'])
 
     @property
-    def fav(self):
-        """See :attr:`favourite`."""
-        return self.favourite
+    def categories(self):
+        """A list of :class:`RainwaveCategory` objects representing the
+        categories the songs in the album belong to."""
+        if 'category_objects' not in self:
+            self['category_objects'] = []
+            for raw_cat in self['genres']:
+                category_id = raw_cat['id']
+                name = raw_cat['name']
+                cat = category.RainwaveCategory(self.channel, category_id, name)
+                self['category_objects'].append(cat)
+        return self['category_objects']
 
     @property
-    def fav_count(self):
-        """The number of listeners who have marked the album as a favourite."""
-        if 'album_fav_count' not in self._raw_info:
-            self._extend()
-        return self._raw_info['album_fav_count']
+    def channel(self):
+        """The :class:`RainwaveChannel` object the album belongs to."""
+        return self._channel
 
     @property
-    def favourite(self):
-        """A boolean representing whether the album is marked as a favourite or
-        not. Change whether the album is a favourite by assigning a boolean
-        value to this attribute."""
-        return self._raw_info['album_favourite']
+    def cool(self):
+        """A boolean representing whether the entire album is on cooldown.
+        :attr:`cool` will be `True` if and only if every song in the album is on
+        cooldown."""
+        return self['cool']
 
-    @favourite.setter
-    def favourite(self, value):
+    @property
+    def cool_lowest(self):
+        """A :class:`datetime.datetime` object specifying the earliest date and
+        time a song in the album will be out of cooldown and available to play.
+        If any song in the album is already available, :attr:`cool_lowest` will
+        be in the past."""
+        return datetime.datetime.utcfromtimestamp(self['cool_lowest'])
+
+    @property
+    def fave(self):
+        """A boolean representing whether the album is marked as a fave or not.
+        Change whether the album is a fave by assigning a boolean value to this
+        attribute."""
+        return self['fave']
+
+    @fave.setter
+    def fave(self, value):
         value = bool(value)
-        if value == self.favourite:
+        if value == self.fave:
             return
-        d = self.channel.fav_album(self.id, str(value).lower())
-        if 'fav_album_result' in d:
-            if d['fav_album_result']['code'] == 1:
-                self._raw_info['album_favourite'] = value
-            else:
-                raise Exception(d['fav_album_result']['text'])
+        d = self.channel.fave_album(self.id, str(value).lower())
+        if d['fave_album_result']['success']:
+            self['fave'] = value
         else:
-            raise Exception(d['error']['text'])
+            raise Exception(d['fave_album_result']['text'])
+
+    @property
+    def fave_count(self):
+        """The number of listeners who have marked the album as a favourite."""
+        return self['fave_count']
 
     @property
     def id(self):
         """The ID of the album."""
-        return self._raw_info['album_id']
-
-    @property
-    def lastplayed(self):
-        """A :class:`datetime.datetime` object specifying the most recent date
-        and time when a song in the album played."""
-        if 'album_lastplayed' not in self._raw_info:
-            self._extend()
-        ts = self._raw_info['album_lastplayed']
-        return datetime.datetime.utcfromtimestamp(ts)
-
-    @property
-    def lowest_cd(self):
-        """A :class:`datetime.datetime` object specifying the earliest date and
-        time a song in the album will be out of cooldown and available to play.
-        If any song in the album is already available, :attr:`lowest_cd` will
-        be in the past."""
-        ts = self._raw_info['album_lowest_oa']
-        return datetime.datetime.utcfromtimestamp(ts)
-
-    @property
-    def lowest_oa(self):
-        """See :attr:`lowest_cd`."""
-        return self.lowest_cd
+        return self['id']
 
     @property
     def name(self):
         """The name of the album."""
-        return self._raw_info['album_name']
+        return self['name']
+
+    @property
+    def played_last(self):
+        """A :class:`datetime.datetime` object specifying the most recent date
+        and time when a song in the album played."""
+        return datetime.datetime.utcfromtimestamp(self['played_last'])
 
     @property
     def rating(self):
         """The average of all ratings given to songs in the album by only the
         listener authenticating to the API."""
-        return self._raw_info['album_rating_user']
+        return self['rating_user']
 
     @property
     def rating_avg(self):
         """The average of all ratings given to songs in the album by all
         listeners."""
-        return self._raw_info['album_rating_avg']
+        return self['rating']
+
+    @property
+    def rating_complete(self):
+        """A boolean representing whether the listener has rated all songs in
+        the album."""
+        return self['rating_complete']
 
     @property
     def rating_count(self):
         """The total number of ratings given to songs in the album by all
         listeners."""
-        if 'album_rating_count' not in self._raw_info:
-            self._extend()
-        return self._raw_info['album_rating_count']
+        return self['rating_count']
 
     @property
     def rating_histogram(self):
@@ -148,17 +139,13 @@ class RainwaveAlbum(object):
             >>> album.rating_histogram
             {'1.0': 4, '1.5': 4, '2.0': 6, ..., '4.5': 46, '5.0': 26}
         """
-        if 'album_rating_histogram' not in self._raw_info:
-            self._extend()
-        return self._raw_info['album_rating_histogram']
+        return self['rating_histogram']
 
     @property
     def rating_rank(self):
         """The position of the album when albums on the channel are ranked by
         rating. The highest-rated album will have :attr:`rating_rank` == 1."""
-        if 'album_rating_rank' not in self._raw_info:
-            self._extend()
-        return self._raw_info['album_rating_rank']
+        return self['rating_rank']
 
     @property
     def rating_user(self):
@@ -166,90 +153,48 @@ class RainwaveAlbum(object):
         return self.rating
 
     @property
+    def request_count(self):
+        """The total number of times a song in the album was requested by any
+        listener."""
+        return self['request_count']
+
+    @property
     def request_rank(self):
         """The position of the album when albums on the channel are ranked by
         how often they are requested. The most-requested album will have
         :attr:`request_rank` == 1."""
-        if 'album_request_rank' not in self._raw_info:
-            self._extend()
-        return self._raw_info['album_request_rank']
+        return self['request_rank']
 
     @property
     def songs(self):
         """A list of :class:`RainwaveSong` objects in the album."""
-        self._extend()
-        if not hasattr(self, '_songs'):
-            self._songs = []
-            for raw_song in self._raw_info['song_data']:
-                new_song = song.RainwaveSong(self, raw_song)
-                self._songs.append(new_song)
-        return self._songs
+        if 'song_objects' not in self:
+            self['song_objects'] = []
+            if 'songs' not in self:
+                album_obj = self.channel.get_album_by_id(self.id)
+                self['songs'] = album_obj['songs']
+            for raw_song in self['songs']:
+                new_song = self.channel.get_song_by_id(raw_song['id'])
+                self['song_objects'].append(new_song)
+        return self['song_objects']
 
     @property
-    def timesdefeated(self):
-        """The number of times a song in the album lost an election."""
-        if 'album_timesdefeated' not in self._raw_info:
-            self._extend()
-        return self._raw_info['album_timesdefeated']
-
-    @property
-    def timesplayed(self):
-        """The number of times a song in the album has played."""
-        if 'album_timesplayed' not in self._raw_info:
-            self._extend()
-        return self._raw_info['album_timesplayed']
-
-    @property
-    def timesplayed_rank(self):
-        """The position of the album when albums on the channel are ranked by
-        how often they are played. The most-played album will have
-        :attr:`timesplayed_rank` == 1."""
-        if 'album_timesplayed_rank' not in self._raw_info:
-            self._extend()
-        return self._raw_info['album_timesplayed_rank']
-
-    @property
-    def timeswon(self):
-        """The number of times a song in the album won an election."""
-        if 'album_timeswon' not in self._raw_info:
-            self._extend()
-        return self._raw_info['album_timeswon']
-
-    @property
-    def totalrequests(self):
-        """The total number of times a song in the album was requested by any
-        listener."""
-        if 'album_totalrequests' not in self._raw_info:
-            self._extend()
-        return self._raw_info['album_totalrequests']
-
-    @property
-    def totalvotes(self):
+    def vote_count(self):
         """The total number of election votes songs in the album have
         received."""
-        if 'album_totalvotes' not in self._raw_info:
-            self._extend()
-        return self._raw_info['album_totalvotes']
+        return self['vote_count']
 
-    @property
-    def vote_rank(self):
-        """The position of the album when albums on the channel are ranked by
-        how many votes they received. The most-voted-for album will have
-        :attr:`vote_rank` == 1."""
-        if 'album_vote_rank' not in self._raw_info:
-            self._extend()
-        return self._raw_info['album_vote_rank']
-
-    def get_song_by_id(self, id):
+    def get_song_by_id(self, song_id):
         """ Return a :class:`RainwaveSong` for the given song ID. Raises an
         :exc:`IndexError` if there is no song with the given ID in the
         album.
 
-        :param id: the ID of the desired song.
-        :type id: int
+        :param song_id: the ID of the desired song.
+        :type song_id: int
         """
 
         for song in self.songs:
-            if song.id == id:
+            if song.id == song_id:
                 return song
-        raise IndexError('Album does not contain song with id: {}'.format(id))
+        err = 'Album does not contain song with id: {}'.format(song_id)
+        raise IndexError(err)

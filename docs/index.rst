@@ -43,31 +43,31 @@ From the :class:`RainwaveClient` object you can get a list of channels
 operating on the network::
 
     >>> rw.channels
-    [<RainwaveChannel [Rainwave]>, <RainwaveChannel [OCR Radio]>, <RainwaveChannel [Mixwave]>, <RainwaveChannel [Bitwave]>, <RainwaveChannel [Omniwave]>]
+    [<RainwaveChannel [Game]>, <RainwaveChannel [OCRemix]>, <RainwaveChannel [Covers]>, <RainwaveChannel [Chiptunes]>, <RainwaveChannel [All]>]
     >>> ocr = rw.channels[1]
     >>> ocr.stream
-    'http://ocstream.rainwave.cc:8000/ocremix.mp3?5049:abcde12345'
+    'http://ocrstream.rainwave.cc:8000/ocremix.mp3?5049:abcde12345'
 
 See what is currently playing::
 
     >>> ocr.schedule_current.songs[0]
-    <RainwaveCandidate [OCR Radio // Crystalis // A Tale of the God Slayer // 4 Keys]>
+    <RainwaveCandidate [OCRemix // Final Fantasy VII: Voices of the Lifestream // Black Wing Metamorphosis // bLiNd, Fishy, Jillian Aversa, Sixto Sounds, Steffan Andrews, Suzumebachi, tefnek]>
 
 Give the currently playing song a rating and mark it as a favourite::
 
     >>> ocr.schedule_current.songs[0].rating = 4.5
-    >>> ocr.schedule_current.songs[0].favourite = True
+    >>> ocr.schedule_current.songs[0].fave = True
 
 See what songs are in the current election::
 
     >>> ocr.schedule_next[0].candidates
-    [<RainwaveCandidate [OCR Radio // Dragon Quest III // Flight of Destiny // Russell Cox]>,
-     <RainwaveCandidate [OCR Radio // Friday the 13th // Panic at Camp Crystal // Ghetto Lee Lewis]>,
-     <RainwaveCandidate [OCR Radio // No More Heroes // The 51st // Homeslice]>]
+    [<RainwaveCandidate [OCRemix // Castlevania II: Simon's Quest // Simon's Symphony // Jovette Rivera]>,
+     <RainwaveCandidate [OCRemix // Sonic the Hedgehog: The Sound of Speed // Final Progression // Jewbei]>,
+     <RainwaveCandidate [OCRemix // Friday the 13th // Panic at Camp Crystal // Ghetto Lee Lewis]>]
 
-Vote for *The 51st*::
+Vote for *Final Progression*::
 
-    >>> ocr.schedule_next[0].candidates[2].vote()
+    >>> ocr.schedule_next[0].candidates[1].vote()
 
 API Documentation
 -----------------

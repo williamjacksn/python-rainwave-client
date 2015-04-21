@@ -1,4 +1,4 @@
-class RainwaveListener:
+class RainwaveListener(dict):
     """A :class:`RainwaveListener` object represents a radio listener."""
 
     #: The :class:`RainwaveChannel` the listener belongs to.
@@ -6,7 +6,7 @@ class RainwaveListener:
 
     def __init__(self, channel, raw_info):
         self.channel = channel
-        self._raw_info = raw_info
+        super().__init__(raw_info)
 
     def __repr__(self):
         return '<RainwaveListener [{}]>'.format(self)
@@ -14,70 +14,84 @@ class RainwaveListener:
     def __str__(self):
         return self.name
 
-    def _extend(self):
-        more_info = self.channel._get_listener_raw_info(self.id)
-        self._raw_info = dict(self._raw_info.items() + more_info.items())
+    @property
+    def avatar(self):
+        """The URL of the listener's avatar."""
+        return 'http://rainwave.cc{}'.format(self['avatar'])
 
-    def _get_extended(self, name):
-        if name not in self._raw_info:
-            self._extend()
-        return self._raw_info[name]
+    @property
+    def color(self):
+        """See :attr:`colour`."""
+        return self.colour
+
+    @property
+    def colour(self):
+        """A hexadecimal string representing the listener's colour on the
+        forums."""
+        return self['colour']
 
     @property
     def id(self):
         """The ID of the listener."""
-        return self._raw_info['user_id']
+        if 'id' in self:
+            return self['id']
+        return self['user_id']
 
     @property
-    def losingrequests(self):
+    def losing_requests(self):
         """The number of requests made by the listener that lost their
         election."""
-        return self._get_extended('radio_losingrequests')
+        return self['losing_requests']
 
     @property
-    def losingvotes(self):
+    def losing_votes(self):
         """The number of votes the listeners has given to a song that lost an
         election."""
-        return self._get_extended('radio_losingvotes')
+        return self['losing_votes']
+
+    @property
+    def mind_changes(self):
+        """The total number of times the listener changed a song rating."""
+        return self['mind_changes']
 
     @property
     def name(self):
         """The name of the listener."""
-        return self._raw_info['username']
+        return self['name']
 
     @property
-    def topalbums(self):
-        """A list of the ten :class:`RainwaveAlbum` objects that the listener
-        has given the highest rating to."""
-        _topalbums = []
-        for album in self._get_extended('user_topalbums'):
-            new_album = self.channel.get_album_by_name(album['album_name'])
-            _topalbums.append(new_album)
-        return _topalbums
+    def rank(self):
+        """A string representing the listener's title on the forums."""
+        return self['rank']
 
     @property
-    def totalmindchange(self):
-        """The total number of times the listener changed a song rating."""
-        return self._get_extended('radio_totalmindchange')
-
-    @property
-    def totalratings(self):
+    def total_ratings(self):
         """The total number of songs the listener has rated."""
-        return self._get_extended('radio_totalratings')
+        return self['total_ratings']
 
     @property
-    def votes(self):
+    def total_requests(self):
+        """The total number of requests the listener has made."""
+        return self['total_requests']
+
+    @property
+    def total_votes(self):
         """The number of votes the listener has cast in the last two weeks."""
-        return self._raw_info['radio_2wkvotes']
+        return self['total_votes']
 
     @property
-    def winningrequests(self):
+    def user_id(self):
+        """See :attr:`id`."""
+        return self.id
+
+    @property
+    def winning_requests(self):
         """The number of requests made by the listener that won their
         election."""
-        return self._get_extended('radio_winningrequests')
+        return self['winning_requests']
 
     @property
-    def winningvotes(self):
+    def winning_votes(self):
         """The number of votes the listener has given to a song that won an
         election."""
-        return self._get_extended('radio_winningvotes')
+        return self['winning_votes']
