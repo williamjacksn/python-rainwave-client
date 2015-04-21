@@ -7,8 +7,8 @@ setup(
     version=rainwaveclient.__version__,
     author=rainwaveclient.__author__,
     author_email='william@subtlecoolness.com',
-    url='https://gutter.readthedocs.org/',
-    description='Python Rainwave client library',
+    url='https://github.com/williamjacksn/python-rainwave-client',
+    description='Python client library for Rainwave',
     packages=['rainwaveclient'],
     classifiers=[
         'Development Status :: 3 - Alpha',
