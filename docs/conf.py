@@ -47,8 +47,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Gutter'
-copyright = u'2013, William Jackson'
+project = u'Python Rainwave Client'
+copyright = u'2015, William Jackson'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -176,7 +176,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'Gutterdoc'
+htmlhelp_basename = 'python_rainwave_client_doc'
 
 
 # -- Options for LaTeX output -------------------------------------------------
@@ -196,8 +196,8 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass
 # [howto/manual]).
 latex_documents = [
-    ('index', 'Gutter.tex', u'Gutter Documentation', u'William Jackson',
-        'manual'),
+    ('index', 'python_rainwave_client.tex',
+     'Python Rainwave Client Documentation', 'William Jackson', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -226,8 +226,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'rainwaveclient', u'Gutter Documentation',
-     [u'William Jackson'], 1)
+    ('index', 'pythonrainwaveclient', 'Python Rainwave Client Documentation',
+     ['William Jackson'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -240,8 +240,9 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    ('index', 'Gutter', u'Gutter Documentation', u'William Jackson', 'Gutter',
-        'One line description of project.', 'Miscellaneous'),
+    ('index', 'Python Rainwave Client', 'Python Rainwave Client Documentation',
+     'William Jackson', 'Python Rainwave Client',
+     'Python client library for Rainwave.', 'Miscellaneous'),
 ]
 
 # Documents to append as an appendix to all manuals.
