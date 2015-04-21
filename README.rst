@@ -2,15 +2,15 @@ Python Rainwave Client
 ======================
 
 This is a Rainwave_ client library for Python. Documentation is available
-at https://gutter.readthedocs.org/.
+at http://python-rainwave-client.readthedocs.org/.
 
 .. _Rainwave: http://rainwave.cc/api4/
 
 Requirements
 ------------
 
-The library uses Requests_ for all HTTP communication. Documentation is built
-with Sphinx_.
+This library requires no dependencies outside the Python 3 standard library.
+Documentation is built with Sphinx_.
 
 .. _Requests: http://docs.python-requests.org/en/latest/
 .. _Sphinx: http://sphinx-doc.org/
