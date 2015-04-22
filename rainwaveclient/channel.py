@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 import datetime
 import threading
 
@@ -25,7 +27,7 @@ class RainwaveChannel(dict):
 
     def __init__(self, client, raw_info):
         self._client = client
-        super().__init__(raw_info)
+        super(RainwaveChannel, self).__init__(raw_info)
         self._do_sync = False
         self._sync_thread = None
 
@@ -44,10 +46,10 @@ class RainwaveChannel(dict):
         self._requests_lock = threading.Lock()
 
     def __repr__(self):
-        return '<RainwaveChannel [{}]>'.format(self.name)
+        return '<RainwaveChannel [{0}]>'.format(self.name)
 
     def __str__(self):
-        return '{}: {}'.format(self.name, self.description)
+        return '{0}: {1}'.format(self.name, self.description)
 
     def _do_async_get(self):
         if not self._stale():
@@ -85,7 +87,7 @@ class RainwaveChannel(dict):
         d = self.client.call('listener', args)
         if 'listener' in d:
             return d['listener']
-        err = 'There is no listener with id: {}'.format(listener_id)
+        err = 'There is no listener with id: {0}'.format(listener_id)
         raise IndexError(err)
 
     def _new_schedule(self, raw_schedule):
@@ -184,7 +186,7 @@ class RainwaveChannel(dict):
                 args = {'sid': self.id, 'id': album_id}
                 d = self.client.call('album', args)
                 return album.RainwaveAlbum(self, d['album'])
-        error = 'Channel does not contain album with id: {}'.format(album_id)
+        error = 'Channel does not contain album with id: {0}'.format(album_id)
         raise IndexError(error)
 
     def get_album_by_name(self, name):
@@ -199,7 +201,7 @@ class RainwaveChannel(dict):
         for alb in self.albums:
             if alb.name == name:
                 return alb
-        error = 'Channel does not contain album with name: {}'.format(name)
+        error = 'Channel does not contain album with name: {0}'.format(name)
         raise IndexError(error)
 
     def get_artist_by_id(self, artist_id):
@@ -215,7 +217,7 @@ class RainwaveChannel(dict):
         d = self.client.call('artist', args)
         if 'id' in d['artist']:
             return artist.RainwaveArtist(self, d['artist'])
-        err = 'Channel does not contain artist with id: {}'.format(artist_id)
+        err = 'Channel does not contain artist with id: {0}'.format(artist_id)
         raise IndexError(err)
 
     def get_listener_by_id(self, listener_id):
@@ -241,7 +243,7 @@ class RainwaveChannel(dict):
         for _listener in self.listeners:
             if _listener.name == name:
                 return _listener
-        err = 'No current listener named {}'.format(name)
+        err = 'No current listener named {0}'.format(name)
         raise IndexError(err)
 
     def get_song_by_id(self, song_id):
@@ -258,7 +260,7 @@ class RainwaveChannel(dict):
         if 'albums' in d['song']:
             alb = self.get_album_by_id(d['song']['albums'][0]['id'])
             return song.RainwaveSong(alb, d['song'])
-        err = 'Channel does not contain song with id: {}'.format(song_id)
+        err = 'Channel does not contain song with id: {0}'.format(song_id)
         raise IndexError(err)
 
     @property

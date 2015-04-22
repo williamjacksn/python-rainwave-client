@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from . import song
 
 
@@ -13,7 +15,7 @@ class RainwaveRequest(song.RainwaveSong):
         return request
 
     def __repr__(self):
-        return '<RainwaveRequest [{}]>'.format(self)
+        return '<RainwaveRequest [{0}]>'.format(self)
 
     @property
     def requester(self):
@@ -27,7 +29,7 @@ class RainwaveUserRequest(song.RainwaveSong):
     requests queue."""
 
     def __repr__(self):
-        return '<RainwaveUserRequest [{}]>'.format(self)
+        return '<RainwaveUserRequest [{0}]>'.format(self)
 
     @property
     def blocked(self):
@@ -60,7 +62,7 @@ class RainwaveUserRequestQueue(list):
 
     def __init__(self, channel):
         self._channel = channel
-        super().__init__()
+        super(RainwaveUserRequestQueue, self).__init__()
 
     def reorder(self, order):
         """Change the order of the requests in the queue.

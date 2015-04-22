@@ -1,7 +1,15 @@
+from __future__ import unicode_literals
+
 import json
-import urllib.error
-import urllib.parse
-import urllib.request
+import sys
+
+if sys.version_info[0] == 2:
+    from urllib import urlencode
+    from urllib2 import urlopen, HTTPError
+else:
+    from urllib.error import HTTPError
+    from urllib.request import urlopen
+    from urllib.parse import urlencode
 
 from . import channel
 
@@ -18,7 +26,7 @@ class RainwaveClient:
     base_url = 'http://rainwave.cc/api4/'
 
     #: The format string used to build canonical album art URLs.
-    art_fmt = 'http://rainwave.cc{}_320.jpg'
+    art_fmt = 'http://rainwave.cc{0}_320.jpg'
 
     def __init__(self, user_id=None, key=None):
         if user_id is not None:
@@ -29,7 +37,7 @@ class RainwaveClient:
         self._channels = None
 
     def __repr__(self):
-        msg = 'RainwaveClient(user_id={!r}, key={!r})'
+        msg = 'RainwaveClient(user_id={0!r}, key={1!r})'
         return msg.format(self.user_id, self.key)
 
     def call(self, path, args=None):
@@ -49,7 +57,7 @@ class RainwaveClient:
           {'album': {'name': 'Bravely Default: Flying Fairy', ...}}
         """
 
-        url = '{}{}'.format(self.base_url, path.lstrip('/'))
+        url = '{0}{1}'.format(self.base_url, path.lstrip('/'))
 
         if args is None:
             args = {}
@@ -58,10 +66,10 @@ class RainwaveClient:
         if 'key' not in args and self.key:
             args['key'] = self.key
 
-        data = urllib.parse.urlencode(args).encode()
+        data = urlencode(args).encode()
         try:
-            response = urllib.request.urlopen(url, data=data)
-        except urllib.error.HTTPError as e:
+            response = urlopen(url, data=data)
+        except HTTPError as e:
             response = e
         body = response.read().decode()
         return json.loads(body)

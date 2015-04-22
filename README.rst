@@ -9,10 +9,7 @@ at https://pythonhosted.org/python-rainwave-client/.
 Requirements
 ------------
 
-This library requires no dependencies outside the Python 3.4 standard library.
-Documentation is built with Sphinx_.
-
-.. _Sphinx: http://sphinx-doc.org/
+This library requires no dependencies outside the Python standard library.
 
 Installation
 ------------
@@ -20,3 +17,4 @@ Installation
 Install with ``pip``::
 
     pip install python-rainwave-client
+

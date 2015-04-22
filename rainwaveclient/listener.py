@@ -1,3 +1,6 @@
+from __future__ import unicode_literals
+
+
 class RainwaveListener(dict):
     """A :class:`RainwaveListener` object represents a radio listener."""
 
@@ -6,10 +9,10 @@ class RainwaveListener(dict):
 
     def __init__(self, channel, raw_info):
         self.channel = channel
-        super().__init__(raw_info)
+        super(RainwaveListener, self).__init__(raw_info)
 
     def __repr__(self):
-        return '<RainwaveListener [{}]>'.format(self)
+        return '<RainwaveListener [{0}]>'.format(self)
 
     def __str__(self):
         return self.name
@@ -17,7 +20,7 @@ class RainwaveListener(dict):
     @property
     def avatar(self):
         """The URL of the listener's avatar."""
-        return 'http://rainwave.cc{}'.format(self['avatar'])
+        return 'http://rainwave.cc{0}'.format(self['avatar'])
 
     @property
     def color(self):

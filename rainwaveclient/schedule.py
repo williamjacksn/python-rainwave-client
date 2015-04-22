@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 import datetime
 
 from . import song
@@ -16,10 +18,10 @@ class RainwaveSchedule(dict):
 
     def __init__(self, channel, raw_info):
         self._channel = channel
-        super().__init__(raw_info)
+        super(RainwaveSchedule, self).__init__(raw_info)
 
     def __repr__(self):
-        return '<RainwaveSchedule [{}]>'.format(self.channel.name)
+        return '<RainwaveSchedule [{0}]>'.format(self.channel.name)
 
     def __str__(self):
         return repr(self)
@@ -46,7 +48,7 @@ class RainwaveElection(RainwaveSchedule):
     :class:`RainwaveSchedule` and represents an election event on a channel."""
 
     def __repr__(self):
-        return '<RainwaveElection [{}]>'.format(self.channel.name)
+        return '<RainwaveElection [{0}]>'.format(self.channel.name)
 
     @property
     def candidates(self):
@@ -71,12 +73,12 @@ class RainwaveOneTimePlay(RainwaveSchedule):
     timeline by a manager."""
 
     def __repr__(self):
-        return '<RainwaveOneTimePlay [{}]>'.format(self.channel.name)
+        return '<RainwaveOneTimePlay [{0}]>'.format(self.channel.name)
 
     @property
     def name(self):
         """The name of the event."""
-        return '{} Power Hour'.format(self['name'])
+        return '{0} Power Hour'.format(self['name'])
 
     @property
     def song(self):

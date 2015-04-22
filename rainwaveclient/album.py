@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 import datetime
 
 from . import category
@@ -14,14 +16,14 @@ class RainwaveAlbum(dict):
 
     def __init__(self, channel, raw_info):
         self._channel = channel
-        super().__init__(raw_info)
+        super(RainwaveAlbum, self).__init__(raw_info)
 
     def __repr__(self):
-        _repr = '<RainwaveAlbum [{} // {}]>'
+        _repr = '<RainwaveAlbum [{0} // {1}]>'
         return _repr.format(self.channel.name, self.name)
 
     def __str__(self):
-        _str = '{} // {}'
+        _str = '{0} // {1}'
         return _str.format(self.channel.name, self.name)
 
     @property
@@ -196,5 +198,5 @@ class RainwaveAlbum(dict):
         for song in self.songs:
             if song.id == song_id:
                 return song
-        err = 'Album does not contain song with id: {}'.format(song_id)
+        err = 'Album does not contain song with id: {0}'.format(song_id)
         raise IndexError(err)

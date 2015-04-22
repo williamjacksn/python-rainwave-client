@@ -1,4 +1,4 @@
-import datetime
+from __future__ import unicode_literals
 
 from . import category
 
@@ -15,16 +15,16 @@ class RainwaveSong(dict):
 
     def __init__(self, album, raw_info):
         self._album = album
-        super().__init__(raw_info)
+        super(RainwaveSong, self).__init__(raw_info)
 
     def __len__(self):
         return self['length']
 
     def __repr__(self):
-        return '<RainwaveSong [{}]>'.format(self)
+        return '<RainwaveSong [{0}]>'.format(self)
 
     def __str__(self):
-        msg = '{} // {} // {}'
+        msg = '{0} // {1} // {2}'
         return msg.format(self.album, self.title, self.artist_string)
 
     @property
@@ -231,10 +231,10 @@ class RainwaveCandidate(RainwaveSong):
     election."""
 
     def __init__(self, album, raw_info):
-        super().__init__(album, raw_info)
+        super(RainwaveCandidate, self).__init__(album, raw_info)
 
     def __repr__(self):
-        return '<RainwaveCandidate [{}]>'.format(self)
+        return '<RainwaveCandidate [{0}]>'.format(self)
 
     @property
     def entry_id(self):

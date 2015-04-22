@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 import datetime
 import os
 import rainwaveclient
@@ -17,23 +19,22 @@ else:
 
 
 class TestRainwaveClient(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
+
+    rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
 
     def test_str(self):
-        _str = 'RainwaveClient(user_id={}, key={!r})'.format(USER_ID, KEY)
+        _str = 'RainwaveClient(user_id={0}, key={1!r})'.format(USER_ID, KEY)
         self.assertEqual(str(self.rw), _str)
 
     def test_repr(self):
-        _repr = 'RainwaveClient(user_id={}, key={!r})'.format(USER_ID, KEY)
+        _repr = 'RainwaveClient(user_id={0}, key={1!r})'.format(USER_ID, KEY)
         self.assertEqual(repr(self.rw), _repr)
 
     def test_base_url(self):
         self.assertEqual(self.rw.base_url, 'http://rainwave.cc/api4/')
 
     def test_art_fmt(self):
-        self.assertEqual(self.rw.art_fmt, 'http://rainwave.cc{}_320.jpg')
+        self.assertEqual(self.rw.art_fmt, 'http://rainwave.cc{0}_320.jpg')
 
     def test_user_id(self):
         self.assertEqual(self.rw.user_id, USER_ID)
@@ -52,10 +53,9 @@ class TestRainwaveClient(unittest.TestCase):
 
 
 class TestRainwaveChannel(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
-        cls.chan = cls.rw.channels[4]
+
+    rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
+    chan = rw.channels[4]
 
     def test_repr(self):
         self.assertEqual(repr(self.chan), '<RainwaveChannel [All]>')
@@ -66,17 +66,16 @@ class TestRainwaveChannel(unittest.TestCase):
         self.assertEqual(str(self.chan), _str)
 
     def test_albums(self):
-        self.assertGreater(len(self.chan.albums), 1)
+        self.assertTrue(len(self.chan.albums) > 1)
 
     def test_artists(self):
-        self.assertGreater(len(self.chan.artists), 1)
+        self.assertTrue(len(self.chan.artists) > 1)
 
     def test_client(self):
         self.assertEqual(self.chan.client, self.rw)
 
     def test_delete_request(self):
-        with self.assertRaises(Exception):
-            self.chan.delete_request(1)
+        self.assertRaises(Exception, self.chan.delete_request, 1)
 
     def test_description(self):
         desc = ('Video game music online radio, including remixes and original '
@@ -84,26 +83,22 @@ class TestRainwaveChannel(unittest.TestCase):
         self.assertEqual(self.chan.description, desc)
 
     def test_get_album_by_id(self):
-        with self.assertRaises(IndexError):
-            self.chan.get_album_by_id(999999)
+        self.assertRaises(IndexError, self.chan.get_album_by_id, 999999)
         alb = self.chan.get_album_by_id(3)
         self.assertEqual(alb.name, 'Goemon\'s Great Adventure')
 
     def test_get_album_by_name(self):
-        with self.assertRaises(IndexError):
-            self.chan.get_album_by_name('Mega Ran')
+        self.assertRaises(IndexError, self.chan.get_album_by_name, 'Mega Ran')
         alb = self.chan.get_album_by_name('Goemon\'s Great Adventure')
         self.assertEqual(alb.id, 3)
 
     def test_get_artist_by_id(self):
-        with self.assertRaises(IndexError):
-            self.chan.get_artist_by_id(1)
+        self.assertRaises(IndexError, self.chan.get_artist_by_id, 1)
         artist = self.chan.get_artist_by_id(1053)
         self.assertEqual(artist.name, 'TheGuitahHeroe')
 
     def test_get_listener_by_id(self):
-        with self.assertRaises(IndexError):
-            self.chan.get_listener_by_id(9999999)
+        self.assertRaises(IndexError, self.chan.get_listener_by_id, 9999999)
         listener = self.chan.get_listener_by_id(2)
         self.assertEqual(listener.name, 'Rob')
 
@@ -111,12 +106,10 @@ class TestRainwaveChannel(unittest.TestCase):
         first_listener = self.chan.listeners[0]
         got = self.chan.get_listener_by_name(first_listener.name)
         self.assertEqual(got.id, first_listener.id)
-        with self.assertRaises(IndexError):
-            self.chan.get_listener_by_name('does not exist')
+        self.assertRaises(IndexError, self.chan.get_listener_by_name, '______')
 
     def test_get_song_by_id(self):
-        with self.assertRaises(IndexError):
-            self.chan.get_song_by_id(999999)
+        self.assertRaises(IndexError, self.chan.get_song_by_id, 9999999)
         song = self.chan.get_song_by_id(8151)
         self.assertEqual(song.title, 'This Treasure')
 
@@ -124,7 +117,7 @@ class TestRainwaveChannel(unittest.TestCase):
         self.assertEqual(self.chan.id, 5)
 
     def test_listeners(self):
-        self.assertGreater(len(self.chan.listeners), 1)
+        self.assertTrue(len(self.chan.listeners) > 1)
 
     def test_name(self):
         self.assertEqual(self.chan.name, 'All')
@@ -134,27 +127,34 @@ class TestRainwaveChannel(unittest.TestCase):
         self.assertTrue(self.chan.ogg_stream.startswith(stream))
 
     def test_reorder_requests(self):
-        with self.assertRaises(Exception):
-            self.chan.reorder_requests([])
+        self.assertRaises(Exception, self.chan.reorder_requests, [])
 
     def test_request_song(self):
-        with self.assertRaises(Exception):
-            self.chan.request_song(999999)
+        self.assertRaises(Exception, self.chan.request_song, 999999)
 
     def test_requests(self):
-        self.assertGreater(len(self.chan.requests), 0)
+        self.assertTrue(len(self.chan.requests) > 0)
 
     def test_schedule_current(self):
-        cur = self.chan.schedule_current
-        self.assertIsInstance(cur.songs[0].title, str)
+        title = self.chan.schedule_current.songs[0].title
+        if sys.version_info[0] == 2:
+            self.assertTrue(isinstance(title, unicode))
+        else:
+            self.assertTrue(isinstance(title, str))
 
     def test_schedule_history(self):
-        hst = self.chan.schedule_history
-        self.assertIsInstance(hst[0].songs[0].title, str)
+        title = self.chan.schedule_history[0].songs[0].title
+        if sys.version_info[0] == 2:
+            self.assertTrue(isinstance(title, unicode))
+        else:
+            self.assertTrue(isinstance(title, str))
 
     def test_schedule_next(self):
-        nxt = self.chan.schedule_next
-        self.assertIsInstance(nxt[0].songs[0].title, str)
+        title = self.chan.schedule_next[0].songs[0].title
+        if sys.version_info[0] == 2:
+            self.assertTrue(isinstance(title, unicode))
+        else:
+            self.assertTrue(isinstance(title, str))
 
     def test_stream(self):
         stream = 'http://allstream.rainwave.cc:8000/all.mp3?' + str(USER_ID)
@@ -166,30 +166,28 @@ class TestRainwaveChannel(unittest.TestCase):
 
 
 class TestRainwaveAlbum(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
-        chan = rw.channels[4]
-        cls.alb = chan.get_album_by_id(1)
+
+    rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
+    alb = rw.channels[4].get_album_by_id(1)
 
     def test_added_on(self):
-        self.assertIsInstance(self.alb.added_on, datetime.datetime)
+        self.assertTrue(isinstance(self.alb.added_on, datetime.datetime))
 
     def test_art(self):
         art = 'http://rainwave.cc/album_art/a_1_320.jpg'
         self.assertEqual(self.alb.art, art)
 
     def test_categories(self):
-        self.assertGreater(len(self.alb.categories), 0)
+        self.assertTrue(len(self.alb.categories) > 0)
 
     def test_channel(self):
         self.assertEqual(self.alb.channel.id, 5)
 
     def test_cool(self):
-        self.assertIsInstance(self.alb.cool, bool)
+        self.assertTrue(isinstance(self.alb.cool, bool))
 
     def test_cool_lowest(self):
-        self.assertIsInstance(self.alb.cool_lowest, datetime.datetime)
+        self.assertTrue(isinstance(self.alb.cool_lowest, datetime.datetime))
 
     def test_fave(self):
         self.assertFalse(self.alb.fave)
@@ -208,8 +206,7 @@ class TestRainwaveAlbum(unittest.TestCase):
         self.assertFalse(self.alb.fave)
 
     def test_get_song_by_id(self):
-        with self.assertRaises(IndexError):
-            self.alb.get_song_by_id(100)
+        self.assertRaises(IndexError, self.alb.get_song_by_id, 100)
         song = self.alb.get_song_by_id(1)
         self.assertEqual(song.title, 'Conflict\'s Chime')
 
@@ -220,25 +217,25 @@ class TestRainwaveAlbum(unittest.TestCase):
         self.assertEqual(self.alb.name, 'Bravely Default: Flying Fairy')
 
     def test_played_last(self):
-        self.assertIsInstance(self.alb.played_last, datetime.datetime)
+        self.assertTrue(isinstance(self.alb.played_last, datetime.datetime))
 
     def test_rating(self):
-        self.assertGreater(self.alb.rating, 0)
+        self.assertTrue(self.alb.rating > 0)
 
     def test_rating_avg(self):
-        self.assertGreater(self.alb.rating_avg, 0)
+        self.assertTrue(self.alb.rating_avg > 0)
 
     def test_rating_complete(self):
-        self.assertIsInstance(self.alb.rating_complete, bool)
+        self.assertTrue(isinstance(self.alb.rating_complete, bool))
 
     def test_rating_count(self):
-        self.assertGreater(self.alb.rating_count, 0)
+        self.assertTrue(self.alb.rating_count > 0)
 
     def test_rating_histogram(self):
-        self.assertIsInstance(self.alb.rating_histogram, dict)
+        self.assertTrue(isinstance(self.alb.rating_histogram, dict))
 
     def test_rating_rank(self):
-        self.assertGreater(self.alb.rating_rank, 0)
+        self.assertTrue(self.alb.rating_rank > 0)
 
     def test_rating_user(self):
         self.assertEqual(self.alb.rating_user, self.alb.rating)
@@ -248,27 +245,25 @@ class TestRainwaveAlbum(unittest.TestCase):
         self.assertEqual(repr(self.alb), _repr)
 
     def test_request_count(self):
-        self.assertGreater(self.alb.request_count, 0)
+        self.assertTrue(self.alb.request_count > 0)
 
     def test_request_rank(self):
-        self.assertGreater(self.alb.request_rank, 0)
+        self.assertTrue(self.alb.request_rank > 0)
 
     def test_songs(self):
-        self.assertGreater(len(self.alb.songs), 0)
+        self.assertTrue(len(self.alb.songs) > 0)
 
     def test_str(self):
         self.assertEqual(str(self.alb), 'All // Bravely Default: Flying Fairy')
 
     def test_vote_count(self):
-        self.assertGreater(self.alb.vote_count, 0)
+        self.assertTrue(self.alb.vote_count > 0)
 
 
 class TestRainwaveSong(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
-        chan = rw.channels[4]
-        cls.song = chan.get_song_by_id(1)
+
+    rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
+    song = rw.channels[4].get_song_by_id(1)
 
     def test_album(self):
         self.assertEqual(self.song.album.name, 'Bravely Default: Flying Fairy')
@@ -280,19 +275,19 @@ class TestRainwaveSong(unittest.TestCase):
         self.assertEqual(len(self.song.artists), 1)
 
     def test_available(self):
-        self.assertIsInstance(self.song.available, bool)
+        self.assertTrue(isinstance(self.song.available, bool))
 
     def test_avail_is_not_cool(self):
-        self.assertIsNot(self.song.available, self.song.cool)
+        self.assertTrue(self.song.available != self.song.cool)
 
     def test_categories(self):
-        self.assertGreater(len(self.song.categories), 0)
+        self.assertTrue(len(self.song.categories) > 0)
 
     def test_channel_id(self):
         self.assertEqual(self.song.channel_id, 5)
 
     def test_cool(self):
-        self.assertIsInstance(self.song.cool, bool)
+        self.assertTrue(isinstance(self.song.cool, bool))
 
     def test_fave(self):
         self.assertFalse(self.song.fave)
@@ -325,7 +320,7 @@ class TestRainwaveSong(unittest.TestCase):
         self.assertEqual(self.song.origin_sid, 1)
 
     def test_rating(self):
-        self.assertGreater(self.song.rating, 0)
+        self.assertTrue(self.song.rating > 0)
 
     def test_rating_set(self):
         self.song.rating = 5
@@ -333,31 +328,32 @@ class TestRainwaveSong(unittest.TestCase):
         self.song.rating = 3
 
     def test_rating_set_invalid(self):
-        with self.assertRaises(Exception):
+        def bad_rate():
             self.song.rating = 6
+        self.assertRaises(Exception, bad_rate)
 
     def test_rating_set_same(self):
         self.song.rating = 3
 
     def test_rating_delete(self):
         del self.song.rating
-        self.assertIsNone(self.song.rating)
+        self.assertTrue(self.song.rating is None)
         self.song.rating = 3
 
     def test_rating_allowed(self):
-        self.assertIsInstance(self.song.rating_allowed, bool)
+        self.assertTrue(isinstance(self.song.rating_allowed, bool))
 
     def test_rating_avg(self):
-        self.assertGreater(self.song.rating_avg, 0)
+        self.assertTrue(self.song.rating_avg > 0)
 
     def test_rating_count(self):
-        self.assertGreater(self.song.rating_count, 0)
+        self.assertTrue(self.song.rating_count > 0)
 
     def test_rating_histogram(self):
-        self.assertIsInstance(self.song.rating_histogram, dict)
+        self.assertTrue(isinstance(self.song.rating_histogram, dict))
 
     def test_rating_rank(self):
-        self.assertGreater(self.song.rating_rank, 0)
+        self.assertTrue(self.song.rating_rank > 0)
 
     def test_rating_user(self):
         self.assertEqual(self.song.rating_user, self.song.rating)
@@ -368,10 +364,10 @@ class TestRainwaveSong(unittest.TestCase):
         self.assertEqual(repr(self.song), _repr)
 
     def test_request_count(self):
-        self.assertGreater(self.song.request_count, 0)
+        self.assertTrue(self.song.request_count > 0)
 
     def test_request_rank(self):
-        self.assertGreater(self.song.request_rank, 0)
+        self.assertTrue(self.song.request_rank > 0)
 
     def test_sid(self):
         self.assertEqual(self.song.sid, 5)
@@ -389,10 +385,9 @@ class TestRainwaveSong(unittest.TestCase):
 
 
 class TestRainwaveArtist(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
-        cls.a = cls.rw.channels[4].get_artist_by_id(288)
+
+    rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
+    a = rw.channels[4].get_artist_by_id(288)
 
     def test_channel(self):
         self.assertEqual(self.a.channel, self.rw.channels[4])
@@ -410,18 +405,17 @@ class TestRainwaveArtist(unittest.TestCase):
         self.assertEqual(self.a.song_count, 9)
 
     def test_songs(self):
-        self.assertIsInstance(self.a.songs, list)
-        self.assertGreater(len(self.a.songs), 0)
+        self.assertTrue(isinstance(self.a.songs, list))
+        self.assertTrue(len(self.a.songs) > 0)
 
     def test_str(self):
         self.assertEqual(str(self.a), 'Stephane Bellanger')
 
 
 class TestRainwaveListener(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
-        cls.l = rw.channels[4].get_listener_by_id(5049)
+
+    rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
+    l = rw.channels[4].get_listener_by_id(5049)
 
     def test_avatar(self):
         _avatar = ('http://rainwave.cc/forums/download/file.php?'
@@ -438,13 +432,13 @@ class TestRainwaveListener(unittest.TestCase):
         self.assertEqual(self.l.id, 5049)
 
     def test_losing_requests(self):
-        self.assertGreater(self.l.losing_requests, 0)
+        self.assertTrue(self.l.losing_requests > 0)
 
     def test_losing_votes(self):
-        self.assertGreater(self.l.losing_votes, 0)
+        self.assertTrue(self.l.losing_votes > 0)
 
     def test_mind_changes(self):
-        self.assertGreater(self.l.mind_changes, 0)
+        self.assertTrue(self.l.mind_changes > 0)
 
     def test_name(self):
         self.assertEqual(self.l.name, 'William')
@@ -459,59 +453,62 @@ class TestRainwaveListener(unittest.TestCase):
         self.assertEqual(str(self.l), 'William')
 
     def test_total_ratings(self):
-        self.assertGreater(self.l.total_ratings, 0)
+        self.assertTrue(self.l.total_ratings > 0)
 
     def test_total_requests(self):
-        self.assertGreater(self.l.total_requests, 0)
+        self.assertTrue(self.l.total_requests > 0)
 
     def test_total_votes(self):
-        self.assertGreater(self.l.total_votes, 0)
+        self.assertTrue(self.l.total_votes > 0)
 
     def test_user_id(self):
         self.assertEqual(self.l.user_id, 5049)
 
     def test_winning_requests(self):
-        self.assertGreater(self.l.winning_requests, 0)
+        self.assertTrue(self.l.winning_requests > 0)
 
     def test_winning_votes(self):
-        self.assertGreater(self.l.winning_votes, 0)
+        self.assertTrue(self.l.winning_votes > 0)
 
 
 class TestRainwaveRequest(unittest.TestCase):
 
-    @classmethod
-    def setUpClass(cls):
-        rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
-        cls.rq = rw.channels[4].requests[0]
+    rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
+    rq = rw.channels[4].requests[0]
 
     def test_repr(self):
         self.assertTrue(repr(self.rq).startswith('<RainwaveRequest '))
 
     def test_requester(self):
-        self.assertIsInstance(self.rq.requester.name, str)
+        if sys.version_info[0] == 2:
+            self.assertTrue(isinstance(self.rq.requester.name, unicode))
+        else:
+            self.assertTrue(isinstance(self.rq.requester.name, str))
 
 
 class TestRainwaveCandidate(unittest.TestCase):
 
-    @classmethod
-    def setUpClass(cls):
-        rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
-        cls.cand = rw.channels[4].schedule_next[0].candidates[0]
+    rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
+    cand = rw.channels[4].schedule_next[0].candidates[0]
 
     def test_repr(self):
-        self.assertIn('RainwaveCandidate', repr(self.cand))
+        self.assertTrue(repr(self.cand).startswith('<RainwaveCandidate '))
 
     def test_entry_id(self):
-        self.assertGreater(self.cand.entry_id, 0)
+        self.assertTrue(self.cand.entry_id > 0)
 
     def test_is_request(self):
-        self.assertIsInstance(self.cand.is_request, bool)
+        self.assertTrue(isinstance(self.cand.is_request, bool))
 
     def test_requested_by(self):
         if self.cand.is_request:
-            self.assertIsInstance(self.cand.requested_by.name, str)
+            name = self.cand.requested_by.name
+            if sys.version_info[0] == 2:
+                self.assertTrue(isinstance(name, unicode))
+            else:
+                self.assertTrue(isinstance(name, str))
         else:
-            self.assertIsNone(self.cand.requested_by)
+            self.assertTrue(self.cand.requested_by is None)
 
     def test_vote(self):
         self.cand.vote()
@@ -519,22 +516,18 @@ class TestRainwaveCandidate(unittest.TestCase):
 
 class TestRainwaveUserRequest(unittest.TestCase):
 
-    @classmethod
-    def setUpClass(cls):
-        cls.rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
-        cls.urq = cls.rw.channels[4].user_requests
+    rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
+    urq = rw.channels[4].user_requests
 
     def test_repr(self):
         self.assertTrue(repr(self.urq[0]).startswith('<RainwaveUserRequest'))
 
     def test_urq_len(self):
-        self.assertGreater(len(self.urq), 0)
+        self.assertTrue(len(self.urq) > 0)
 
     def test_urq_reorder(self):
-        with self.assertRaises(Exception):
-            self.urq.reorder([99])
-        with self.assertRaises(Exception):
-            self.urq.reorder([98, 99])
+        self.assertRaises(Exception, self.urq.reorder, [99])
+        self.assertRaises(Exception, self.urq.reorder, [98, 99])
         indices = list(range(len(self.urq)))
         random.shuffle(indices)
         self.urq.reorder(indices)
@@ -552,13 +545,11 @@ class TestRainwaveUserRequest(unittest.TestCase):
 
 class TestRainwaveSchedule(unittest.TestCase):
 
-    @classmethod
-    def setUpClass(cls):
-        cls.rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
+    rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
 
     def test_id(self):
         event = self.rw.channels[4].schedule_current
-        self.assertIsInstance(event.id, int)
+        self.assertTrue(isinstance(event.id, int))
 
     def test_repr(self):
         event = self.rw.channels[4].schedule_current
@@ -566,7 +557,7 @@ class TestRainwaveSchedule(unittest.TestCase):
 
     def test_start(self):
         event = self.rw.channels[4].schedule_current
-        self.assertIsInstance(event.start, datetime.datetime)
+        self.assertTrue(isinstance(event.start, datetime.datetime))
 
 if __name__ == '__main__':
     unittest.main()

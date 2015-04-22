@@ -1,3 +1,6 @@
+from __future__ import unicode_literals
+
+
 class RainwaveArtist(dict):
     """A :class:`RainwaveArtist` object represents one artist.
 
@@ -10,10 +13,10 @@ class RainwaveArtist(dict):
 
     def __init__(self, channel, raw_info):
         self._channel = channel
-        super().__init__(raw_info)
+        super(RainwaveArtist, self).__init__(raw_info)
 
     def __repr__(self):
-        return '<RainwaveArtist [{}]>'.format(self)
+        return '<RainwaveArtist [{0}]>'.format(self)
 
     def __str__(self):
         return self.name

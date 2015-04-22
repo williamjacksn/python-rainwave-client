@@ -15,6 +15,8 @@ To use, either register a callable using your target signal's
         ## do something here
 """
 
+from __future__ import unicode_literals
+
 import threading
 
 
