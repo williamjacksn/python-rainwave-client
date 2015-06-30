@@ -193,7 +193,7 @@ class TestRainwaveAlbum(unittest.TestCase):
         self.assertFalse(self.alb.fave)
 
     def test_fave_count(self):
-        self.assertEqual(self.alb.fave_count, 24)
+        self.assertTrue(self.alb.fave_count > 0)
 
     def test_fave_set(self):
         self.alb.fave = True
