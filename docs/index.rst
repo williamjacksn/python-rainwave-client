@@ -9,7 +9,7 @@ Python Rainwave Client
 This is a Python client library for Rainwave_. The source is available at
 https://github.com/williamjacksn/python-rainwave-client.
 
-.. _Rainwave: http://rainwave.cc/
+.. _Rainwave: https://rainwave.cc/
 
 Installation
 ------------
@@ -28,7 +28,7 @@ object::
     >>> from rainwaveclient import RainwaveClient
     >>> rw = RainwaveClient()
 
-Obtain your Rainwave User ID and API key from http://rainwave.cc/keys/ and set
+Obtain your Rainwave User ID and API key from https://rainwave.cc/keys/ and set
 them in the :class:`RainwaveClient` object::
 
     >>> rw.user_id = 5049

@@ -2,13 +2,14 @@ from __future__ import unicode_literals
 
 import json
 import sys
+import uuid
 
 if sys.version_info[0] == 2:
     from urllib import urlencode
-    from urllib2 import urlopen, HTTPError
+    from urllib2 import urlopen, HTTPError, Request
 else:
     from urllib.error import HTTPError
-    from urllib.request import urlopen
+    from urllib.request import urlopen, Request
     from urllib.parse import urlencode
 
 from . import channel
@@ -67,11 +68,13 @@ class RainwaveClient:
             args['key'] = self.key
 
         data = urlencode(args).encode()
+        headers = {'user-agent': uuid.uuid4().hex}
+        req = Request(url=url, data=data, headers=headers)
         try:
-            response = urlopen(url, data=data)
+            response = urlopen(req)
         except HTTPError as e:
             response = e
-        body = response.read().decode()
+        body = response.read().decode(encoding='utf-8')
         return json.loads(body)
 
     @property
