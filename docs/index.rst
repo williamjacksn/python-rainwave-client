@@ -42,7 +42,7 @@ operating on the network::
     >>> rw.channels
     [<RainwaveChannel [Game]>, <RainwaveChannel [OCRemix]>, <RainwaveChannel [Covers]>, <RainwaveChannel [Chiptunes]>, <RainwaveChannel [All]>]
     >>> ocr = rw.channels[1]
-    >>> ocr.stream
+    >>> ocr.mp3_stream
     'http://ocrstream.rainwave.cc:8000/ocremix.mp3?5049:abcde12345'
 
 See what is currently playing::
