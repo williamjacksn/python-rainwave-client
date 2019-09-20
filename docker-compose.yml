@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  python-rainwave-client-dev:
+    image: williamjackson/python-rainwave-client-dev
+    build: .
+
+  py-build:
+    image: williamjackson/python-rainwave-client-dev
+    command: ["setup.py", "bdist_wheel"]
+
+  twine-upload:
+    image: williamjackson/python-rainwave-client-dev
+    entrypoint: ["/usr/local/bin/twine"]
+    command: ["upload", "--skip-existing", "--verbose", "dist/*"]
+    environment:
+      TWINE_PASSWORD:
+      TWINE_USERNAME:
+
+  docs-build:
+    image: williamjackson/python-rainwave-client-dev
+    entrypoint: ["/usr/local/bin/sphinx-build"]
+    command: ["/python-rainwave-client/docs", "/python-rainwave-client/html"]
+
+  cleanup:
+    image: williamjackson/python-rainwave-client-dev
+    entrypoint: ["/bin/rm"]
+    command: ["-rf", "build", "dist", "html", "python-rainwave-client.egg-info"]

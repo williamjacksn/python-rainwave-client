@@ -313,6 +313,9 @@ class RainwaveChannel(dict):
         else:
             raise Exception(d['request_result']['text'])
 
+    def clear_requests(self):
+        return self.client.call('clear_requests', {'sid': self.id})
+
     @property
     def requests(self):
         """A list of :class:`RainwaveRequest` objects in the request line of

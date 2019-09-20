@@ -17,7 +17,7 @@ from . import channel
 
 class RainwaveClient:
     """A :class:`RainwaveClient` object provides a simple interface to the
-    Rainwave API (see http://rainwave.cc/api4/ for details about the API).
+    Rainwave API (see https://rainwave.cc/api4/ for details about the API).
 
     :param user_id: the User ID to use when communicating with the API.
     :param key: the API key to use when communicating with the API.

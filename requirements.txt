@@ -1,1 +1,2 @@
-Sphinx
+Sphinx==2.2.0
+twine==1.15.0
