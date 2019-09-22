@@ -163,7 +163,8 @@ class RainwaveSong(dict):
 
     @property
     def rating_histogram(self):
-        """A dictionary representing the distribution of ratings given to the song by all listeners. For example::
+        """A dictionary representing the distribution of ratings given to the song by all listeners.
+        For example::
 
             >>> song.rating_histogram
             {'1.0': 4, '1.5': 4, '2.0': 6, ..., '4.5': 46, '5.0': 26}
