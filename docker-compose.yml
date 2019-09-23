@@ -16,6 +16,11 @@ services:
       RW_KEY:
       RW_USER_ID:
 
+  twine-check:
+    image: williamjackson/python-rainwave-client-dev
+    entrypoint: ["/usr/local/bin/twine"]
+    command: ["check", "dist/*"]
+
   twine-upload:
     image: williamjackson/python-rainwave-client-dev
     entrypoint: ["/usr/local/bin/twine"]
@@ -32,4 +37,4 @@ services:
   cleanup:
     image: williamjackson/python-rainwave-client-dev
     entrypoint: ["/bin/rm"]
-    command: ["-rf", "build", "dist", "html", "python-rainwave-client.egg-info"]
+    command: ["-rf", "build", "dist", "html", "python_rainwave_client.egg-info"]

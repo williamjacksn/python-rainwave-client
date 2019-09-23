@@ -1,16 +1,18 @@
 from __future__ import unicode_literals
 
-from setuptools import setup
+import setuptools
 
 import rainwaveclient
 
-setup(
+setuptools.setup(
     name=rainwaveclient.__setup_name__,
     version=rainwaveclient.__version__,
     author=rainwaveclient.__author__,
     author_email=rainwaveclient.__author_email__,
     url=rainwaveclient.__url__,
     description=rainwaveclient.__description__,
+    long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
     packages=['rainwaveclient'],
     classifiers=[
         'Development Status :: 4 - Beta',
@@ -25,6 +27,6 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Topic :: Software Development :: Libraries'
     ],
-    license=open('LICENSE').read(),
+    license='MIT License',
     keywords=rainwaveclient.__keywords__
 )
