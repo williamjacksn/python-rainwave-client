@@ -148,7 +148,7 @@ class RainwaveSong(dict):
 
     @property
     def rating_allowed(self):
-        """A boolean representing whether the listener can current rate the song."""
+        """A boolean representing whether the listener can currently rate the song."""
         return self['rating_allowed']
 
     @property
