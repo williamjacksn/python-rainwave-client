@@ -1,8 +1,11 @@
 from __future__ import unicode_literals
 
 import json
+import logging
 import sys
 import uuid
+
+from . import channel
 
 if sys.version_info[0] == 2:
     from urllib import urlencode
@@ -12,7 +15,7 @@ else:
     from urllib.request import urlopen, Request
     from urllib.parse import urlencode
 
-from . import channel
+log = logging.getLogger(__name__)
 
 
 class RainwaveClient:
@@ -24,10 +27,10 @@ class RainwaveClient:
     """
 
     #: The URL upon which all API calls are based.
-    base_url = 'http://rainwave.cc/api4/'
+    base_url = 'https://rainwave.cc/api4/'
 
     #: The format string used to build canonical album art URLs.
-    art_fmt = 'http://rainwave.cc{0}_320.jpg'
+    art_fmt = 'https://rainwave.cc{0}_320.jpg'
 
     def __init__(self, user_id=None, key=None):
         if user_id is not None:
@@ -36,6 +39,7 @@ class RainwaveClient:
             self._key = key
         self._raw_channels = None
         self._channels = None
+        self.user_agent = uuid.uuid4().hex
 
     def __repr__(self):
         msg = 'RainwaveClient(user_id={0!r}, key={1!r})'
@@ -68,14 +72,16 @@ class RainwaveClient:
             args['key'] = self.key
 
         data = urlencode(args).encode()
-        headers = {'user-agent': uuid.uuid4().hex}
+        headers = {'user-agent': self.user_agent}
         req = Request(url=url, data=data, headers=headers)
         try:
             response = urlopen(req)
         except HTTPError as e:
             response = e
         body = response.read().decode(encoding='utf-8')
-        return json.loads(body)
+        api_response = json.loads(body)
+        log.debug(api_response)
+        return api_response
 
     @property
     def channels(self):
