@@ -2,9 +2,9 @@ Python Rainwave Client
 ======================
 
 This is a Python client library for Rainwave_. Documentation is available at
-https://python-rainwave-client.readthedocs.io.
+https://python-rainwave-client.subtlecoolness.com/.
 
-.. _Rainwave: http://rainwave.cc/api4/
+.. _Rainwave: https://rainwave.cc/api4/
 
 Requirements
 ------------
