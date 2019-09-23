@@ -75,7 +75,7 @@ class RainwaveAlbum(dict):
         """A boolean representing whether the album is marked as a fave or not.
         Change whether the album is a fave by assigning a boolean value to this
         attribute."""
-        return self['fave']
+        return self.get('fave', False)
 
     @fave.setter
     def fave(self, value):
