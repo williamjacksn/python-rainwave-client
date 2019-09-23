@@ -8,12 +8,12 @@ import sys
 import unittest
 
 if 'RW_USER_ID' in os.environ:
-    USER_ID = int(os.environ.get('RW_USER_ID'))
+    USER_ID = int(os.getenv('RW_USER_ID'))
 else:
     sys.exit('Please set the {!r} environment variable'.format('RW_USER_ID'))
 
 if 'RW_KEY' in os.environ:
-    KEY = os.environ.get('RW_KEY')
+    KEY = os.getenv('RW_KEY')
 else:
     sys.exit('Please set the {!r} environment variable'.format('RW_KEY'))
 
@@ -31,10 +31,10 @@ class TestRainwaveClient(unittest.TestCase):
         self.assertEqual(repr(self.rw), _repr)
 
     def test_base_url(self):
-        self.assertEqual(self.rw.base_url, 'http://rainwave.cc/api4/')
+        self.assertEqual(self.rw.base_url, 'https://rainwave.cc/api4/')
 
     def test_art_fmt(self):
-        self.assertEqual(self.rw.art_fmt, 'http://rainwave.cc{0}_320.jpg')
+        self.assertEqual(self.rw.art_fmt, 'https://rainwave.cc{0}_320.jpg')
 
     def test_user_id(self):
         self.assertEqual(self.rw.user_id, USER_ID)
@@ -84,13 +84,13 @@ class TestRainwaveChannel(unittest.TestCase):
 
     def test_get_album_by_id(self):
         self.assertRaises(IndexError, self.chan.get_album_by_id, 999999)
-        alb = self.chan.get_album_by_id(3)
-        self.assertEqual(alb.name, 'Goemon\'s Great Adventure')
+        alb = self.chan.get_album_by_id(3324)
+        self.assertEqual(alb.name, '2')
 
     def test_get_album_by_name(self):
         self.assertRaises(IndexError, self.chan.get_album_by_name, 'Mega Ran')
-        alb = self.chan.get_album_by_name('Goemon\'s Great Adventure')
-        self.assertEqual(alb.id, 3)
+        alb = self.chan.get_album_by_name('2')
+        self.assertEqual(alb.id, 3324)
 
     def test_get_artist_by_id(self):
         self.assertRaises(IndexError, self.chan.get_artist_by_id, 1)
@@ -168,13 +168,13 @@ class TestRainwaveChannel(unittest.TestCase):
 class TestRainwaveAlbum(unittest.TestCase):
 
     rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
-    alb = rw.channels[4].get_album_by_id(1)
+    alb = rw.channels[4].get_album_by_id(3119)
 
     def test_added_on(self):
         self.assertTrue(isinstance(self.alb.added_on, datetime.datetime))
 
     def test_art(self):
-        art = 'http://rainwave.cc/album_art/a_1_320.jpg'
+        art = 'https://rainwave.cc/static/baked/album_art/a_3119_320.jpg'
         self.assertEqual(self.alb.art, art)
 
     def test_categories(self):
@@ -201,20 +201,20 @@ class TestRainwaveAlbum(unittest.TestCase):
         self.alb.fave = False
         self.assertFalse(self.alb.fave)
 
-    def test_gave_set_same(self):
+    def test_fave_set_same(self):
         self.alb.fave = False
         self.assertFalse(self.alb.fave)
 
     def test_get_song_by_id(self):
         self.assertRaises(IndexError, self.alb.get_song_by_id, 100)
-        song = self.alb.get_song_by_id(1)
-        self.assertEqual(song.title, 'Conflict\'s Chime')
+        song = self.alb.get_song_by_id(2)
+        self.assertEqual(song.title, 'Sunlight Filtering Through the Trees')
 
     def test_id(self):
-        self.assertEqual(self.alb.id, 1)
+        self.assertEqual(self.alb.id, 3119)
 
     def test_name(self):
-        self.assertEqual(self.alb.name, 'Bravely Default: Flying Fairy')
+        self.assertEqual(self.alb.name, 'Bravely Default')
 
     def test_played_last(self):
         self.assertTrue(isinstance(self.alb.played_last, datetime.datetime))
@@ -241,7 +241,7 @@ class TestRainwaveAlbum(unittest.TestCase):
         self.assertEqual(self.alb.rating_user, self.alb.rating)
 
     def test_repr(self):
-        _repr = '<RainwaveAlbum [All // Bravely Default: Flying Fairy]>'
+        _repr = '<RainwaveAlbum [All // Bravely Default]>'
         self.assertEqual(repr(self.alb), _repr)
 
     def test_request_count(self):
@@ -254,7 +254,7 @@ class TestRainwaveAlbum(unittest.TestCase):
         self.assertTrue(len(self.alb.songs) > 0)
 
     def test_str(self):
-        self.assertEqual(str(self.alb), 'All // Bravely Default: Flying Fairy')
+        self.assertEqual(str(self.alb), 'All // Bravely Default')
 
     def test_vote_count(self):
         self.assertTrue(self.alb.vote_count > 0)
@@ -263,10 +263,10 @@ class TestRainwaveAlbum(unittest.TestCase):
 class TestRainwaveSong(unittest.TestCase):
 
     rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
-    song = rw.channels[4].get_song_by_id(1)
+    song = rw.channels[4].get_song_by_id(2)
 
     def test_album(self):
-        self.assertEqual(self.song.album.name, 'Bravely Default: Flying Fairy')
+        self.assertEqual(self.song.album.name, 'Bravely Default')
 
     def test_artist_string(self):
         self.assertEqual(self.song.artist_string, 'Revo')
@@ -302,13 +302,13 @@ class TestRainwaveSong(unittest.TestCase):
         self.song.fave = False
 
     def test_id(self):
-        self.assertEqual(self.song.id, 1)
+        self.assertEqual(self.song.id, 2)
 
     def test_len(self):
-        self.assertEqual(len(self.song), 167)
+        self.assertEqual(len(self.song), 227)
 
     def test_length(self):
-        self.assertEqual(self.song.length, 167)
+        self.assertEqual(self.song.length, 227)
 
     def test_link_text(self):
         self.assertEqual(self.song.link_text, 'Click for More Info')
@@ -359,8 +359,7 @@ class TestRainwaveSong(unittest.TestCase):
         self.assertEqual(self.song.rating_user, self.song.rating)
 
     def test_repr(self):
-        _repr = ('<RainwaveSong [All // Bravely Default: Flying Fairy // '
-                 'Conflict\'s Chime // Revo]>')
+        _repr = '<RainwaveSong [All // Bravely Default // Sunlight Filtering Through the Trees // Revo]>'
         self.assertEqual(repr(self.song), _repr)
 
     def test_request_count(self):
@@ -373,12 +372,11 @@ class TestRainwaveSong(unittest.TestCase):
         self.assertEqual(self.song.sid, 5)
 
     def test_str(self):
-        _str = ('All // Bravely Default: Flying Fairy // Conflict\'s Chime // '
-                'Revo')
+        _str = 'All // Bravely Default // Sunlight Filtering Through the Trees // Revo'
         self.assertEqual(str(self.song), _str)
 
     def test_title(self):
-        self.assertEqual(self.song.title, 'Conflict\'s Chime')
+        self.assertEqual(self.song.title, 'Sunlight Filtering Through the Trees')
 
     def test_url(self):
         self.assertEqual(self.song.url, 'http://vgmdb.net/album/33726')
@@ -415,11 +413,10 @@ class TestRainwaveArtist(unittest.TestCase):
 class TestRainwaveListener(unittest.TestCase):
 
     rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
-    l = rw.channels[4].get_listener_by_id(5049)
+    l = rw.channels[4].get_listener_by_id(3)
 
     def test_avatar(self):
-        _avatar = ('http://rainwave.cc/forums/download/file.php?'
-                   'avatar=5049_1408449931.jpg')
+        _avatar = 'http://rainwave.cc/forums/download/file.php?avatar=3_1565274340.jpg'
         self.assertEqual(self.l.avatar, _avatar)
 
     def test_color(self):
@@ -429,7 +426,7 @@ class TestRainwaveListener(unittest.TestCase):
         self.assertEqual(self.l.colour, 'FF0000')
 
     def test_id(self):
-        self.assertEqual(self.l.id, 5049)
+        self.assertEqual(self.l.id, 3)
 
     def test_losing_requests(self):
         self.assertTrue(self.l.losing_requests > 0)
@@ -462,7 +459,7 @@ class TestRainwaveListener(unittest.TestCase):
         self.assertTrue(self.l.total_votes > 0)
 
     def test_user_id(self):
-        self.assertEqual(self.l.user_id, 5049)
+        self.assertEqual(self.l.user_id, 3)
 
     def test_winning_requests(self):
         self.assertTrue(self.l.winning_requests > 0)

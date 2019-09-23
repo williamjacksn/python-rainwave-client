@@ -9,6 +9,13 @@ services:
     image: williamjackson/python-rainwave-client-dev
     command: ["setup.py", "bdist_wheel"]
 
+  tests:
+    image: williamjackson/python-rainwave-client-dev
+    command: ["tests.py"]
+    environment:
+      RW_KEY:
+      RW_USER_ID:
+
   twine-upload:
     image: williamjackson/python-rainwave-client-dev
     entrypoint: ["/usr/local/bin/twine"]
