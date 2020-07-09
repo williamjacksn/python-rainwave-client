@@ -8,6 +8,7 @@ services:
       - ./:/workspace
     command:
       - setup.py
+      - sdist
       - bdist_wheel
 
   tests:
