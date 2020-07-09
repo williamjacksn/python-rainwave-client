@@ -1,40 +1,70 @@
 version: '3'
 
 services:
-  python-rainwave-client-dev:
-    image: williamjackson/python-rainwave-client-dev
-    build: .
-
   py-build:
-    image: williamjackson/python-rainwave-client-dev
-    command: ["setup.py", "bdist_wheel"]
+    image: docker.pkg.github.com/williamjacksn/python-rainwave-client/python-rainwave-client-helper
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    command:
+      - setup.py
+      - bdist_wheel
 
   tests:
-    image: williamjackson/python-rainwave-client-dev
-    command: ["tests.py"]
+    image: docker.pkg.github.com/williamjacksn/python-rainwave-client/python-rainwave-client-helper
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    command:
+      - tests.py
     environment:
       RW_KEY:
       RW_USER_ID:
 
   twine-check:
-    image: williamjackson/python-rainwave-client-dev
-    entrypoint: ["/usr/local/bin/twine"]
-    command: ["check", "dist/*"]
+    image: docker.pkg.github.com/williamjacksn/python-rainwave-client/python-rainwave-client-helper
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    entrypoint:
+      - /usr/local/bin/twine
+      - check
+      - dist/*
 
   twine-upload:
-    image: williamjackson/python-rainwave-client-dev
-    entrypoint: ["/usr/local/bin/twine"]
-    command: ["upload", "--skip-existing", "--verbose", "dist/*"]
+    image: docker.pkg.github.com/williamjacksn/python-rainwave-client/python-rainwave-client-helper
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    entrypoint:
+      - /usr/local/bin/twine
+      - upload
+      - --skip-existing
+      - --verbose
+      - dist/*
     environment:
       TWINE_PASSWORD:
       TWINE_USERNAME:
 
   docs-build:
-    image: williamjackson/python-rainwave-client-dev
-    entrypoint: ["/usr/local/bin/sphinx-build"]
-    command: ["/python-rainwave-client/docs", "/python-rainwave-client/html"]
+    image: docker.pkg.github.com/williamjacksn/python-rainwave-client/python-rainwave-client-helper
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    entrypoint:
+      - /usr/local/bin/sphinx-build
+      - docs
+      - html
 
   cleanup:
-    image: williamjackson/python-rainwave-client-dev
-    entrypoint: ["/bin/rm"]
-    command: ["-rf", "build", "dist", "html", "python_rainwave_client.egg-info"]
+    image: docker.pkg.github.com/williamjacksn/python-rainwave-client/python-rainwave-client-helper
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    entrypoint:
+      - /bin/rm
+      - -rf
+      - build
+      - dist
+      - html
+      - python_rainwave_client.egg-info
