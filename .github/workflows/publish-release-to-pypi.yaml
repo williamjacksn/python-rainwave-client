@@ -15,13 +15,6 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v2.3.3
 
-      - name: Log in to the GitHub registry
-        uses: docker/login-action@v1.4.1
-        with:
-          registry: docker.pkg.github.com
-          username: ${{ github.actor }}
-          password: ${{ github.token }}
-
       - name: Build the package
         run: docker-compose run -T py-build
 
