@@ -63,13 +63,13 @@ pytz==2021.1
     # via babel
 readme-renderer==29.0
     # via twine
-requests-toolbelt==0.9.1
-    # via twine
 requests==2.25.1
     # via
     #   requests-toolbelt
     #   sphinx
     #   twine
+requests-toolbelt==0.9.1
+    # via twine
 rfc3986==1.5.0
     # via twine
 secretstorage==3.3.1
@@ -80,12 +80,12 @@ six==1.16.0
     #   readme-renderer
 snowballstemmer==2.1.0
     # via sphinx
-sphinx-rtd-theme==0.5.2
-    # via -r requirements.in
-sphinx==4.0.2
+sphinx==4.0.3
     # via
     #   -r requirements.in
     #   sphinx-rtd-theme
+sphinx-rtd-theme==0.5.2
+    # via -r requirements.in
 sphinxcontrib-applehelp==1.0.2
     # via sphinx
 sphinxcontrib-devhelp==1.0.2
