@@ -49,7 +49,7 @@ packaging==20.9
     # via
     #   bleach
     #   sphinx
-pkginfo==1.7.0
+pkginfo==1.8.2
     # via twine
 pycparser==2.20
     # via cffi
@@ -100,7 +100,7 @@ sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
 tqdm==4.61.1
     # via twine
-twine==3.6.0
+twine==3.7.0
     # via -r requirements.in
 urllib3==1.26.5
     # via requests
