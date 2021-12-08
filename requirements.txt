@@ -100,7 +100,7 @@ sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
 tqdm==4.61.1
     # via twine
-twine==3.7.0
+twine==3.7.1
     # via -r requirements.in
 urllib3==1.26.5
     # via requests
