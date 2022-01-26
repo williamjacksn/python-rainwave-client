@@ -86,3 +86,8 @@ class RainwaveOneTimePlay(RainwaveSchedule):
         album_id = self['songs'][0]['albums'][0]['id']
         tmp_album = self.channel.get_album_by_id(album_id)
         return song.RainwaveSong(tmp_album, self['songs'][0])
+
+    @property
+    def songs(self):
+        """A list containing the :class:`RainwaveSong` for the event."""
+        return [self.song]
