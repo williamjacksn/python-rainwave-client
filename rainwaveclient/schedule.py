@@ -62,6 +62,13 @@ class RainwaveElection(RainwaveSchedule):
         return self['candidate_objects']
 
     @property
+    def song(self):
+        """The first :class:`RainwaveCandidate` object in the list of
+        candidates. If the :class:`RainwaveElection` event has already closed,
+        this is the song that won the election."""
+        return self.candidates[0]
+
+    @property
     def songs(self):
         """See :attr:`candidates`."""
         return self.candidates

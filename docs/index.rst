@@ -51,6 +51,7 @@ See what is currently playing::
 
     >>> ocr.schedule_current.songs[0]
     <RainwaveCandidate [OCRemix // Final Fantasy VII: Voices of the Lifestream // Black Wing Metamorphosis // bLiNd, Fishy, Jillian Aversa, Sixto Sounds, Steffan Andrews, Suzumebachi, tefnek]>
+    >>> # or ocr.schedule_current.song
 
 Give the currently playing song a rating and mark it as a favourite::
 
