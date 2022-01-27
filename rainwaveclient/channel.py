@@ -392,6 +392,11 @@ class RainwaveChannel(dict):
         return self['stream']
 
     @property
+    def url(self):
+        """The URL of the web interface for the channel."""
+        return 'https://rainwave.cc/{}/'.format(self.key)
+
+    @property
     def user_requests(self):
         """A :class:`RainwaveUserRequestQueue` of :class:`RainwaveUserRequest`
         objects in the listener's personal request queue."""
