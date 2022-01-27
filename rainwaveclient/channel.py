@@ -269,6 +269,11 @@ class RainwaveChannel(dict):
         return self['id']
 
     @property
+    def key(self):
+        """The channel key, a short string that identifies the channel."""
+        return self['key']
+
+    @property
     def listeners(self):
         """A list of :class:`RainwaveListener` objects listening to the
         channel."""
