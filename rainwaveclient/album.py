@@ -181,6 +181,11 @@ class RainwaveAlbum(dict):
         return self['song_objects']
 
     @property
+    def url(self):
+        """The URL of the album information page on https://rainwave.cc/"""
+        return '{}#!/album/{}'.format(self.channel.url, self.id)
+
+    @property
     def vote_count(self):
         """The total number of election votes songs in the album have
         received."""
