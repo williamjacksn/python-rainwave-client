@@ -181,13 +181,14 @@ class RainwaveChannel(dict):
         :type album_id: int
         """
 
-        for alb in self.albums:
-            if alb.id == album_id:
-                args = {'sid': self.id, 'id': album_id}
-                d = self.client.call('album', args)
-                return album.RainwaveAlbum(self, d['album'])
-        error = 'Channel does not contain album with id: {0}'.format(album_id)
-        raise IndexError(error)
+        args = {'sid': self.id, 'id': album_id}
+        d = self.client.call('album', args)
+        if 'album_error' in d:
+            raise IndexError(d['album_error']['text'])
+        album_data = d['album']
+        if 'text' in album_data:
+            raise IndexError(album_data['text'])
+        return album.RainwaveAlbum(self, album_data)
 
     def get_album_by_name(self, name):
         """Return a :class:`RainwaveAlbum` for the given album name. Raise an
