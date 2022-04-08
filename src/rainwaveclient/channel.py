@@ -47,10 +47,10 @@ class RainwaveChannel(dict):
         self._requests_lock = threading.Lock()
 
     def __repr__(self):
-        return '<RainwaveChannel [{0}]>'.format(self.name)
+        return f'<RainwaveChannel [{self.name}]>'
 
     def __str__(self):
-        return '{0}: {1}'.format(self.name, self.description)
+        return f'{self.name}: {self.description}'
 
     def _do_async_get(self):
         if not self._stale():
@@ -88,7 +88,7 @@ class RainwaveChannel(dict):
         d = self.client.call('listener', args)
         if 'listener' in d:
             return d['listener']
-        err = 'There is no listener with id: {0}'.format(listener_id)
+        err = f'There is no listener with id: {listener_id}'
         raise IndexError(err)
 
     def _new_schedule(self, raw_schedule):
@@ -203,7 +203,7 @@ class RainwaveChannel(dict):
         for alb in self.albums:
             if alb.name == name:
                 return alb
-        error = 'Channel does not contain album with name: {0}'.format(name)
+        error = f'Channel does not contain album with name: {name}'
         raise IndexError(error)
 
     def get_artist_by_id(self, artist_id):
@@ -219,7 +219,7 @@ class RainwaveChannel(dict):
         d = self.client.call('artist', args)
         if 'id' in d['artist']:
             return artist.RainwaveArtist(self, d['artist'])
-        err = 'Channel does not contain artist with id: {0}'.format(artist_id)
+        err = f'Channel does not contain artist with id: {artist_id}'
         raise IndexError(err)
 
     def get_listener_by_id(self, listener_id):
@@ -245,7 +245,7 @@ class RainwaveChannel(dict):
         for _listener in self.listeners:
             if _listener.name == name:
                 return _listener
-        err = 'No current listener named {0}'.format(name)
+        err = f'No current listener named {name}'
         raise IndexError(err)
 
     def get_song_by_id(self, song_id):
@@ -262,7 +262,7 @@ class RainwaveChannel(dict):
         if 'albums' in d['song']:
             alb = self.get_album_by_id(d['song']['albums'][0]['id'])
             return song.RainwaveSong(alb, d['song'])
-        err = 'Channel does not contain song with id: {0}'.format(song_id)
+        err = f'Channel does not contain song with id: {song_id}'
         raise IndexError(err)
 
     @property
@@ -396,7 +396,7 @@ class RainwaveChannel(dict):
     @property
     def url(self):
         """The URL of the web interface for the channel."""
-        return 'https://rainwave.cc/{}/'.format(self.key)
+        return f'https://rainwave.cc/{self.key}/'
 
     @property
     def user_requests(self):

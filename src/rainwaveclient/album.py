@@ -17,12 +17,10 @@ class RainwaveAlbum(dict):
         super(RainwaveAlbum, self).__init__(raw_info)
 
     def __repr__(self):
-        _repr = '<RainwaveAlbum [{0} // {1}]>'
-        return _repr.format(self.channel.name, self.name)
+        return f'<RainwaveAlbum [{self.channel.name} // {self.name}]>'
 
     def __str__(self):
-        _str = '{0} // {1}'
-        return _str.format(self.channel.name, self.name)
+        return f'{self.channel.name} // {self.name}'
 
     @property
     def art(self):
@@ -181,7 +179,7 @@ class RainwaveAlbum(dict):
     @property
     def url(self):
         """The URL of the album information page on https://rainwave.cc/"""
-        return '{}#!/album/{}'.format(self.channel.url, self.id)
+        return f'{self.channel.url}#!/album/{self.id}'
 
     @property
     def vote_count(self):
@@ -201,5 +199,5 @@ class RainwaveAlbum(dict):
         for song in self.songs:
             if song.id == song_id:
                 return song
-        err = 'Album does not contain song with id: {0}'.format(song_id)
+        err = f'Album does not contain song with id: {song_id}'
         raise IndexError(err)

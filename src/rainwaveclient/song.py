@@ -18,11 +18,10 @@ class RainwaveSong(dict):
         return self['length']
 
     def __repr__(self):
-        return '<RainwaveSong [{0}]>'.format(self)
+        return f'<RainwaveSong [{self}]>'
 
     def __str__(self):
-        msg = '{0} // {1} // {2}'
-        return msg.format(self.album, self.title, self.artist_string)
+        return f'{self.album} // {self.title} // {self.artist_string}'
 
     @property
     def album(self):
@@ -219,7 +218,7 @@ class RainwaveCandidate(RainwaveSong):
         super(RainwaveCandidate, self).__init__(album, raw_info)
 
     def __repr__(self):
-        return '<RainwaveCandidate [{0}]>'.format(self)
+        return f'<RainwaveCandidate [{self}]>'
 
     @property
     def entry_id(self):

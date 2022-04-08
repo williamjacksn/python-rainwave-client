@@ -12,7 +12,7 @@ class RainwaveRequest(song.RainwaveSong):
         return request
 
     def __repr__(self):
-        return '<RainwaveRequest [{0}]>'.format(self)
+        return f'<RainwaveRequest [{self}]>'
 
     @property
     def requester(self):
@@ -25,7 +25,7 @@ class RainwaveUserRequest(song.RainwaveSong):
     authenticating listener's requests queue."""
 
     def __repr__(self):
-        return '<RainwaveUserRequest [{0}]>'.format(self)
+        return f'<RainwaveUserRequest [{self}]>'
 
     @property
     def blocked(self):

@@ -13,7 +13,7 @@ class RainwaveArtist(dict):
         super(RainwaveArtist, self).__init__(raw_info)
 
     def __repr__(self):
-        return '<RainwaveArtist [{0}]>'.format(self)
+        return f'<RainwaveArtist [{self}]>'
 
     def __str__(self):
         return self.name

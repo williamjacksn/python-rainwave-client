@@ -35,8 +35,7 @@ class RainwaveClient:
         self.user_agent = uuid.uuid4().hex
 
     def __repr__(self):
-        msg = 'RainwaveClient(user_id={0!r}, key={1!r})'
-        return msg.format(self.user_id, self.key)
+        return f'RainwaveClient(user_id={self.user_id!r}, key={self.key!r})'
 
     def call(self, path, args=None):
         """Make a direct call to the API if you know the necessary path and
@@ -55,7 +54,8 @@ class RainwaveClient:
           {'album': {'name': 'Bravely Default: Flying Fairy', ...}}
         """
 
-        url = '{0}{1}'.format(self.base_url, path.lstrip('/'))
+        path = path.lstrip('/')
+        url = f'{self.base_url}{path}'
 
         if args is None:
             args = {}

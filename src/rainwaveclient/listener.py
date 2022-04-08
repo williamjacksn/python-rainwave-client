@@ -9,7 +9,7 @@ class RainwaveListener(dict):
         super(RainwaveListener, self).__init__(raw_info)
 
     def __repr__(self):
-        return '<RainwaveListener [{0}]>'.format(self)
+        return f'<RainwaveListener [{self}]>'
 
     def __str__(self):
         return self.name

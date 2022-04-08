@@ -19,7 +19,7 @@ class RainwaveSchedule(dict):
         super(RainwaveSchedule, self).__init__(raw_info)
 
     def __repr__(self):
-        return '<RainwaveSchedule [{0}]>'.format(self.channel.name)
+        return f'<RainwaveSchedule [{self.channel.name}]>'
 
     def __str__(self):
         return repr(self)
@@ -46,7 +46,7 @@ class RainwaveElection(RainwaveSchedule):
     :class:`RainwaveSchedule` and represents an election event on a channel."""
 
     def __repr__(self):
-        return '<RainwaveElection [{0}]>'.format(self.channel.name)
+        return f'<RainwaveElection [{self.channel.name}]>'
 
     @property
     def candidates(self):
@@ -78,12 +78,13 @@ class RainwaveOneTimePlay(RainwaveSchedule):
     timeline by a manager."""
 
     def __repr__(self):
-        return '<RainwaveOneTimePlay [{0}]>'.format(self.channel.name)
+        return f'<RainwaveOneTimePlay [{self.channel.name}]>'
 
     @property
     def name(self):
         """The name of the event."""
-        return '{0} Power Hour'.format(self['name'])
+        _name = self.get('name')
+        return f'{_name} Power Hour'
 
     @property
     def song(self):
