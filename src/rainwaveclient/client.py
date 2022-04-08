@@ -16,7 +16,9 @@ class RainwaveClient:
     Rainwave API (see https://rainwave.cc/api4/ for details about the API).
 
     :param user_id: the User ID to use when communicating with the API.
+    :type user_id: int
     :param key: the API key to use when communicating with the API.
+    :type key: str
     """
 
     #: The URL upon which all API calls are based.
@@ -25,7 +27,7 @@ class RainwaveClient:
     #: The format string used to build canonical album art URLs.
     art_fmt = 'https://rainwave.cc{0}_320.jpg'
 
-    def __init__(self, user_id=None, key=None):
+    def __init__(self, user_id: int = None, key: str = None):
         if user_id is not None:
             self._user_id = int(user_id)
         if key is not None:
@@ -34,10 +36,10 @@ class RainwaveClient:
         self._channels = None
         self.user_agent = uuid.uuid4().hex
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'RainwaveClient(user_id={self.user_id!r}, key={self.key!r})'
 
-    def call(self, path, args=None):
+    def call(self, path: str, args: dict = None) -> dict:
         """Make a direct call to the API if you know the necessary path and
         arguments.
 
@@ -78,7 +80,7 @@ class RainwaveClient:
         return api_response
 
     @property
-    def channels(self):
+    def channels(self) -> list[channel.RainwaveChannel]:
         """A list of :class:`RainwaveChannel` objects associated with this
         :class:`RainwaveClient` object."""
 
@@ -98,21 +100,21 @@ class RainwaveClient:
         return self._channels
 
     @property
-    def key(self):
+    def key(self) -> str:
         """The API key to use when communicating with the API. Find your API
         key at https://rainwave.cc/keys/."""
         return self._key
 
     @key.setter
-    def key(self, value):
+    def key(self, value: str):
         self._key = value
 
     @property
-    def user_id(self):
+    def user_id(self) -> int:
         """The User ID to use when communicating with the API. Find your User ID
         at https://rainwave.cc/keys/."""
         return self._user_id
 
     @user_id.setter
-    def user_id(self, value):
+    def user_id(self, value: int):
         self._user_id = value
