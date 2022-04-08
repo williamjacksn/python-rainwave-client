@@ -36,7 +36,7 @@ class RainwaveAlbum(dict):
     @property
     def categories(self):
         """A list of :class:`RainwaveCategory` objects representing the
-        categories the songs in the album belong to."""
+        categories the songs on the album belong to."""
         if 'category_objects' not in self:
             self['category_objects'] = []
             for raw_cat in self['genres']:
@@ -54,23 +54,23 @@ class RainwaveAlbum(dict):
     @property
     def cool(self):
         """A boolean representing whether the entire album is on cooldown.
-        :attr:`cool` will be `True` if and only if every song in the album is on
+        :attr:`cool` will be `True` if and only if every song on the album is on
         cooldown."""
         return self['cool']
 
     @property
     def cool_lowest(self):
         """A :class:`datetime.datetime` object specifying the earliest date and
-        time a song in the album will be out of cooldown and available to play.
-        If any song in the album is already available, :attr:`cool_lowest` will
+        time a song on the album will be out of cooldown and available to play.
+        If any song on the album is already available, :attr:`cool_lowest` will
         be in the past."""
         return datetime.datetime.utcfromtimestamp(self['cool_lowest'])
 
     @property
     def fave(self):
-        """A boolean representing whether the album is marked as a fave or not.
-        Change whether the album is a fave by assigning a boolean value to this
-        attribute."""
+        """A boolean representing whether the album is marked as a favourite or
+        not. Change whether the album is a favourite by assigning a boolean
+        value to this attribute."""
         return self.get('fave', False)
 
     @fave.setter
@@ -102,37 +102,37 @@ class RainwaveAlbum(dict):
     @property
     def played_last(self):
         """A :class:`datetime.datetime` object specifying the most recent date
-        and time when a song in the album played."""
+        and time when a song on the album played."""
         return datetime.datetime.utcfromtimestamp(self['played_last'])
 
     @property
     def rating(self):
-        """The average of all ratings given to songs in the album by only the
+        """The average of all ratings given to songs on the album by only the
         listener authenticating to the API."""
         return self['rating_user']
 
     @property
     def rating_avg(self):
-        """The average of all ratings given to songs in the album by all
+        """The average of all ratings given to songs on the album by all
         listeners."""
         return self['rating']
 
     @property
     def rating_complete(self):
-        """A boolean representing whether the listener has rated all songs in
+        """A boolean representing whether the listener has rated all songs on
         the album."""
         return self['rating_complete']
 
     @property
     def rating_count(self):
-        """The total number of ratings given to songs in the album by all
+        """The total number of ratings given to songs on the album by all
         listeners."""
         return self['rating_count']
 
     @property
     def rating_histogram(self):
         """A dictionary representing the distribution of ratings given to all
-        songs in the album by all listeners. For example::
+        songs on the album by all listeners. For example::
 
             >>> album.rating_histogram
             {'1.0': 4, '1.5': 4, '2.0': 6, ..., '4.5': 46, '5.0': 26}
@@ -152,7 +152,7 @@ class RainwaveAlbum(dict):
 
     @property
     def request_count(self):
-        """The total number of times a song in the album was requested by any
+        """The total number of times a song on the album was requested by any
         listener."""
         return self['request_count']
 
@@ -165,7 +165,7 @@ class RainwaveAlbum(dict):
 
     @property
     def songs(self):
-        """A list of :class:`RainwaveSong` objects in the album."""
+        """A list of :class:`RainwaveSong` objects on the album."""
         if 'song_objects' not in self:
             self['song_objects'] = []
             if 'songs' not in self:
@@ -183,13 +183,13 @@ class RainwaveAlbum(dict):
 
     @property
     def vote_count(self):
-        """The total number of election votes songs in the album have
+        """The total number of election votes songs on the album have
         received."""
         return self['vote_count']
 
     def get_song_by_id(self, song_id):
         """ Return a :class:`RainwaveSong` for the given song ID. Raises an
-        :exc:`IndexError` if there is no song with the given ID in the
+        :exc:`IndexError` if there is no song with the given ID on the
         album.
 
         :param song_id: the ID of the desired song.

@@ -6,8 +6,9 @@ class RainwaveSong(dict):
 
     .. note::
 
-        You should not instantiate an object of this class directly, but rather obtain one from
-        :attr:`RainwaveAlbum.songs`, :attr:`RainwaveArtist.songs`, or some other object.
+        You should not instantiate an object of this class directly, but rather
+        obtain one from :attr:`RainwaveAlbum.songs`,
+        :attr:`RainwaveArtist.songs`, or some other object.
     """
 
     def __init__(self, album, raw_info):
@@ -50,12 +51,14 @@ class RainwaveSong(dict):
 
     @property
     def available(self):
-        """A boolean representing whether the song is available to play or not. Opposite of :attr:`cool`."""
+        """A boolean representing whether the song is available to play or not.
+        Opposite of :attr:`cool`."""
         return not self.cool
 
     @property
     def categories(self):
-        """A list of :class:`RainwaveCategory` objects representing the categories the song belongs to."""
+        """A list of :class:`RainwaveCategory` objects representing the
+        categories the song belongs to."""
         if 'category_objects' not in self:
             self['category_objects'] = []
             for raw_cat in self['groups']:
@@ -73,13 +76,15 @@ class RainwaveSong(dict):
 
     @property
     def cool(self):
-        """A boolean representing whether the song is on cooldown. Opposite of :attr:`available`."""
+        """A boolean representing whether the song is on cooldown. Opposite of
+        :attr:`available`."""
         return self['cool']
 
     @property
     def fave(self):
-        """A boolean representing whether the song is marked as a fave or not. Change whether the song is a fave by
-        assigning a boolean value to this attribute."""
+        """A boolean representing whether the song is marked as a fave or not.
+        Change whether the song is a fave by assigning a boolean value to this
+        attribute."""
         return self['fave']
 
     @fave.setter
@@ -100,7 +105,8 @@ class RainwaveSong(dict):
 
     @property
     def length(self):
-        """The length of the song in seconds. :class:`RainwaveSong` objects also support `len(song)`."""
+        """The length of the song in seconds. :class:`RainwaveSong` objects also
+        support `len(song)`."""
         return len(self)
 
     @property
@@ -110,8 +116,9 @@ class RainwaveSong(dict):
 
     @property
     def origin_channel_id(self):
-        """The :attr:`RainwaveChannel.id` of the home channel for the song. This could be different from
-        :attr:`channel_id` if the song is in the playlist of multiple channels."""
+        """The :attr:`RainwaveChannel.id` of the home channel for the song. This
+        could be different from :attr:`channel_id` if the song is in the
+        playlist of multiple channels."""
         return self['origin_sid']
 
     @property
@@ -121,8 +128,8 @@ class RainwaveSong(dict):
 
     @property
     def rating(self):
-        """The rating given to the song by the listener authenticating to the API. Change the rating by assigning a new
-        value to this attribute."""
+        """The rating given to the song by the listener authenticating to the
+        API. Change the rating by assigning a new value to this attribute."""
         return self['rating_user']
 
     @rating.setter
@@ -145,7 +152,8 @@ class RainwaveSong(dict):
 
     @property
     def rating_allowed(self):
-        """A boolean representing whether the listener can currently rate the song."""
+        """A boolean representing whether the listener can currently rate the
+        song."""
         return self['rating_allowed']
 
     @property
@@ -160,8 +168,8 @@ class RainwaveSong(dict):
 
     @property
     def rating_histogram(self):
-        """A dictionary representing the distribution of ratings given to the song by all listeners.
-        For example::
+        """A dictionary representing the distribution of ratings given to the
+        song by all listeners. For example::
 
             >>> song.rating_histogram
             {'1.0': 4, '1.5': 4, '2.0': 6, ..., '4.5': 46, '5.0': 26}
@@ -170,8 +178,8 @@ class RainwaveSong(dict):
 
     @property
     def rating_rank(self):
-        """The position of the album when albums on the channel are ranked by rating. The highest-rated album will have
-        :attr:`rating_rank` == 1."""
+        """The position of the album when albums on the channel are ranked by
+        rating. The highest-rated album will have :attr:`rating_rank` == 1."""
         return self['rating_rank']
 
     @property
@@ -181,13 +189,15 @@ class RainwaveSong(dict):
 
     @property
     def request_count(self):
-        """The total number of times the song has been requested by any listener."""
+        """The total number of times the song has been requested by any
+        listener."""
         return self['request_count']
 
     @property
     def request_rank(self):
-        """The position of the song when songs on the channel are ranked by how often they are requested. The
-        most-requested song will have :attr:`rating_rank` == 1."""
+        """The position of the song when songs on the channel are ranked by how
+        often they are requested. The most-requested song will have
+        :attr:`rating_rank` == 1."""
         return self['rating_rank']
 
     @property
@@ -211,8 +221,9 @@ class RainwaveSong(dict):
 
 
 class RainwaveCandidate(RainwaveSong):
-    """A :class:`RainwaveCandidate` object is a subclass of :class:`RainwaveSong` representing a song that is a
-    candidate in an election."""
+    """A :class:`RainwaveCandidate` object is a subclass of
+    :class:`RainwaveSong` representing a song that is a candidate in an
+    election."""
 
     def __init__(self, album, raw_info):
         super(RainwaveCandidate, self).__init__(album, raw_info)
@@ -227,13 +238,14 @@ class RainwaveCandidate(RainwaveSong):
 
     @property
     def is_request(self):
-        """A boolean representing whether the candidate is a listener request or not."""
+        """A boolean representing whether the candidate is a listener request or
+        not."""
         return self['elec_request_user_id'] > 0
 
     @property
     def requested_by(self):
-        """The :class:`RainwaveListener` who requested the candidate, if the candidate is a request. ``None``
-        otherwise."""
+        """The :class:`RainwaveListener` who requested the candidate, if the
+        candidate is a request. ``None`` otherwise."""
         if self.is_request:
             user_id = self['elec_request_user_id']
             return self.album.channel.get_listener_by_id(user_id)
@@ -247,6 +259,6 @@ class RainwaveCandidate(RainwaveSong):
 
     @property
     def votes(self):
-        """The number of votes this candidate received in the election. If the election has not ended, :attr:`votes`
-        will be ``0``."""
+        """The number of votes this candidate received in the election. If the
+        election has not ended, :attr:`votes` will be ``0``."""
         return self['entry_votes']

@@ -99,7 +99,7 @@ class RainwaveClient:
     @property
     def key(self):
         """The API key to use when communicating with the API. Find your API
-        key at http://rainwave.cc/keys/."""
+        key at https://rainwave.cc/keys/."""
         return self._key
 
     @key.setter
@@ -109,7 +109,7 @@ class RainwaveClient:
     @property
     def user_id(self):
         """The User ID to use when communicating with the API. Find your User ID
-        at http://rainwave.cc/keys/."""
+        at https://rainwave.cc/keys/."""
         return self._user_id
 
     @user_id.setter

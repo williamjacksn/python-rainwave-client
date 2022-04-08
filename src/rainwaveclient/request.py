@@ -2,8 +2,8 @@ from . import song
 
 
 class RainwaveRequest(song.RainwaveSong):
-    """A :class:`RainwaveRequest` object is a subclass of :class:`RainwaveSong` representing a song that has been
-    requested to play on the radio."""
+    """A :class:`RainwaveRequest` object is a subclass of :class:`RainwaveSong`
+    representing a song that has been requested to play on the radio."""
 
     @classmethod
     def request_from_song(cls, _song, requester):
@@ -21,35 +21,41 @@ class RainwaveRequest(song.RainwaveSong):
 
 
 class RainwaveUserRequest(song.RainwaveSong):
-    """A :class:`RainwaveUserRequest` object is a subclass of :class:`RainwaveSong` representing a song in the
-    authenticating listener's requests queue."""
+    """A :class:`RainwaveUserRequest` object is a subclass of
+    :class:`RainwaveSong` representing a song in the authenticating listener's
+    requests queue."""
 
     def __repr__(self):
         return f'<RainwaveUserRequest [{self}]>'
 
     @property
     def blocked(self):
-        """``True`` if the request is currently blocked. See :attr:`blocked_by_album` and :attr:`blocked_by_category` to
-        determine why the request is blocked."""
+        """``True`` if the request is currently blocked. See
+        :attr:`blocked_by_album` and :attr:`blocked_by_category` to determine
+        why the request is blocked."""
         return bool(self.blocked_by_album or self.blocked_by_category)
 
     @property
     def blocked_by_album(self):
-        """``True`` if the request is currently blocked because a song from the same album is in an election."""
+        """``True`` if the request is currently blocked because a song from the
+        same album is in an election."""
         return self['elec_blocked_by'] == 'album'
 
     @property
     def blocked_by_category(self):
-        """``True`` if the request is currently blocked because a song from the same category is in an election."""
+        """``True`` if the request is currently blocked because a song from the
+        same category is in an election."""
         return self['elec_blocked_by'] == 'group'
 
     def delete(self):
-        """Remove the requested song from the authenticating listener's request queue."""
+        """Remove the requested song from the authenticating listener's request
+        queue."""
         self.album.channel.delete_request(self.id)
 
 
 class RainwaveUserRequestQueue(list):
-    """A :class:`RainwaveUserRequestQueue` is a list-like object that supports explicit reordering."""
+    """A :class:`RainwaveUserRequestQueue` is a list-like object that supports
+    explicit reordering."""
 
     def __init__(self, channel):
         self._channel = channel
@@ -57,7 +63,7 @@ class RainwaveUserRequestQueue(list):
 
     def clear(self):
         """Clear all requests from the queue."""
-        d = self._channel.clear_requests()
+        self._channel.clear_requests()
 
     def reorder(self, order):
         """Change the order of the requests in the queue.
@@ -67,7 +73,8 @@ class RainwaveUserRequestQueue(list):
 
         Example usage:
 
-        If you have four songs in your request queue and you want to move the last song to the top of the queue::
+        If you have four songs in your request queue, and you want to move the
+        last song to the top of the queue::
 
         >>> from rainwaveclient import RainwaveClient
         >>> rw = RainwaveClient(5049, 'abcde12345')
@@ -78,11 +85,12 @@ class RainwaveUserRequestQueue(list):
         To randomly shuffle your request queue::
 
         >>> import random
-        >>> indices = range(len(game.user_requests))
+        >>> indices = list(range(len(game.user_requests)))
         >>> random.shuffle(indices)
         >>> rq.reorder(indices)
 
-        All indices must appear in ``order`` and each index must only appear once.
+        All indices must appear in ``order`` and each index must only appear
+        once.
         """
 
         if set(order) != set(range(len(self))):
