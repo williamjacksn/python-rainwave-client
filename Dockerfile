@@ -1,9 +1,16 @@
 FROM python:3.10.4-alpine3.15
 
-COPY requirements.txt /python-rainwave-client/requirements.txt
+RUN /usr/sbin/adduser -g python -D python
 
-RUN /usr/local/bin/pip install --no-cache-dir --requirement /python-rainwave-client/requirements.txt
+USER python
+RUN /usr/local/bin/python -m venv /home/python/venv
 
-ENV PYTHONUNBUFFERED="1"
+COPY --chown=python:python requirements.txt /home/python/python-rainwave-client/requirements.txt
+RUN /home/python/venv/bin/pip install --no-cache-dir --requirement /home/python/python-rainwave-client/requirements.txt
 
-ENTRYPOINT ["/usr/local/bin/python"]
+ENV PATH="/home/python/venv/bin:${PATH}" \
+    PYTHONUNBUFFERED="1" \
+    TZ="Etc/UTC"
+
+LABEL org.opencontainers.image.authors="William Jackson <william@subtlecoolness.com>" \
+      org.opencontainers.image.source="https://github.com/williamjacksn/python-rainwave-client"
