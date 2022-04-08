@@ -68,6 +68,7 @@ class RainwaveClient:
         headers = {'user-agent': self.user_agent}
         req = Request(url=url, data=data, headers=headers)
         try:
+            log.debug(f'Calling {url}')
             response = urlopen(req)
         except HTTPError as e:
             response = e

@@ -73,6 +73,13 @@ class RainwaveChannel(dict):
             if not self._sched_current:
                 args['resync'] = 'true'
             d = self.client.call('sync', args)
+            missing_data = False
+            for key in ['sched_current', 'sched_next', 'sched_history']:
+                if key not in d:
+                    missing_data = True
+                    log.error(f'Missing {key} data in API response')
+            if missing_data:
+                continue
             if self._do_sync:
                 with self._sched_lock:
                     self._sched_current = d['sched_current']
