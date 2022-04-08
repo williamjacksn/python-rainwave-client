@@ -1,5 +1,5 @@
 __setup_name__ = 'python-rainwave-client'
-__version__ = '0.9.0'
+__version__ = '0.10.0'
 __author__ = 'William Jackson'
 __author_email__ = 'william@subtlecoolness.com'
 __url__ = 'https://github.com/williamjacksn/python-rainwave-client'
