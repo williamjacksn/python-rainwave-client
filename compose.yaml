@@ -1,0 +1,84 @@
+services:
+  cleanup:
+    entrypoint:
+      - /bin/rm
+      - -fr
+      - dist
+      - html
+      - src/python_rainwave_client.egg-info
+    image: ghcr.io/williamjacksn/python-rainwave-client-helper
+    init: true
+    volumes:
+      - ./:/home/python/python-rainwave-client
+    working_dir: /home/python/python-rainwave-client
+
+  docs-build:
+    entrypoint:
+      - /home/python/venv/bin/sphinx-build
+      - docs
+      - html
+    image: ghcr.io/williamjacksn/python-rainwave-client-helper
+    init: true
+    volumes:
+      - ./:/home/python/python-rainwave-client
+    working_dir: /home/python/python-rainwave-client
+
+  py-build:
+    entrypoint:
+      - /home/python/venv/bin/python
+      - -m
+      - build
+    image: ghcr.io/williamjacksn/python-rainwave-client-helper
+    init: true
+    volumes:
+      - ./:/home/python/python-rainwave-client
+    working_dir: /home/python/python-rainwave-client
+
+  shell:
+    entrypoint:
+      - /bin/sh
+    image: ghcr.io/williamjacksn/python-rainwave-client-helper
+    init: true
+    volumes:
+      - ./:/home/python/python-rainwave-client
+    working_dir: /home/python/python-rainwave-client
+
+  tests:
+    entrypoint:
+      - /home/python/venv/bin/python
+      - tests.py
+    environment:
+      RW_KEY:
+      RW_USER_ID:
+    image: ghcr.io/williamjacksn/python-rainwave-client-helper
+    init: true
+    volumes:
+      - ./:/home/python/python-rainwave-client
+    working_dir: /home/python/python-rainwave-client
+
+  twine-check:
+    entrypoint:
+      - /home/python/venv/bin/twine
+      - check
+      - dist/*
+    image: ghcr.io/williamjacksn/python-rainwave-client-helper
+    init: true
+    volumes:
+      - ./:/home/python/python-rainwave-client
+    working_dir: /home/python/python-rainwave-client
+
+  twine-upload:
+    entrypoint:
+      - /home/python/venv/bin/twine
+      - upload
+      - --skip-existing
+      - --verbose
+      - dist/*
+    environment:
+      TWINE_PASSWORD:
+      TWINE_USERNAME:
+    image: ghcr.io/williamjacksn/python-rainwave-client-helper
+    init: true
+    volumes:
+      - ./:/home/python/python-rainwave-client
+    working_dir: /home/python/python-rainwave-client

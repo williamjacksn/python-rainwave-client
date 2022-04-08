@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 __setup_name__ = 'python-rainwave-client'
 __version__ = '0.9.0'
 __author__ = 'William Jackson'

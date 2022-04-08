@@ -1,19 +1,12 @@
-from __future__ import unicode_literals
-
 import json
 import logging
-import sys
 import uuid
 
 from . import channel
 
-if sys.version_info[0] == 2:
-    from urllib import urlencode
-    from urllib2 import urlopen, HTTPError, Request
-else:
-    from urllib.error import HTTPError
-    from urllib.request import urlopen, Request
-    from urllib.parse import urlencode
+from urllib.error import HTTPError
+from urllib.request import urlopen, Request
+from urllib.parse import urlencode
 
 log = logging.getLogger(__name__)
 

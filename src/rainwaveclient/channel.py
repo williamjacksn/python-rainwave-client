@@ -1,6 +1,5 @@
-from __future__ import unicode_literals
-
 import datetime
+import logging
 import threading
 
 from . import album
@@ -13,6 +12,8 @@ from . import song
 
 pre_sync = dispatch.Signal()
 post_sync = dispatch.Signal()
+
+log = logging.getLogger(__name__)
 
 
 class RainwaveChannel(dict):
@@ -334,8 +335,8 @@ class RainwaveChannel(dict):
                 if raw_request.get('song_id') is None:
                     continue
                 _song = self.get_song_by_id(raw_request['song_id'])
-                _reqr = self.get_listener_by_id(raw_request['user_id'])
-                rq = request.RainwaveRequest.request_from_song(_song, _reqr)
+                _requester = self.get_listener_by_id(raw_request['user_id'])
+                rq = request.RainwaveRequest.request_from_song(_song, _requester)
                 rqs.append(rq)
         return rqs
 

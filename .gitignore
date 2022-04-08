@@ -1,7 +1,6 @@
 .idea
 __pycache__
-build
+compose.override.yaml
 dist
-docker-compose.override.yaml
 html
 python_rainwave_client.egg-info

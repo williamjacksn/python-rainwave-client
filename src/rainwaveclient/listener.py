@@ -1,6 +1,3 @@
-from __future__ import unicode_literals
-
-
 class RainwaveListener(dict):
     """A :class:`RainwaveListener` object represents a radio listener."""
 
@@ -20,7 +17,7 @@ class RainwaveListener(dict):
     @property
     def avatar(self):
         """The URL of the listener's avatar."""
-        return 'http://rainwave.cc{0}'.format(self['avatar'])
+        return self['avatar']
 
     @property
     def color(self):
