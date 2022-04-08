@@ -1,21 +1,21 @@
-from __future__ import unicode_literals
-
 import datetime
 import os
-import rainwaveclient
 import random
 import sys
 import unittest
 
+from src import rainwaveclient
+
+
 if 'RW_USER_ID' in os.environ:
     USER_ID = int(os.getenv('RW_USER_ID'))
 else:
-    sys.exit('Please set the {!r} environment variable'.format('RW_USER_ID'))
+    sys.exit('Please set the RW_USER_ID environment variable')
 
 if 'RW_KEY' in os.environ:
     KEY = os.getenv('RW_KEY')
 else:
-    sys.exit('Please set the {!r} environment variable'.format('RW_KEY'))
+    sys.exit('Please set the RW_KEY environment variable')
 
 
 class TestRainwaveClient(unittest.TestCase):
@@ -23,11 +23,11 @@ class TestRainwaveClient(unittest.TestCase):
     rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
 
     def test_str(self):
-        _str = 'RainwaveClient(user_id={0}, key={1!r})'.format(USER_ID, KEY)
+        _str = f'RainwaveClient(user_id={USER_ID}, key={KEY!r})'
         self.assertEqual(str(self.rw), _str)
 
     def test_repr(self):
-        _repr = 'RainwaveClient(user_id={0}, key={1!r})'.format(USER_ID, KEY)
+        _repr = f'RainwaveClient(user_id={USER_ID}, key={KEY!r})'
         self.assertEqual(repr(self.rw), _repr)
 
     def test_base_url(self):
@@ -122,8 +122,8 @@ class TestRainwaveChannel(unittest.TestCase):
     def test_name(self):
         self.assertEqual(self.chan.name, 'All')
 
-    def test_oggstream(self):
-        stream = 'http://allstream.rainwave.cc:8000/all.ogg?' + str(USER_ID)
+    def test_ogg_stream(self):
+        stream = f'http://allrelays.rainwave.cc/all.ogg?{USER_ID}'
         self.assertTrue(self.chan.ogg_stream.startswith(stream))
 
     def test_reorder_requests(self):
@@ -137,27 +137,18 @@ class TestRainwaveChannel(unittest.TestCase):
 
     def test_schedule_current(self):
         title = self.chan.schedule_current.songs[0].title
-        if sys.version_info[0] == 2:
-            self.assertTrue(isinstance(title, unicode))
-        else:
-            self.assertTrue(isinstance(title, str))
+        self.assertTrue(isinstance(title, str))
 
     def test_schedule_history(self):
         title = self.chan.schedule_history[0].songs[0].title
-        if sys.version_info[0] == 2:
-            self.assertTrue(isinstance(title, unicode))
-        else:
-            self.assertTrue(isinstance(title, str))
+        self.assertTrue(isinstance(title, str))
 
     def test_schedule_next(self):
         title = self.chan.schedule_next[0].songs[0].title
-        if sys.version_info[0] == 2:
-            self.assertTrue(isinstance(title, unicode))
-        else:
-            self.assertTrue(isinstance(title, str))
+        self.assertTrue(isinstance(title, str))
 
     def test_stream(self):
-        stream = 'http://allstream.rainwave.cc:8000/all.mp3?' + str(USER_ID)
+        stream = f'http://allrelays.rainwave.cc/all.mp3?{USER_ID}'
         self.assertTrue(self.chan.mp3_stream.startswith(stream))
 
     def test_sync(self):
@@ -174,7 +165,7 @@ class TestRainwaveAlbum(unittest.TestCase):
         self.assertTrue(isinstance(self.alb.added_on, datetime.datetime))
 
     def test_art(self):
-        art = 'https://rainwave.cc/static/baked/album_art/a_3119_320.jpg'
+        art = 'https://rainwave.cc/album_art/5_3119_320.jpg'
         self.assertEqual(self.alb.art, art)
 
     def test_categories(self):
@@ -416,7 +407,7 @@ class TestRainwaveListener(unittest.TestCase):
     l = rw.channels[4].get_listener_by_id(3)
 
     def test_avatar(self):
-        _avatar = 'http://rainwave.cc/forums/download/file.php?avatar=3_1565274340.jpg'
+        _avatar = 'https://cdn.discordapp.com/avatars/137745037898416129/1be2f49c9590b386ae0c0e60310c785f.png?size=320'
         self.assertEqual(self.l.avatar, _avatar)
 
     def test_color(self):
@@ -429,43 +420,43 @@ class TestRainwaveListener(unittest.TestCase):
         self.assertEqual(self.l.id, 3)
 
     def test_losing_requests(self):
-        self.assertTrue(self.l.losing_requests > 0)
+        self.assertEqual(self.l.losing_requests, 0)
 
     def test_losing_votes(self):
-        self.assertTrue(self.l.losing_votes > 0)
+        self.assertEqual(self.l.losing_votes, 0)
 
     def test_mind_changes(self):
-        self.assertTrue(self.l.mind_changes > 0)
+        self.assertEqual(self.l.mind_changes, 0)
 
     def test_name(self):
-        self.assertEqual(self.l.name, 'William')
+        self.assertEqual(self.l.name, 'William Jackson')
 
     def test_rank(self):
         self.assertEqual(self.l.rank, 'Mister Three')
 
     def test_repr(self):
-        self.assertEqual(repr(self.l), '<RainwaveListener [William]>')
+        self.assertEqual(repr(self.l), '<RainwaveListener [William Jackson]>')
 
     def test_str(self):
-        self.assertEqual(str(self.l), 'William')
+        self.assertEqual(str(self.l), 'William Jackson')
 
     def test_total_ratings(self):
-        self.assertTrue(self.l.total_ratings > 0)
+        self.assertEqual(self.l.total_ratings, 0)
 
     def test_total_requests(self):
-        self.assertTrue(self.l.total_requests > 0)
+        self.assertEqual(self.l.total_requests, 0)
 
     def test_total_votes(self):
-        self.assertTrue(self.l.total_votes > 0)
+        self.assertEqual(self.l.total_votes, 0)
 
     def test_user_id(self):
         self.assertEqual(self.l.user_id, 3)
 
     def test_winning_requests(self):
-        self.assertTrue(self.l.winning_requests > 0)
+        self.assertEqual(self.l.winning_requests, 0)
 
     def test_winning_votes(self):
-        self.assertTrue(self.l.winning_votes > 0)
+        self.assertEqual(self.l.winning_votes, 0)
 
 
 class TestRainwaveRequest(unittest.TestCase):
@@ -477,10 +468,7 @@ class TestRainwaveRequest(unittest.TestCase):
         self.assertTrue(repr(self.rq).startswith('<RainwaveRequest '))
 
     def test_requester(self):
-        if sys.version_info[0] == 2:
-            self.assertTrue(isinstance(self.rq.requester.name, unicode))
-        else:
-            self.assertTrue(isinstance(self.rq.requester.name, str))
+        self.assertTrue(isinstance(self.rq.requester.name, str))
 
 
 class TestRainwaveCandidate(unittest.TestCase):
@@ -500,10 +488,7 @@ class TestRainwaveCandidate(unittest.TestCase):
     def test_requested_by(self):
         if self.cand.is_request:
             name = self.cand.requested_by.name
-            if sys.version_info[0] == 2:
-                self.assertTrue(isinstance(name, unicode))
-            else:
-                self.assertTrue(isinstance(name, str))
+            self.assertTrue(isinstance(name, str))
         else:
             self.assertTrue(self.cand.requested_by is None)
 
