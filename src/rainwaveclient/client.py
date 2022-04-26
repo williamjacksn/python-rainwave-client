@@ -2,11 +2,12 @@ import json
 import logging
 import uuid
 
-from . import channel
-
+from typing import List
 from urllib.error import HTTPError
 from urllib.request import urlopen, Request
 from urllib.parse import urlencode
+
+from .channel import RainwaveChannel
 
 log = logging.getLogger(__name__)
 
@@ -40,6 +41,7 @@ class RainwaveClient:
         return f'RainwaveClient(user_id={self.user_id!r}, key={self.key!r})'
 
     def call(self, path: str, args: dict = None) -> dict:
+        # noinspection PyUnresolvedReferences
         """Make a direct call to the API if you know the necessary path and
         arguments.
 
@@ -47,6 +49,8 @@ class RainwaveClient:
         :type path: str
         :param args: (optional) any arguments required by the API method.
         :type args: dict
+        :return: The raw data returned from the API call.
+        :rtype: dict
 
         Usage::
 
@@ -80,7 +84,7 @@ class RainwaveClient:
         return api_response
 
     @property
-    def channels(self) -> list[channel.RainwaveChannel]:
+    def channels(self) -> List[RainwaveChannel]:
         """A list of :class:`RainwaveChannel` objects associated with this
         :class:`RainwaveClient` object."""
 
@@ -94,7 +98,7 @@ class RainwaveClient:
         if self._channels is None:
             self._channels = list()
             for raw_channel in self._raw_channels:
-                new_channel = channel.RainwaveChannel(self, raw_channel)
+                new_channel = RainwaveChannel(self, raw_channel)
                 self._channels.append(new_channel)
 
         return self._channels

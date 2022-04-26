@@ -2,6 +2,8 @@ import datetime
 import logging
 import threading
 
+from typing import TYPE_CHECKING
+
 from . import album
 from . import artist
 from . import dispatch
@@ -9,6 +11,9 @@ from . import listener
 from . import request
 from . import schedule
 from . import song
+
+if TYPE_CHECKING:
+    from .client import RainwaveClient
 
 pre_sync = dispatch.Signal()
 post_sync = dispatch.Signal()
@@ -153,7 +158,7 @@ class RainwaveChannel(dict):
         return self.client.call('clear_rating', args)
 
     @property
-    def client(self):
+    def client(self) -> 'RainwaveClient':
         """The :class:`RainwaveClient` object that the channel belongs to."""
         return self._client
 
