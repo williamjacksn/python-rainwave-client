@@ -86,7 +86,7 @@ six==1.16.0
     # via bleach
 snowballstemmer==2.1.0
     # via sphinx
-sphinx==5.0.2
+sphinx==5.1.0
     # via
     #   -r requirements.in
     #   sphinx-rtd-theme
