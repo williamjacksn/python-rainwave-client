@@ -1,6 +1,37 @@
 [build-system]
 requires = [
-    "setuptools>=42",
-    "wheel"
+    "setuptools>=61.0.0",
+    "wheel>=0.37.0",
 ]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "python-rainwave-client"
+description = "Python client library for Rainwave"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Libraries",
+]
+dynamic = [
+    "version",
+]
+
+[[project.authors]]
+name = "William Jackson"
+email = "william@subtlecoolness.com"
+
+[project.license]
+file = "LICENSE"
+
+[project.urls]
+"Homepage" = "https://github.com/williamjacksn/python-rainwave-client"
+"Bug Tracker" = "https://github.com/williamjacksn/python-rainwave-client/issues"
+
+[tool.setuptools.dynamic]
+version.attr = "rainwaveclient.__version__"
