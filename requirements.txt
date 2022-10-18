@@ -64,7 +64,7 @@ pygments==2.13.0
     #   readme-renderer
     #   rich
     #   sphinx
-pyparsing==2.4.7
+pyparsing==3.0.9
     # via packaging
 pytz==2021.1
     # via babel
