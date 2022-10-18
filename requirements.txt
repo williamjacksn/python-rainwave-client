@@ -14,7 +14,7 @@ bleach==5.0.1
     # via readme-renderer
 build==0.8.0
     # via -r requirements.in
-certifi==2021.5.30
+certifi==2022.9.24
     # via requests
 cffi==1.14.5
     # via cryptography
