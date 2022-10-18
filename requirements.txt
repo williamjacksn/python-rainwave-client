@@ -31,7 +31,7 @@ docutils==0.16
     #   sphinx-rtd-theme
 idna==2.10
     # via requests
-imagesize==1.2.0
+imagesize==1.4.1
     # via sphinx
 importlib-metadata==4.5.0
     # via
@@ -47,7 +47,7 @@ keyring==23.0.1
     # via twine
 markupsafe==2.0.1
     # via jinja2
-packaging==20.9
+packaging==21.3
     # via
     #   bleach
     #   build
@@ -58,7 +58,7 @@ pkginfo==1.8.2
     # via twine
 pycparser==2.20
     # via cffi
-pygments==2.9.0
+pygments==2.13.0
     # via
     #   readme-renderer
     #   rich
@@ -86,7 +86,7 @@ six==1.16.0
     # via bleach
 snowballstemmer==2.1.0
     # via sphinx
-sphinx==5.1.1
+sphinx==5.3.0
     # via
     #   -r requirements.in
     #   sphinx-rtd-theme
