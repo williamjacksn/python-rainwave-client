@@ -85,7 +85,7 @@ secretstorage==3.3.3
     # via keyring
 six==1.16.0
     # via bleach
-snowballstemmer==2.1.0
+snowballstemmer==2.2.0
     # via sphinx
 sphinx==5.3.0
     # via
