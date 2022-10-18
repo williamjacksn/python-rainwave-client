@@ -10,7 +10,7 @@ alabaster==0.7.12
     # via sphinx
 babel==2.10.3
     # via sphinx
-bleach==3.3.0
+bleach==5.0.1
     # via readme-renderer
 build==0.8.0
     # via -r requirements.in
@@ -49,7 +49,6 @@ markupsafe==2.0.1
     # via jinja2
 packaging==21.3
     # via
-    #   bleach
     #   build
     #   sphinx
 pep517==0.12.0
