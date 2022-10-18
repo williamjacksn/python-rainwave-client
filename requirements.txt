@@ -29,7 +29,7 @@ docutils==0.17.1
     #   readme-renderer
     #   sphinx
     #   sphinx-rtd-theme
-idna==2.10
+idna==3.4
     # via requests
 imagesize==1.4.1
     # via sphinx
