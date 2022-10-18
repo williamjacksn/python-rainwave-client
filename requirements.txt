@@ -111,7 +111,7 @@ tomli==2.0.1
     #   pep517
 twine==4.0.1
     # via -r requirements.in
-urllib3==1.26.5
+urllib3==1.26.12
     # via
     #   requests
     #   twine
