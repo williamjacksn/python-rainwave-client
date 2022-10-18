@@ -77,7 +77,7 @@ requests==2.28.1
     #   twine
 requests-toolbelt==0.10.0
     # via twine
-rfc3986==1.5.0
+rfc3986==2.0.0
     # via twine
 rich==12.0.1
     # via twine
