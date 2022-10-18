@@ -37,7 +37,7 @@ importlib-metadata==5.0.0
     # via twine
 jaraco-classes==3.2.3
     # via keyring
-jeepney==0.6.0
+jeepney==0.8.0
     # via
     #   keyring
     #   secretstorage
