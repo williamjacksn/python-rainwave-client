@@ -105,7 +105,7 @@ sphinxcontrib-qthelp==1.0.3
     # via sphinx
 sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
-twine==4.0.1
+twine==4.0.2
     # via -r requirements.in
 urllib3==1.26.12
     # via
