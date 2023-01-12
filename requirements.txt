@@ -12,7 +12,7 @@ babel==2.10.3
     # via sphinx
 bleach==5.0.1
     # via readme-renderer
-build==0.9.0
+build==0.10.0
     # via -r requirements.in
 certifi==2022.12.7
     # via requests
@@ -53,8 +53,6 @@ packaging==21.3
     # via
     #   build
     #   sphinx
-pep517==0.13.0
-    # via build
 pkginfo==1.8.3
     # via twine
 pycparser==2.21
@@ -66,6 +64,8 @@ pygments==2.13.0
     #   sphinx
 pyparsing==3.0.9
     # via packaging
+pyproject-hooks==1.0.0
+    # via build
 pytz==2022.5
     # via babel
 readme-renderer==37.2
