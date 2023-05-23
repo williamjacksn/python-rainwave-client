@@ -70,7 +70,7 @@ pytz==2022.5
     # via babel
 readme-renderer==37.2
     # via twine
-requests==2.28.1
+requests==2.31.0
     # via
     #   requests-toolbelt
     #   sphinx
