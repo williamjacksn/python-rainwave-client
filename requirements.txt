@@ -12,24 +12,24 @@ babel==2.13.1
     # via sphinx
 build==1.0.3
     # via -r requirements.in
-certifi==2023.7.22
+certifi==2023.11.17
     # via requests
 cffi==1.16.0
     # via cryptography
 charset-normalizer==3.3.2
     # via requests
-cryptography==41.0.6
+cryptography==41.0.7
     # via secretstorage
-docutils==0.18.1
+docutils==0.20.1
     # via
     #   readme-renderer
     #   sphinx
     #   sphinx-rtd-theme
-idna==3.4
+idna==3.6
     # via requests
 imagesize==1.4.1
     # via sphinx
-importlib-metadata==6.8.0
+importlib-metadata==7.0.0
     # via
     #   keyring
     #   twine
@@ -41,7 +41,7 @@ jeepney==0.8.0
     #   secretstorage
 jinja2==3.1.2
     # via sphinx
-keyring==24.2.0
+keyring==24.3.0
     # via twine
 markdown-it-py==3.0.0
     # via rich
@@ -61,7 +61,7 @@ pkginfo==1.9.6
     # via twine
 pycparser==2.21
     # via cffi
-pygments==2.16.1
+pygments==2.17.2
     # via
     #   readme-renderer
     #   rich
@@ -79,7 +79,7 @@ requests-toolbelt==1.0.0
     # via twine
 rfc3986==2.0.0
     # via twine
-rich==13.6.0
+rich==13.7.0
     # via twine
 secretstorage==3.3.3
     # via keyring
@@ -113,7 +113,7 @@ sphinxcontrib-serializinghtml==1.1.9
     # via sphinx
 twine==4.0.2
     # via -r requirements.in
-urllib3==2.0.7
+urllib3==2.1.0
     # via
     #   requests
     #   twine
