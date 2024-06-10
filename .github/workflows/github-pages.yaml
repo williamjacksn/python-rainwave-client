@@ -1,46 +1,41 @@
-name: 'Build documentation and deploy to GitHub Pages'
+name: Deploy documentation to GitHub Pages
 
 on:
   push:
     branches:
-      - 'master'
+      - master
   workflow_dispatch:
-
-permissions:
-  contents: 'read'
-  pages: 'write'
-  id-token: 'write'
 
 concurrency:
   cancel-in-progress: true
-  group: 'github-pages'
+  group: github-pages
 
 jobs:
-  build:
-    runs-on: 'ubuntu-latest'
-    steps:
-
-      - name: 'Checkout'
-        uses: 'actions/checkout@v4'
-
-      - name: 'Configure Pages'
-        uses: 'actions/configure-pages@v5'
-
-      - name: 'Build documentation'
-        run: docker compose run --no-TTY --user="$(id -u):$(id -g)" docs-build
-
-      - name: 'Upload artifact'
-        uses: 'actions/upload-pages-artifact@v3'
-        with:
-          path: 'html/'
-
   deploy:
     environment:
-      name: 'github-pages'
+      name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: 'ubuntu-latest'
-    needs: 'build'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    runs-on: ubuntu-latest
     steps:
-      - name: 'Deploy to GitHub Pages'
-        id: 'deployment'
-        uses: 'actions/deploy-pages@v4'
+
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Build documentation
+        run: docker compose run --no-TTY --user="$(id -u):$(id -g)" docs-build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: html
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
