@@ -49,7 +49,7 @@ sphinx-rtd-theme==2.0.0
     # via -r requirements.in
 sphinxcontrib-applehelp==2.0.0
     # via sphinx
-sphinxcontrib-devhelp==1.0.6
+sphinxcontrib-devhelp==2.0.0
     # via sphinx
 sphinxcontrib-htmlhelp==2.1.0
     # via sphinx
