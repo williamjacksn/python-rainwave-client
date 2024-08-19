@@ -159,13 +159,13 @@ class TestRainwaveChannel(unittest.TestCase):
 class TestRainwaveAlbum(unittest.TestCase):
 
     rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
-    alb = rw.channels[4].get_album_by_id(3119)
+    alb = rw.channels[4].get_album_by_id(1251)
 
     def test_added_on(self):
         self.assertIsInstance(self.alb.added_on, datetime.datetime)
 
     def test_art(self):
-        art = 'https://rainwave.cc/album_art/5_3119_320.jpg'
+        art = 'https://rainwave.cc/album_art/5_1251_320.jpg'
         self.assertEqual(self.alb.art, art)
 
     def test_categories(self):
@@ -198,14 +198,14 @@ class TestRainwaveAlbum(unittest.TestCase):
 
     def test_get_song_by_id(self):
         self.assertRaises(IndexError, self.alb.get_song_by_id, 100)
-        song = self.alb.get_song_by_id(2)
-        self.assertEqual(song.title, 'Sunlight Filtering Through the Trees')
+        song = self.alb.get_song_by_id(15016)
+        self.assertEqual(song.title, 'Ending')
 
     def test_id(self):
-        self.assertEqual(self.alb.id, 3119)
+        self.assertEqual(self.alb.id, 1251)
 
     def test_name(self):
-        self.assertEqual(self.alb.name, 'Bravely Default')
+        self.assertEqual(self.alb.name, 'The Legend of Zelda')
 
     def test_played_last(self):
         self.assertIsInstance(self.alb.played_last, datetime.datetime)
@@ -232,7 +232,7 @@ class TestRainwaveAlbum(unittest.TestCase):
         self.assertEqual(self.alb.rating_user, self.alb.rating)
 
     def test_repr(self):
-        _repr = '<RainwaveAlbum [All // Bravely Default]>'
+        _repr = '<RainwaveAlbum [All // The Legend of Zelda]>'
         self.assertEqual(repr(self.alb), _repr)
 
     def test_request_count(self):
@@ -245,7 +245,7 @@ class TestRainwaveAlbum(unittest.TestCase):
         self.assertTrue(len(self.alb.songs) > 0)
 
     def test_str(self):
-        self.assertEqual(str(self.alb), 'All // Bravely Default')
+        self.assertEqual(str(self.alb), 'All // The Legend of Zelda')
 
     def test_vote_count(self):
         self.assertTrue(self.alb.vote_count > 0)
