@@ -40,7 +40,7 @@ class RainwaveClient:
     def __repr__(self) -> str:
         return f'RainwaveClient(user_id={self.user_id!r}, key={self.key!r})'
 
-    def call(self, path: str, args: dict = None) -> dict:
+    def call(self, path: str, args: dict = None, method: str = 'POST') -> dict:
         # noinspection PyUnresolvedReferences
         """Make a direct call to the API if you know the necessary path and
         arguments.
@@ -49,6 +49,8 @@ class RainwaveClient:
         :type path: str
         :param args: (optional) any arguments required by the API method.
         :type args: dict
+        :param method: (optional) the HTTP method to use for the API call, default `POST`
+        :type method: str
         :return: The raw data returned from the API call.
         :rtype: dict
 
@@ -72,7 +74,7 @@ class RainwaveClient:
 
         data = urlencode(args).encode()
         headers = {'user-agent': self.user_agent}
-        req = Request(url=url, data=data, headers=headers)
+        req = Request(url=url, data=data, headers=headers, method=method)
         try:
             log.debug(f'Calling {url}')
             response = urlopen(req)

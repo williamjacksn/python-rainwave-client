@@ -60,7 +60,7 @@ class RainwaveChannel(dict):
     def _do_async_get(self):
         if not self._stale():
             return
-        d = self.client.call('/info', {'sid': self.id})
+        d = self.client.call('info', {'sid': self.id}, method='GET')
         with self._sched_lock:
             self._sched_current = d['sched_current']
             self._sched_next = d['sched_next']
