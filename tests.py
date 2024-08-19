@@ -137,15 +137,15 @@ class TestRainwaveChannel(unittest.TestCase):
 
     def test_schedule_current(self):
         title = self.chan.schedule_current.songs[0].title
-        self.assertTrue(isinstance(title, str))
+        self.assertIsInstance(title, str)
 
     def test_schedule_history(self):
         title = self.chan.schedule_history[0].songs[0].title
-        self.assertTrue(isinstance(title, str))
+        self.assertIsInstance(title, str)
 
     def test_schedule_next(self):
         title = self.chan.schedule_next[0].songs[0].title
-        self.assertTrue(isinstance(title, str))
+        self.assertIsInstance(title, str)
 
     def test_stream(self):
         stream = f'http://allrelays.rainwave.cc/all.mp3?{USER_ID}'
@@ -162,7 +162,7 @@ class TestRainwaveAlbum(unittest.TestCase):
     alb = rw.channels[4].get_album_by_id(3119)
 
     def test_added_on(self):
-        self.assertTrue(isinstance(self.alb.added_on, datetime.datetime))
+        self.assertIsInstance(self.alb.added_on, datetime.datetime)
 
     def test_art(self):
         art = 'https://rainwave.cc/album_art/5_3119_320.jpg'
@@ -175,10 +175,10 @@ class TestRainwaveAlbum(unittest.TestCase):
         self.assertEqual(self.alb.channel.id, 5)
 
     def test_cool(self):
-        self.assertTrue(isinstance(self.alb.cool, bool))
+        self.assertIsInstance(self.alb.cool, bool)
 
     def test_cool_lowest(self):
-        self.assertTrue(isinstance(self.alb.cool_lowest, datetime.datetime))
+        self.assertIsInstance(self.alb.cool_lowest, datetime.datetime)
 
     def test_fave(self):
         self.assertFalse(self.alb.fave)
@@ -208,7 +208,7 @@ class TestRainwaveAlbum(unittest.TestCase):
         self.assertEqual(self.alb.name, 'Bravely Default')
 
     def test_played_last(self):
-        self.assertTrue(isinstance(self.alb.played_last, datetime.datetime))
+        self.assertIsInstance(self.alb.played_last, datetime.datetime)
 
     def test_rating(self):
         self.assertTrue(self.alb.rating > 0)
@@ -217,13 +217,13 @@ class TestRainwaveAlbum(unittest.TestCase):
         self.assertTrue(self.alb.rating_avg > 0)
 
     def test_rating_complete(self):
-        self.assertTrue(isinstance(self.alb.rating_complete, bool))
+        self.assertIsInstance(self.alb.rating_complete, bool)
 
     def test_rating_count(self):
         self.assertTrue(self.alb.rating_count > 0)
 
     def test_rating_histogram(self):
-        self.assertTrue(isinstance(self.alb.rating_histogram, dict))
+        self.assertIsInstance(self.alb.rating_histogram, dict)
 
     def test_rating_rank(self):
         self.assertTrue(self.alb.rating_rank > 0)
@@ -266,7 +266,7 @@ class TestRainwaveSong(unittest.TestCase):
         self.assertEqual(len(self.song.artists), 1)
 
     def test_available(self):
-        self.assertTrue(isinstance(self.song.available, bool))
+        self.assertIsInstance(self.song.available, bool)
 
     def test_avail_is_not_cool(self):
         self.assertTrue(self.song.available != self.song.cool)
@@ -278,7 +278,7 @@ class TestRainwaveSong(unittest.TestCase):
         self.assertEqual(self.song.channel_id, 5)
 
     def test_cool(self):
-        self.assertTrue(isinstance(self.song.cool, bool))
+        self.assertIsInstance(self.song.cool, bool)
 
     def test_fave(self):
         self.assertFalse(self.song.fave)
@@ -332,7 +332,7 @@ class TestRainwaveSong(unittest.TestCase):
         self.song.rating = 3
 
     def test_rating_allowed(self):
-        self.assertTrue(isinstance(self.song.rating_allowed, bool))
+        self.assertIsInstance(self.song.rating_allowed, bool)
 
     def test_rating_avg(self):
         self.assertTrue(self.song.rating_avg > 0)
@@ -341,7 +341,7 @@ class TestRainwaveSong(unittest.TestCase):
         self.assertTrue(self.song.rating_count > 0)
 
     def test_rating_histogram(self):
-        self.assertTrue(isinstance(self.song.rating_histogram, dict))
+        self.assertIsInstance(self.song.rating_histogram, dict)
 
     def test_rating_rank(self):
         self.assertTrue(self.song.rating_rank > 0)
@@ -394,7 +394,7 @@ class TestRainwaveArtist(unittest.TestCase):
         self.assertEqual(self.a.song_count, 16)
 
     def test_songs(self):
-        self.assertTrue(isinstance(self.a.songs, list))
+        self.assertIsInstance(self.a.songs, list)
         self.assertTrue(len(self.a.songs) > 0)
 
     def test_str(self):
@@ -468,7 +468,7 @@ class TestRainwaveRequest(unittest.TestCase):
         self.assertTrue(repr(self.rq).startswith('<RainwaveRequest '))
 
     def test_requester(self):
-        self.assertTrue(isinstance(self.rq.requester.name, str))
+        self.assertIsInstance(self.rq.requester.name, str)
 
 
 class TestRainwaveCandidate(unittest.TestCase):
@@ -483,12 +483,12 @@ class TestRainwaveCandidate(unittest.TestCase):
         self.assertTrue(self.cand.entry_id > 0)
 
     def test_is_request(self):
-        self.assertTrue(isinstance(self.cand.is_request, bool))
+        self.assertIsInstance(self.cand.is_request, bool)
 
     def test_requested_by(self):
         if self.cand.is_request:
             name = self.cand.requested_by.name
-            self.assertTrue(isinstance(name, str))
+            self.assertIsInstance(name, str)
         else:
             self.assertTrue(self.cand.requested_by is None)
 
@@ -531,7 +531,7 @@ class TestRainwaveSchedule(unittest.TestCase):
 
     def test_id(self):
         event = self.rw.channels[4].schedule_current
-        self.assertTrue(isinstance(event.id, int))
+        self.assertIsInstance(event.id, int)
 
     def test_repr(self):
         event = self.rw.channels[4].schedule_current
