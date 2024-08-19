@@ -1,6 +1,11 @@
 import datetime
 
-from . import song
+from typing import List, TYPE_CHECKING
+
+from .song import RainwaveCandidate, RainwaveSong
+
+if TYPE_CHECKING:
+    from .channel import RainwaveChannel
 
 
 class RainwaveSchedule(dict):
@@ -28,36 +33,36 @@ class RainwaveSchedule(dict):
         return repr(self)
 
     @property
-    def channel(self):
+    def channel(self) -> 'RainwaveChannel':
         """The :class:`RainwaveChannel` object the event belongs to."""
         return self._channel
 
     @property
-    def end(self):
+    def end(self) -> datetime.datetime:
         """A `datetime.datetime` object representing the end time of the event. For future events, this should equal
         :attr:`start` + :attr:`length`. For current and past events this should equal
         :attr:`start_actual` + :attr:`length`."""
         return datetime.datetime.fromtimestamp(self['end'], datetime.UTC)
 
     @property
-    def id(self):
+    def id(self) -> int:
         """The ID of the event."""
         return self['id']
 
     @property
-    def length(self):
+    def length(self) -> int:
         """The duration of the event in seconds. For future elections, this value is estimated by averaging the duration
         of all songs in the election. :class:`RainwaveSchedule` objects also support `len(schedule)`."""
         return len(self)
 
     @property
-    def start(self):
+    def start(self) -> datetime.datetime:
         """A `datetime.datetime` object representing the estimated start time of the event. This is only useful for
         future events. For current and past events, see :attr:`start_actual`."""
         return datetime.datetime.fromtimestamp(self['start'], datetime.UTC)
     
     @property
-    def start_actual(self):
+    def start_actual(self) -> datetime.datetime:
         """A `datetime.datetime` object representing the actual start time of the event. If the event has not started
         yet, this will be `None`."""
         if self['start_actual'] is not None:
@@ -72,25 +77,25 @@ class RainwaveElection(RainwaveSchedule):
         return f'<RainwaveElection [{self.channel.name}]>'
 
     @property
-    def candidates(self):
+    def candidates(self) -> List[RainwaveCandidate]:
         """A list of :class:`RainwaveCandidate` objects in the election."""
         if 'candidate_objects' not in self:
             self['candidate_objects'] = []
             for raw_song in self['songs']:
                 alb = self.channel.get_album_by_id(raw_song['albums'][0]['id'])
-                tmp_song = song.RainwaveCandidate(alb, raw_song)
+                tmp_song = RainwaveCandidate(alb, raw_song)
                 self['candidate_objects'].append(tmp_song)
         return self['candidate_objects']
 
     @property
-    def song(self):
+    def song(self) -> RainwaveCandidate:
         """The first :class:`RainwaveCandidate` object in the list of
         candidates. If the :class:`RainwaveElection` event has already closed,
         this is the song that won the election."""
         return self.candidates[0]
 
     @property
-    def songs(self):
+    def songs(self) -> List[RainwaveCandidate]:
         """See :attr:`candidates`."""
         return self.candidates
 
@@ -104,19 +109,19 @@ class RainwaveOneTimePlay(RainwaveSchedule):
         return f'<RainwaveOneTimePlay [{self.channel.name}]>'
 
     @property
-    def name(self):
+    def name(self) -> str:
         """The name of the event."""
         _name = self.get('name')
         return f'{_name} Power Hour'
 
     @property
-    def song(self):
+    def song(self) -> RainwaveSong:
         """The :class:`RainwaveSong` for the event."""
         album_id = self['songs'][0]['albums'][0]['id']
         tmp_album = self.channel.get_album_by_id(album_id)
-        return song.RainwaveSong(tmp_album, self['songs'][0])
+        return RainwaveSong(tmp_album, self['songs'][0])
 
     @property
-    def songs(self):
+    def songs(self) -> List[RainwaveSong]:
         """A list containing the :class:`RainwaveSong` for the event."""
         return [self.song]
