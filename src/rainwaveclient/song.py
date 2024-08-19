@@ -194,7 +194,7 @@ class RainwaveSong(dict):
         return self.rating
 
     @property
-    def request_count(self) - int:
+    def request_count(self) -> int:
         """The total number of times the song has been requested by any
         listener."""
         return self['request_count']
