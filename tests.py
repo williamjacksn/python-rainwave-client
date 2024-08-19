@@ -557,4 +557,6 @@ class TestRainwaveSchedule(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    ver = sys.version_info
+    print(f'Testing on Python {ver.major}.{ver.minor}.{ver.micro}')
     unittest.main()
