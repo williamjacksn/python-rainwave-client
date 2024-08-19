@@ -45,7 +45,7 @@ class RainwaveAlbum(dict):
         added to the playlist."""
         if 'added_on' not in self:
             self._update()
-        return datetime.datetime.utcfromtimestamp(self['added_on'])
+        return datetime.datetime.fromtimestamp(self['added_on'], datetime.UTC)
 
     @property
     def categories(self) -> List['RainwaveCategory']:
@@ -80,7 +80,7 @@ class RainwaveAlbum(dict):
         time a song on the album will be out of cooldown and available to play.
         If any song on the album is already available, :attr:`cool_lowest` will
         be in the past."""
-        return datetime.datetime.utcfromtimestamp(self['cool_lowest'])
+        return datetime.datetime.fromtimestamp(self['cool_lowest'], datetime.UTC)
 
     @property
     def fave(self) -> bool:
@@ -123,7 +123,7 @@ class RainwaveAlbum(dict):
         and time when a song on the album played."""
         if 'played_last' not in self:
             self._update()
-        return datetime.datetime.utcfromtimestamp(self['played_last'])
+        return datetime.datetime.fromtimestamp(self['played_last'], datetime.UTC)
 
     @property
     def rating(self) -> float:

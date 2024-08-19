@@ -18,6 +18,9 @@ class RainwaveSchedule(dict):
         self._channel = channel
         super(RainwaveSchedule, self).__init__(raw_info)
 
+    def __len__(self):
+        return self['length']
+
     def __repr__(self):
         return f'<RainwaveSchedule [{self.channel.name}]>'
 
@@ -30,15 +33,35 @@ class RainwaveSchedule(dict):
         return self._channel
 
     @property
+    def end(self):
+        """A `datetime.datetime` object representing the end time of the event. For future events, this should equal
+        :attr:`start` + :attr:`length`. For current and past events this should equal
+        :attr:`start_actual` + :attr:`length`."""
+        return datetime.datetime.fromtimestamp(self['end'], datetime.UTC)
+
+    @property
     def id(self):
         """The ID of the event."""
         return self['id']
 
     @property
+    def length(self):
+        """The duration of the event in seconds. For future elections, this value is estimated by averaging the duration
+        of all songs in the election. :class:`RainwaveSchedule` objects also support `len(schedule)`."""
+        return len(self)
+
+    @property
     def start(self):
-        """A `datetime.datetime` object representing the start time of the event
-        in UTC time."""
-        return datetime.datetime.utcfromtimestamp(self['start'])
+        """A `datetime.datetime` object representing the estimated start time of the event. This is only useful for
+        future events. For current and past events, see :attr:`start_actual`."""
+        return datetime.datetime.fromtimestamp(self['start'], datetime.UTC)
+    
+    @property
+    def start_actual(self):
+        """A `datetime.datetime` object representing the actual start time of the event. If the event has not started
+        yet, this will be `None`."""
+        if self['start_actual'] is not None:
+            return datetime.datetime.fromtimestamp(self['start_actual'], datetime.UTC)
 
 
 class RainwaveElection(RainwaveSchedule):
