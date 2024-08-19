@@ -1,5 +1,11 @@
-from . import category
+from typing import Dict, List, TYPE_CHECKING
 
+from .category import RainwaveCategory
+
+if TYPE_CHECKING:
+    from .album import RainwaveAlbum
+    from .artist import RainwaveArtist
+    from .listener import RainwaveListener
 
 class RainwaveSong(dict):
     """A :class:`RainwaveSong` object represents one song.
@@ -25,17 +31,17 @@ class RainwaveSong(dict):
         return f'{self.album} // {self.title} // {self.artist_string}'
 
     @property
-    def album(self):
+    def album(self) -> 'RainwaveAlbum':
         """The :class:`RainwaveAlbum` object the song belongs to."""
         return self._album
 
     @property
-    def artist_string(self):
+    def artist_string(self) -> str:
         """A single string with the names of all artists for the song."""
         return ', '.join([artist.name for artist in self.artists])
 
     @property
-    def artists(self):
+    def artists(self) -> List['RainwaveArtist']:
         """A list of :class:`RainwaveArtist` objects the song is attributed to."""
         if 'artist_objects' not in self:
             self['artist_objects'] = []
@@ -50,13 +56,13 @@ class RainwaveSong(dict):
         return self['artist_objects']
 
     @property
-    def available(self):
+    def available(self) -> bool:
         """A boolean representing whether the song is available to play or not.
         Opposite of :attr:`cool`."""
         return not self.cool
 
     @property
-    def categories(self):
+    def categories(self) -> List['RainwaveCategory']:
         """A list of :class:`RainwaveCategory` objects representing the
         categories the song belongs to."""
         if 'category_objects' not in self:
@@ -65,23 +71,23 @@ class RainwaveSong(dict):
                 chan = self.album.channel
                 cat_id = raw_cat['id']
                 name = raw_cat['name']
-                cat = category.RainwaveCategory(chan, cat_id, name)
+                cat = RainwaveCategory(chan, cat_id, name)
                 self['category_objects'].append(cat)
         return self['category_objects']
 
     @property
-    def channel_id(self):
+    def channel_id(self) -> int:
         """The :attr:`RainwaveChannel.id` of the channel the song belongs to."""
         return self['sid']
 
     @property
-    def cool(self):
+    def cool(self) -> bool:
         """A boolean representing whether the song is on cooldown. Opposite of
         :attr:`available`."""
         return self['cool']
 
     @property
-    def fave(self):
+    def fave(self) -> bool:
         """A boolean representing whether the song is marked as a fave or not.
         Change whether the song is a fave by assigning a boolean value to this
         attribute."""
@@ -99,35 +105,35 @@ class RainwaveSong(dict):
             raise Exception(d['fave_song_result']['text'])
 
     @property
-    def id(self):
+    def id(self) -> int:
         """The ID of the song."""
         return self['id']
 
     @property
-    def length(self):
+    def length(self) -> int:
         """The length of the song in seconds. :class:`RainwaveSong` objects also
         support `len(song)`."""
         return len(self)
 
     @property
-    def link_text(self):
+    def link_text(self) -> str:
         """The link text that corresponds with :attr:`url`."""
         return self['link_text']
 
     @property
-    def origin_channel_id(self):
+    def origin_channel_id(self) -> int:
         """The :attr:`RainwaveChannel.id` of the home channel for the song. This
         could be different from :attr:`channel_id` if the song is in the
         playlist of multiple channels."""
         return self['origin_sid']
 
     @property
-    def origin_sid(self):
+    def origin_sid(self) -> int:
         """See :attr:`origin_channel_id`."""
         return self.origin_channel_id
 
     @property
-    def rating(self):
+    def rating(self) -> float:
         """The rating given to the song by the listener authenticating to the
         API. Change the rating by assigning a new value to this attribute."""
         return self['rating_user']
@@ -151,23 +157,23 @@ class RainwaveSong(dict):
             raise Exception(d['rate_result']['text'])
 
     @property
-    def rating_allowed(self):
+    def rating_allowed(self) -> bool:
         """A boolean representing whether the listener can currently rate the
         song."""
         return self['rating_allowed']
 
     @property
-    def rating_avg(self):
+    def rating_avg(self) -> float:
         """The average of all ratings given to the song by all listeners."""
         return self['rating']
 
     @property
-    def rating_count(self):
+    def rating_count(self) -> int:
         """The total number of ratings given to the song by all listeners."""
         return self['rating_count']
 
     @property
-    def rating_histogram(self):
+    def rating_histogram(self) -> Dict[str, int]:
         """A dictionary representing the distribution of ratings given to the
         song by all listeners. For example::
 
@@ -177,41 +183,41 @@ class RainwaveSong(dict):
         return self['rating_histogram']
 
     @property
-    def rating_rank(self):
+    def rating_rank(self) -> int:
         """The position of the album when albums on the channel are ranked by
         rating. The highest-rated album will have :attr:`rating_rank` == 1."""
         return self['rating_rank']
 
     @property
-    def rating_user(self):
+    def rating_user(self) -> float:
         """See :attr:`rating`."""
         return self.rating
 
     @property
-    def request_count(self):
+    def request_count(self) - int:
         """The total number of times the song has been requested by any
         listener."""
         return self['request_count']
 
     @property
-    def request_rank(self):
+    def request_rank(self) -> int:
         """The position of the song when songs on the channel are ranked by how
         often they are requested. The most-requested song will have
         :attr:`rating_rank` == 1."""
         return self['rating_rank']
 
     @property
-    def sid(self):
+    def sid(self) -> int:
         """See :attr:`channel_id`."""
         return self.channel_id
 
     @property
-    def title(self):
+    def title(self) -> str:
         """The title of the song."""
         return self['title']
 
     @property
-    def url(self):
+    def url(self) -> str:
         """The URL of more information about the song."""
         return self['url']
 
@@ -232,18 +238,18 @@ class RainwaveCandidate(RainwaveSong):
         return f'<RainwaveCandidate [{self}]>'
 
     @property
-    def entry_id(self):
+    def entry_id(self) -> int:
         """The election entry ID for this candidate. Used for voting."""
         return self['entry_id']
 
     @property
-    def is_request(self):
+    def is_request(self) -> bool:
         """A boolean representing whether the candidate is a listener request or
         not."""
         return self['elec_request_user_id'] > 0
 
     @property
-    def requested_by(self):
+    def requested_by(self) -> 'RainwaveListener':
         """The :class:`RainwaveListener` who requested the candidate, if the
         candidate is a request. ``None`` otherwise."""
         if self.is_request:
@@ -258,7 +264,7 @@ class RainwaveCandidate(RainwaveSong):
             raise Exception(d['vote_result']['text'])
 
     @property
-    def votes(self):
+    def votes(self) -> int:
         """The number of votes this candidate received in the election. If the
         election has not ended, :attr:`votes` will be ``0``."""
         return self['entry_votes']
