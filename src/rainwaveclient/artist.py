@@ -1,3 +1,9 @@
+from typing import List, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .channel import RainwaveChannel
+    from .song import RainwaveSong
+
 class RainwaveArtist(dict):
     """A :class:`RainwaveArtist` object represents one artist.
 
@@ -19,27 +25,27 @@ class RainwaveArtist(dict):
         return self.name
 
     @property
-    def channel(self):
+    def channel(self) -> 'RainwaveChannel':
         """The :class:`RainwaveChannel` object associated with the artist."""
         return self._channel
 
     @property
-    def id(self):
+    def id(self) -> int:
         """The ID of the artist."""
         return self['id']
 
     @property
-    def name(self):
+    def name(self) -> str:
         """The name of the artist."""
         return self['name']
 
     @property
-    def song_count(self):
+    def song_count(self) -> int:
         """The number of songs attributed to the artist."""
         return len(self.songs)
 
     @property
-    def songs(self):
+    def songs(self) -> List['RainwaveSong']:
         """A list of :class:`RainwaveSong` objects attributed to the artist."""
         if 'song_objects' not in self:
             self['song_objects'] = []
