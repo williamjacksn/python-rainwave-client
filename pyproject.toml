@@ -30,8 +30,9 @@ email = "william@subtlecoolness.com"
 file = "LICENSE"
 
 [project.urls]
-"Homepage" = "https://github.com/williamjacksn/python-rainwave-client"
-"Bug Tracker" = "https://github.com/williamjacksn/python-rainwave-client/issues"
+"Documentation" = "https://python-rainwave-client.subtlecoolness.com/"
+"Repository" = "https://github.com/williamjacksn/python-rainwave-client"
+"Issues" = "https://github.com/williamjacksn/python-rainwave-client/issues"
 
 [tool.setuptools.dynamic]
 version.attr = "rainwaveclient.__version__"
