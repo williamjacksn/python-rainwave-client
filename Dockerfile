@@ -9,6 +9,7 @@ COPY --chown=python:python requirements.txt /home/python/python-rainwave-client/
 RUN /home/python/venv/bin/pip install --no-cache-dir --requirement /home/python/python-rainwave-client/requirements.txt
 
 ENV PATH="/home/python/venv/bin:${PATH}" \
+    PYTHONDONTWRITEBYTECODE="1" \
     PYTHONUNBUFFERED="1" \
     TZ="Etc/UTC"
 
