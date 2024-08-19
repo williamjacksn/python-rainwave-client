@@ -94,8 +94,8 @@ class TestRainwaveChannel(unittest.TestCase):
 
     def test_get_artist_by_id(self):
         self.assertRaises(IndexError, self.chan.get_artist_by_id, 1)
-        artist = self.chan.get_artist_by_id(1053)
-        self.assertEqual(artist.name, 'TheGuitahHeroe')
+        artist = self.chan.get_artist_by_id(22844)
+        self.assertEqual(artist.name, 'Shigeru Miyamoto')
 
     def test_get_listener_by_id(self):
         self.assertRaises(IndexError, self.chan.get_listener_by_id, 9999999)
@@ -254,13 +254,13 @@ class TestRainwaveAlbum(unittest.TestCase):
 class TestRainwaveSong(unittest.TestCase):
 
     rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
-    song = rw.channels[4].get_song_by_id(2)
+    song = rw.channels[4].get_song_by_id(68)
 
     def test_album(self):
-        self.assertEqual(self.song.album.name, 'Bravely Default')
+        self.assertEqual(self.song.album.name, 'Puzzlejuice')
 
     def test_artist_string(self):
-        self.assertEqual(self.song.artist_string, 'Revo')
+        self.assertEqual(self.song.artist_string, 'Big Giant Circles')
 
     def test_artists(self):
         self.assertEqual(len(self.song.artists), 1)
@@ -293,16 +293,16 @@ class TestRainwaveSong(unittest.TestCase):
         self.song.fave = False
 
     def test_id(self):
-        self.assertEqual(self.song.id, 2)
+        self.assertEqual(self.song.id, 68)
 
     def test_len(self):
-        self.assertEqual(len(self.song), 227)
+        self.assertEqual(len(self.song), 203)
 
     def test_length(self):
-        self.assertEqual(self.song.length, 227)
+        self.assertEqual(self.song.length, 203)
 
     def test_link_text(self):
-        self.assertEqual(self.song.link_text, 'Click for More Info')
+        self.assertEqual(self.song.link_text, 'Get @ Bandcamp')
 
     def test_origin_channel_id(self):
         self.assertEqual(self.song.origin_channel_id, 1)
@@ -350,7 +350,7 @@ class TestRainwaveSong(unittest.TestCase):
         self.assertEqual(self.song.rating_user, self.song.rating)
 
     def test_repr(self):
-        _repr = '<RainwaveSong [All // Bravely Default // Sunlight Filtering Through the Trees // Revo]>'
+        _repr = '<RainwaveSong [All // Puzzlejuice // Sipping Juice // Big Giant Circles]>'
         self.assertEqual(repr(self.song), _repr)
 
     def test_request_count(self):
@@ -363,14 +363,14 @@ class TestRainwaveSong(unittest.TestCase):
         self.assertEqual(self.song.sid, 5)
 
     def test_str(self):
-        _str = 'All // Bravely Default // Sunlight Filtering Through the Trees // Revo'
+        _str = 'All // Puzzlejuice // Sipping Juice // Big Giant Circles'
         self.assertEqual(str(self.song), _str)
 
     def test_title(self):
-        self.assertEqual(self.song.title, 'Sunlight Filtering Through the Trees')
+        self.assertEqual(self.song.title, 'Sipping Juice')
 
     def test_url(self):
-        self.assertEqual(self.song.url, 'http://vgmdb.net/album/33726')
+        self.assertEqual(self.song.url, 'https://biggiantcircles.bandcamp.com/album/puzzlejuice-soundtrack')
 
 
 class TestRainwaveArtist(unittest.TestCase):
@@ -391,7 +391,7 @@ class TestRainwaveArtist(unittest.TestCase):
         self.assertEqual(repr(self.a), '<RainwaveArtist [Stephane Bellanger]>')
 
     def test_song_count(self):
-        self.assertEqual(self.a.song_count, 9)
+        self.assertEqual(self.a.song_count, 16)
 
     def test_songs(self):
         self.assertTrue(isinstance(self.a.songs, list))
@@ -407,7 +407,7 @@ class TestRainwaveListener(unittest.TestCase):
     l = rw.channels[4].get_listener_by_id(3)
 
     def test_avatar(self):
-        _avatar = 'https://cdn.discordapp.com/avatars/137745037898416129/1be2f49c9590b386ae0c0e60310c785f.png?size=320'
+        _avatar = 'https://cdn.discordapp.com/avatars/137745037898416129/81fb3f1e8ee75ec0e18855b630829440.png?size=320'
         self.assertEqual(self.l.avatar, _avatar)
 
     def test_color(self):
@@ -429,16 +429,16 @@ class TestRainwaveListener(unittest.TestCase):
         self.assertEqual(self.l.mind_changes, 0)
 
     def test_name(self):
-        self.assertEqual(self.l.name, 'William Jackson')
+        self.assertEqual(self.l.name, 'William')
 
     def test_rank(self):
         self.assertEqual(self.l.rank, 'Mister Three')
 
     def test_repr(self):
-        self.assertEqual(repr(self.l), '<RainwaveListener [William Jackson]>')
+        self.assertEqual(repr(self.l), '<RainwaveListener [William]>')
 
     def test_str(self):
-        self.assertEqual(str(self.l), 'William Jackson')
+        self.assertEqual(str(self.l), 'William')
 
     def test_total_ratings(self):
         self.assertEqual(self.l.total_ratings, 0)
