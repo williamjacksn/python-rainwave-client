@@ -31,4 +31,4 @@ jobs:
         run: python tests.py
         env:
           RW_KEY: ${{ secrets.rw_key }}
-          RW_USER_ID: ${{ secrets.rw_user_id }}
+          RW_USER_ID: ${{ env.rw_user_id }}
