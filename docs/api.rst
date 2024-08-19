@@ -82,3 +82,9 @@ API Objects
 
 .. autoclass:: RainwaveListener
     :members:
+
+:class:`RainwaveCategory`
+-------------------------
+
+.. autoclass:: RainwaveCategory
+    :members:
