@@ -45,12 +45,13 @@ services:
 
   tests:
     entrypoint:
-      - /home/python/venv/bin/python
+      - python
       - tests.py
     environment:
+      PYTHONDONTWRITEBYTECODE: 1
       RW_KEY:
       RW_USER_ID:
-    image: ghcr.io/williamjacksn/python-rainwave-client-helper
+    image: python:3.8-slim
     init: true
     volumes:
       - ./:/home/python/python-rainwave-client
