@@ -475,7 +475,7 @@ class TestRainwaveRequest(unittest.TestCase):
 class TestRainwaveCandidate(unittest.TestCase):
 
     rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
-    cand = rw.channels[4].schedule_next[0].candidates[0]
+    cand: rainwaveclient.RainwaveCandidate = rw.channels[4].schedule_next[0].candidates[0]
 
     def test_repr(self):
         self.assertTrue(repr(self.cand).startswith('<RainwaveCandidate '))
@@ -494,6 +494,12 @@ class TestRainwaveCandidate(unittest.TestCase):
             self.assertTrue(self.cand.requested_by is None)
 
     def test_vote(self):
+        current = self.rw.channels[4].schedule_current
+        self.cand: rainwaveclient.RainwaveCandidate = self.rw.channels[4].schedule_next[0].candidates[0]
+        now = datetime.datetime.now(datetime.timezone.utc)
+        time_left: datetime.timedelta = current.end - now
+        if int(time_left.total_seconds()) < 10:
+            self.skipTest(f'{int(time_left.total_seconds())} left, skipping vote test')
         self.cand.vote()
 
 
