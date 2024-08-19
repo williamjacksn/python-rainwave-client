@@ -1,7 +1,12 @@
-from . import song
+from typing import List, TYPE_CHECKING
+
+from .song import RainwaveSong
+
+if TYPE_CHECKING:
+    from .listener import RainwaveListener
 
 
-class RainwaveRequest(song.RainwaveSong):
+class RainwaveRequest(RainwaveSong):
     """A :class:`RainwaveRequest` object is a subclass of :class:`RainwaveSong`
     representing a song that has been requested to play on the radio."""
 
@@ -15,12 +20,12 @@ class RainwaveRequest(song.RainwaveSong):
         return f'<RainwaveRequest [{self}]>'
 
     @property
-    def requester(self):
+    def requester(self) -> 'RainwaveListener':
         """The :class:`RainwaveListener` who made the request."""
         return self['requester']
 
 
-class RainwaveUserRequest(song.RainwaveSong):
+class RainwaveUserRequest(RainwaveSong):
     """A :class:`RainwaveUserRequest` object is a subclass of
     :class:`RainwaveSong` representing a song in the authenticating listener's
     requests queue."""
@@ -29,20 +34,20 @@ class RainwaveUserRequest(song.RainwaveSong):
         return f'<RainwaveUserRequest [{self}]>'
 
     @property
-    def blocked(self):
+    def blocked(self) -> bool:
         """``True`` if the request is currently blocked. See
         :attr:`blocked_by_album` and :attr:`blocked_by_category` to determine
         why the request is blocked."""
         return bool(self.blocked_by_album or self.blocked_by_category)
 
     @property
-    def blocked_by_album(self):
+    def blocked_by_album(self) -> bool:
         """``True`` if the request is currently blocked because a song from the
         same album is in an election."""
         return self['elec_blocked_by'] == 'album'
 
     @property
-    def blocked_by_category(self):
+    def blocked_by_category(self) -> bool:
         """``True`` if the request is currently blocked because a song from the
         same category is in an election."""
         return self['elec_blocked_by'] == 'group'
@@ -65,7 +70,7 @@ class RainwaveUserRequestQueue(list):
         """Clear all requests from the queue."""
         self._channel.clear_requests()
 
-    def reorder(self, order):
+    def reorder(self, order: List[int]):
         """Change the order of the requests in the queue.
 
         :param order: the indices of the requests in the new order.
