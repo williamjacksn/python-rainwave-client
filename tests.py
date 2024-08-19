@@ -522,7 +522,7 @@ class TestRainwaveUserRequest(unittest.TestCase):
         self.urq.reorder(indices)
 
     def test_request_delete(self):
-        song = self.rw.channels[4].albums[0].songs[0]
+        song = self.rw.channels[4].albums[sys.version_info.minor].songs[0]
         song.request()
         for ur in self.rw.channels[4].user_requests:
             if ur.id == song.id:
