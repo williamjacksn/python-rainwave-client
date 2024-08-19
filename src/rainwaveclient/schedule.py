@@ -83,7 +83,7 @@ class RainwaveElection(RainwaveSchedule):
             self['candidate_objects'] = []
             for raw_song in self['songs']:
                 alb = self.channel.get_album_by_id(raw_song['albums'][0]['id'])
-                tmp_song = RainwaveCandidate(alb, raw_song)
+                tmp_song = RainwaveCandidate(alb, self, raw_song)
                 self['candidate_objects'].append(tmp_song)
         return self['candidate_objects']
 

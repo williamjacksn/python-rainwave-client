@@ -6,6 +6,7 @@ if TYPE_CHECKING:
     from .album import RainwaveAlbum
     from .artist import RainwaveArtist
     from .listener import RainwaveListener
+    from .schedule import RainwaveElection
 
 class RainwaveSong(dict):
     """A :class:`RainwaveSong` object represents one song.
@@ -17,7 +18,7 @@ class RainwaveSong(dict):
         :attr:`RainwaveArtist.songs`, or some other object.
     """
 
-    def __init__(self, album, raw_info):
+    def __init__(self, album: 'RainwaveAlbum', raw_info: Dict):
         self._album = album
         super(RainwaveSong, self).__init__(raw_info)
 
@@ -231,8 +232,9 @@ class RainwaveCandidate(RainwaveSong):
     :class:`RainwaveSong` representing a song that is a candidate in an
     election."""
 
-    def __init__(self, album, raw_info):
+    def __init__(self, album: 'RainwaveAlbum', election: 'RainwaveElection', raw_info: Dict):
         super(RainwaveCandidate, self).__init__(album, raw_info)
+        self.election = election
 
     def __repr__(self):
         return f'<RainwaveCandidate [{self}]>'
