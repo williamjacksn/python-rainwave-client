@@ -2,7 +2,7 @@ import datetime
 import logging
 import threading
 
-from typing import TYPE_CHECKING
+from typing import List, TYPE_CHECKING
 
 from . import album
 from . import artist
@@ -13,7 +13,13 @@ from . import schedule
 from . import song
 
 if TYPE_CHECKING:
+    from .album import RainwaveAlbum
+    from .artist import RainwaveArtist
     from .client import RainwaveClient
+    from .listener import RainwaveListener
+    from .request import RainwaveRequest, RainwaveUserRequestQueue
+    from .schedule import RainwaveSchedule
+    from .song import RainwaveSong
 
 pre_sync = dispatch.Signal()
 post_sync = dispatch.Signal()
@@ -122,7 +128,7 @@ class RainwaveChannel(dict):
         return now > ts
 
     @property
-    def albums(self):
+    def albums(self) -> List['RainwaveAlbum']:
         """A list of :class:`RainwaveAlbum` objects in the playlist of the
         channel."""
 
@@ -138,7 +144,7 @@ class RainwaveChannel(dict):
         return self._albums
 
     @property
-    def artists(self):
+    def artists(self) -> List['RainwaveArtist']:
         """A list of :class:`RainwaveArtist` objects in the playlist of the
         channel."""
 
@@ -173,7 +179,7 @@ class RainwaveChannel(dict):
             raise Exception(d['delete_request_result']['text'])
 
     @property
-    def description(self):
+    def description(self) -> str:
         """A description of the channel."""
         return self['description']
 
@@ -185,7 +191,7 @@ class RainwaveChannel(dict):
         args = {'song_id': song_id, 'fave': fave}
         return self.client.call('fave_song', args)
 
-    def get_album_by_id(self, album_id):
+    def get_album_by_id(self, album_id: int) -> 'RainwaveAlbum':
         """Return a :class:`RainwaveAlbum` for the given album ID. Raise an
         :exc:`IndexError` if there is no album with the given ID in the
         playlist of the channel.
@@ -203,7 +209,7 @@ class RainwaveChannel(dict):
             raise IndexError(album_data['text'])
         return album.RainwaveAlbum(self, album_data)
 
-    def get_album_by_name(self, name):
+    def get_album_by_name(self, name: str) -> 'RainwaveAlbum':
         """Return a :class:`RainwaveAlbum` for the given album name. Raise an
         :exc:`IndexError` if there is no album with the given name in the
         playlist of the channel.
@@ -218,7 +224,7 @@ class RainwaveChannel(dict):
         error = f'Channel does not contain album with name: {name}'
         raise IndexError(error)
 
-    def get_artist_by_id(self, artist_id):
+    def get_artist_by_id(self, artist_id: int) -> 'RainwaveArtist':
         """Return a :class:`RainwaveArtist` for the given artist ID. Raise an
         :exc:`IndexError` if there is no artist with the given ID in the
         playlist of the channel.
@@ -234,7 +240,7 @@ class RainwaveChannel(dict):
         err = f'Channel does not contain artist with id: {artist_id}'
         raise IndexError(err)
 
-    def get_listener_by_id(self, listener_id):
+    def get_listener_by_id(self, listener_id: int) -> 'RainwaveListener':
         """Return a :class:`RainwaveListener` for the given listener ID. Raise
         an :exc:`IndexError` if there is no listener with the given ID.
 
@@ -245,7 +251,7 @@ class RainwaveChannel(dict):
         raw_listener = self._get_listener_raw_info(listener_id)
         return listener.RainwaveListener(self, raw_listener)
 
-    def get_listener_by_name(self, name):
+    def get_listener_by_name(self, name: str) -> 'RainwaveListener':
         """Return a :class:`RainwaveListener` for the given listener name. Raise
         an :exc:`IndexError` if there is no listener with the given name
         currently listening to the channel.
@@ -260,7 +266,7 @@ class RainwaveChannel(dict):
         err = f'No current listener named {name}'
         raise IndexError(err)
 
-    def get_song_by_id(self, song_id):
+    def get_song_by_id(self, song_id: int) -> 'RainwaveSong':
         """Return a :class:`RainwaveSong` for the given song ID. Raise an
         :exc:`IndexError` if there is no song with the given ID in the playlist
         of the channel.
@@ -278,17 +284,17 @@ class RainwaveChannel(dict):
         raise IndexError(err)
 
     @property
-    def id(self):
+    def id(self) -> int:
         """The ID of the channel."""
         return self['id']
 
     @property
-    def key(self):
+    def key(self) -> str:
         """The channel key, a short string that identifies the channel."""
         return self['key']
 
     @property
-    def listeners(self):
+    def listeners(self) -> List['RainwaveListener']:
         """A list of :class:`RainwaveListener` objects listening to the
         channel."""
         _listeners = []
@@ -298,12 +304,12 @@ class RainwaveChannel(dict):
         return _listeners
 
     @property
-    def name(self):
+    def name(self) -> str:
         """The name of the channel."""
         return self['name']
 
     @property
-    def ogg_stream(self):
+    def ogg_stream(self) -> str:
         """The URL of the OGG stream for the channel. See also
         :attr:`mp3_stream`."""
         return self.mp3_stream.replace('.mp3', '.ogg')
@@ -336,7 +342,7 @@ class RainwaveChannel(dict):
         return self.client.call('clear_requests', {'sid': self.id})
 
     @property
-    def requests(self):
+    def requests(self) -> List['RainwaveRequest']:
         """A list of :class:`RainwaveRequest` objects in the request line of
         the channel."""
         if self._stale():
@@ -353,7 +359,7 @@ class RainwaveChannel(dict):
         return rqs
 
     @property
-    def schedule_current(self):
+    def schedule_current(self) -> 'RainwaveSchedule':
         """The current :class:`RainwaveSchedule` for the channel."""
         if self._stale():
             self._do_async_get()
@@ -362,9 +368,9 @@ class RainwaveChannel(dict):
         return sched_current
 
     @property
-    def schedule_history(self):
-        """A list of the past :class:`RainwaveSchedule` objects for the
-        channel."""
+    def schedule_history(self) -> List['RainwaveSchedule']:
+        """A list of the past :class:`RainwaveSchedule` objects for the channel.
+        The events are sorted reverse-chronologically: the first event in the list was the most recent event."""
         if self._stale():
             self._do_async_get()
         sched_history = []
@@ -374,9 +380,9 @@ class RainwaveChannel(dict):
         return sched_history
 
     @property
-    def schedule_next(self):
-        """A list of the next :class:`RainwaveSchedule` objects for the
-        channel."""
+    def schedule_next(self) -> List['RainwaveSchedule']:
+        """A list of the next :class:`RainwaveSchedule` objects for the channel.
+        The events are sorted chronologically: the first event in the list will happen soonest."""
         if self._stale():
             self._do_async_get()
         sched_next = []
@@ -400,18 +406,18 @@ class RainwaveChannel(dict):
         self._sync_thread = None
 
     @property
-    def mp3_stream(self):
+    def mp3_stream(self) -> str:
         """The URL of the MP3 stream for the channel. See also
         :attr:`ogg_stream`."""
         return self['stream']
 
     @property
-    def url(self):
+    def url(self) -> str:
         """The URL of the web interface for the channel."""
         return f'https://rainwave.cc/{self.key}/'
 
     @property
-    def user_requests(self):
+    def user_requests(self) -> 'RainwaveUserRequestQueue':
         """A :class:`RainwaveUserRequestQueue` of :class:`RainwaveUserRequest`
         objects in the listener's personal request queue."""
         if self._stale():
