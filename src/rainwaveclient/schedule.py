@@ -42,7 +42,7 @@ class RainwaveSchedule(dict):
         """A `datetime.datetime` object representing the end time of the event. For future events, this should equal
         :attr:`start` + :attr:`length`. For current and past events this should equal
         :attr:`start_actual` + :attr:`length`."""
-        return datetime.datetime.fromtimestamp(self['end'], datetime.UTC)
+        return datetime.datetime.fromtimestamp(self['end'], datetime.timezone.utc)
 
     @property
     def id(self) -> int:
@@ -59,14 +59,14 @@ class RainwaveSchedule(dict):
     def start(self) -> datetime.datetime:
         """A `datetime.datetime` object representing the estimated start time of the event. This is only useful for
         future events. For current and past events, see :attr:`start_actual`."""
-        return datetime.datetime.fromtimestamp(self['start'], datetime.UTC)
+        return datetime.datetime.fromtimestamp(self['start'], datetime.timezone.utc)
     
     @property
     def start_actual(self) -> datetime.datetime:
         """A `datetime.datetime` object representing the actual start time of the event. If the event has not started
         yet, this will be `None`."""
         if self['start_actual'] is not None:
-            return datetime.datetime.fromtimestamp(self['start_actual'], datetime.UTC)
+            return datetime.datetime.fromtimestamp(self['start_actual'], datetime.timezone.utc)
 
 
 class RainwaveElection(RainwaveSchedule):

@@ -122,9 +122,9 @@ class RainwaveChannel(dict):
 
         if len(self._sched_next) < 1:
             return True
-        now = datetime.datetime.now(datetime.UTC)
+        now = datetime.datetime.now(datetime.timezone.utc)
         ts = self._sched_current['end']
-        ts = datetime.datetime.fromtimestamp(ts, datetime.UTC)
+        ts = datetime.datetime.fromtimestamp(ts, datetime.timezone.utc)
         return now > ts
 
     @property

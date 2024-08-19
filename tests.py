@@ -544,7 +544,7 @@ class TestRainwaveSchedule(unittest.TestCase):
     def test_start_actual_current(self):
         event = self.rw.channels[4].schedule_current
         self.assertIsInstance(event.start_actual, datetime.datetime)
-        self.assertGreater(datetime.datetime.now(datetime.UTC), event.start_actual)
+        self.assertGreater(datetime.datetime.now(datetime.timezone.utc), event.start_actual)
 
     def test_start_actual_history(self):
         event = self.rw.channels[4].schedule_history[0]
