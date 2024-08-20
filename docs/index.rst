@@ -78,10 +78,10 @@ API Documentation
    :maxdepth: 2
 
    api
+   changelog
 
 Indices and tables
 ==================
 
 * :ref:`genindex`
 * :ref:`search`
-

@@ -25,14 +25,14 @@ intersphinx_mapping = {'python': ('https://docs.python.org/3', None)}
 templates_path = ['_templates']
 
 # The suffix of source filenames.
-source_suffix = '.rst'
+source_suffix = {'.rst': 'restructuredtext'}
 
 # The master toctree document.
 master_doc = 'index'
 
 # General information about the project.
 project = u'Python Rainwave Client'
-copyright = u'2013, 2015, 2019 William Jackson'
+copyright = u'William Jackson'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
