@@ -78,7 +78,7 @@ API Documentation
    :maxdepth: 2
 
    api
-   changelog
+   changes
 
 Indices and tables
 ==================

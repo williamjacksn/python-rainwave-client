@@ -1,8 +1,8 @@
-.. _changelog:
+.. _changes:
 
-=========
-Changelog
-=========
+=======
+Changes
+=======
 
 2024.3
 ======
@@ -109,3 +109,56 @@ Released 2022-01-26.
 Released 2022-01-19.
 
 The library is better at tracking when cached schedule information is stale and needs to be reloaded.
+
+0.6.3
+=====
+
+Released 2020-07-09.
+
+Switch to a new theme for the documentation.
+
+0.6.2
+=====
+
+Released 2019-09-23.
+
+Fix a link in the README.
+
+0.6.1
+=====
+
+Released 2019-09-23.
+
+Fix the package description for PyPI.
+
+0.6.0
+=====
+
+Released 2019-09-23.
+
+Drop support for Python 2.6, 3.2, 3.3, and 3.4. This version is supported on Python 2.7, 3.5, 3.6, and 3.7
+
+* Base URLs now use ``https`` instead of ``http``.
+* ``RainwaveAlbum.fave`` now returns ``False`` instead of ``None`` if the album is not a favourite.
+* ``RainwaveUserRequestQueue`` gained a new method ``clear()`` to clear the user's request queue.
+
+0.5
+===
+
+Released 2019-01-03.
+
+The library now adds a randomly-generated user agent to each request.
+
+0.4
+===
+
+Released 2015-04-22.
+
+This version is supported on Python 2.6, 2.7, 3.2, 3.3, and 3.4.
+
+0.3.1
+=====
+
+Released 2015-04-21.
+
+The library has been renamed from *Gutter* to *Python Rainwave Client*.
