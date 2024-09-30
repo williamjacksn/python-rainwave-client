@@ -34,7 +34,7 @@ packaging==24.1
     #   sphinx
 pygments==2.18.0
     # via sphinx
-pyproject-hooks==1.1.0
+pyproject-hooks==1.2.0
     # via build
 requests==2.32.3
     # via sphinx
