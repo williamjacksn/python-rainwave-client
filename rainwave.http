@@ -1,0 +1,33 @@
+### album
+POST https://rainwave.cc/api4/album
+Content-Type: application/x-www-form-urlencoded
+
+user_id = {{user-id}} &
+key = {{key}} &
+sid = 1 &
+id = 1
+
+### listener
+POST https://rainwave.cc/api4/listener
+Content-Type: application/x-www-form-urlencoded
+
+user_id = {{user-id}} &
+key = {{key}} &
+id = 1
+
+### song
+POST https://rainwave.cc/api4/song
+Content-Type: application/x-www-form-urlencoded
+
+user_id = {{user-id}} &
+key = {{key}} &
+sid = 1 &
+id = 1
+
+### user_search
+POST https://rainwave.cc/api4/user_search
+Content-Type: application/x-www-form-urlencoded
+
+user_id = {{user-id}} &
+key = {{key}} &
+username = William
