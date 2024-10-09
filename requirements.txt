@@ -6,7 +6,7 @@
 #
 --extra-index-url https://alpine-wheels.github.io/index
 
-alabaster==0.7.16
+alabaster==1.0.0
     # via sphinx
 babel==2.16.0
     # via sphinx
