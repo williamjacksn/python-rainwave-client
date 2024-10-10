@@ -1,10 +1,13 @@
 import datetime
+import notch
 import os
 import random
 import sys
 import unittest
 
 from src import rainwaveclient
+
+log = notch.make_log('rainwave-client-tests')
 
 
 if 'RW_USER_ID' in os.environ:
