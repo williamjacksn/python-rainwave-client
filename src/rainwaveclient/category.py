@@ -1,6 +1,12 @@
+import typing
+
+if typing.TYPE_CHECKING:
+    from . import RainwaveChannel
+
+
 class RainwaveCategory:
 
-    def __init__(self, channel, category_id, name):
+    def __init__(self, channel: 'RainwaveChannel', category_id: int, name: str):
         self._channel = channel
         self.category_id = category_id
         self.name = name

@@ -1,7 +1,8 @@
-from typing import TYPE_CHECKING
+import typing
 
-if TYPE_CHECKING:
-    from .channel import RainwaveChannel
+if typing.TYPE_CHECKING:
+    from . import RainwaveChannel
+
 
 class RainwaveListener(dict):
     """A :class:`RainwaveListener` object represents a radio listener."""
@@ -9,14 +10,14 @@ class RainwaveListener(dict):
     #: The :class:`RainwaveChannel` the listener belongs to.
     channel: 'RainwaveChannel' = None
 
-    def __init__(self, channel, raw_info):
+    def __init__(self, channel: 'RainwaveChannel', raw_info: dict):
         self.channel = channel
         super(RainwaveListener, self).__init__(raw_info)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<RainwaveListener [{self}]>'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     @property

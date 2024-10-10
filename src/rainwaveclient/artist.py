@@ -1,8 +1,8 @@
-from typing import List, TYPE_CHECKING
+import typing
 
-if TYPE_CHECKING:
-    from .channel import RainwaveChannel
-    from .song import RainwaveSong
+if typing.TYPE_CHECKING:
+    from . import RainwaveChannel, RainwaveSong
+
 
 class RainwaveArtist(dict):
     """A :class:`RainwaveArtist` object represents one artist.
@@ -14,14 +14,14 @@ class RainwaveArtist(dict):
         :attr:`RainwaveSong.artists`.
     """
 
-    def __init__(self, channel, raw_info):
+    def __init__(self, channel: 'RainwaveChannel', raw_info: dict):
         self._channel = channel
         super(RainwaveArtist, self).__init__(raw_info)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<RainwaveArtist [{self}]>'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
     @property
@@ -45,7 +45,7 @@ class RainwaveArtist(dict):
         return len(self.songs)
 
     @property
-    def songs(self) -> List['RainwaveSong']:
+    def songs(self) -> list['RainwaveSong']:
         """A list of :class:`RainwaveSong` objects attributed to the artist."""
         if 'song_objects' not in self:
             self['song_objects'] = []

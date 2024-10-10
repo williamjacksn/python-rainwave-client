@@ -2,7 +2,6 @@ import json
 import logging
 import uuid
 
-from typing import List
 from urllib.error import HTTPError
 from urllib.request import urlopen, Request
 from urllib.parse import urlencode
@@ -86,7 +85,7 @@ class RainwaveClient:
         return api_response
 
     @property
-    def channels(self) -> List[RainwaveChannel]:
+    def channels(self) -> list[RainwaveChannel]:
         """A list of :class:`RainwaveChannel` objects associated with this
         :class:`RainwaveClient` object."""
 

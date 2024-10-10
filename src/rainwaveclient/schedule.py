@@ -1,11 +1,10 @@
 import datetime
+import typing
 
-from typing import List, TYPE_CHECKING
+from .song import RainwaveCandidate
 
-from .song import RainwaveCandidate, RainwaveSong
-
-if TYPE_CHECKING:
-    from .channel import RainwaveChannel
+if typing.TYPE_CHECKING:
+    from . import RainwaveChannel, RainwaveSong
 
 
 class RainwaveSchedule(dict):
@@ -19,17 +18,17 @@ class RainwaveSchedule(dict):
         :attr:`RainwaveChannel.schedule_history`.
     """
 
-    def __init__(self, channel, raw_info):
+    def __init__(self, channel: 'RainwaveChannel', raw_info: dict):
         self._channel = channel
         super(RainwaveSchedule, self).__init__(raw_info)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return self['length']
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<RainwaveSchedule [{self.channel.name}]>'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return repr(self)
 
     @property
@@ -73,11 +72,11 @@ class RainwaveElection(RainwaveSchedule):
     """A :class:`RainwaveElection` object is a subclass of
     :class:`RainwaveSchedule` and represents an election event on a channel."""
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<RainwaveElection [{self.channel.name}]>'
 
     @property
-    def candidates(self) -> List[RainwaveCandidate]:
+    def candidates(self) -> list['RainwaveCandidate']:
         """A list of :class:`RainwaveCandidate` objects in the election."""
         if 'candidate_objects' not in self:
             self['candidate_objects'] = []
@@ -88,14 +87,14 @@ class RainwaveElection(RainwaveSchedule):
         return self['candidate_objects']
 
     @property
-    def song(self) -> RainwaveCandidate:
+    def song(self) -> 'RainwaveCandidate':
         """The first :class:`RainwaveCandidate` object in the list of
         candidates. If the :class:`RainwaveElection` event has already closed,
         this is the song that won the election."""
         return self.candidates[0]
 
     @property
-    def songs(self) -> List[RainwaveCandidate]:
+    def songs(self) -> list['RainwaveCandidate']:
         """See :attr:`candidates`."""
         return self.candidates
 
@@ -105,7 +104,7 @@ class RainwaveOneTimePlay(RainwaveSchedule):
     :class:`RainwaveSchedule` and represents a song added directly to the
     timeline by a manager."""
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<RainwaveOneTimePlay [{self.channel.name}]>'
 
     @property
@@ -115,13 +114,13 @@ class RainwaveOneTimePlay(RainwaveSchedule):
         return f'{_name} Power Hour'
 
     @property
-    def song(self) -> RainwaveSong:
+    def song(self) -> 'RainwaveSong':
         """The :class:`RainwaveSong` for the event."""
         album_id = self['songs'][0]['albums'][0]['id']
         tmp_album = self.channel.get_album_by_id(album_id)
         return RainwaveSong(tmp_album, self['songs'][0])
 
     @property
-    def songs(self) -> List[RainwaveSong]:
+    def songs(self) -> list['RainwaveSong']:
         """A list containing the :class:`RainwaveSong` for the event."""
         return [self.song]

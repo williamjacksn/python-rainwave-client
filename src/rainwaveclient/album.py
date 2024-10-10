@@ -1,14 +1,10 @@
 import datetime
+import typing
 
-from typing import Dict, List, TYPE_CHECKING
+from .category import RainwaveCategory
 
-from . import category
-
-if TYPE_CHECKING:
-    from .category import RainwaveCategory
-    from .channel import RainwaveChannel
-    from .song import RainwaveSong
-
+if typing.TYPE_CHECKING:
+    from . import RainwaveChannel, RainwaveSong
 
 class RainwaveAlbum(dict):
     """A :class:`RainwaveAlbum` object represents one album.
@@ -48,7 +44,7 @@ class RainwaveAlbum(dict):
         return datetime.datetime.fromtimestamp(self['added_on'], datetime.timezone.utc)
 
     @property
-    def categories(self) -> List['RainwaveCategory']:
+    def categories(self) -> list['RainwaveCategory']:
         """A list of :class:`RainwaveCategory` objects representing the
         categories the songs on the album belong to."""
         if 'category_objects' not in self:
@@ -58,7 +54,7 @@ class RainwaveAlbum(dict):
             for raw_cat in self['genres']:
                 category_id = raw_cat['id']
                 name = raw_cat['name']
-                cat = category.RainwaveCategory(self.channel, category_id, name)
+                cat = RainwaveCategory(self.channel, category_id, name)
                 self['category_objects'].append(cat)
         return self['category_objects']
 
@@ -152,7 +148,7 @@ class RainwaveAlbum(dict):
         return self['rating_count']
 
     @property
-    def rating_histogram(self) -> Dict[str, int]:
+    def rating_histogram(self) -> dict[str, int]:
         """A dictionary representing the distribution of ratings given to all
         songs on the album by all listeners. For example::
 
@@ -194,7 +190,7 @@ class RainwaveAlbum(dict):
         return self['request_rank']
 
     @property
-    def songs(self) -> List['RainwaveSong']:
+    def songs(self) -> list['RainwaveSong']:
         """A list of :class:`RainwaveSong` objects on the album."""
         if 'song_objects' not in self:
             self['song_objects'] = []

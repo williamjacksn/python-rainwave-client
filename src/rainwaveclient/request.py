@@ -1,9 +1,9 @@
-from typing import List, TYPE_CHECKING
+import typing
 
 from .song import RainwaveSong
 
-if TYPE_CHECKING:
-    from .listener import RainwaveListener
+if typing.TYPE_CHECKING:
+    from . import RainwaveListener
 
 
 class RainwaveRequest(RainwaveSong):
@@ -11,12 +11,12 @@ class RainwaveRequest(RainwaveSong):
     representing a song that has been requested to play on the radio."""
 
     @classmethod
-    def request_from_song(cls, _song, requester):
+    def request_from_song(cls, _song: RainwaveSong, requester: 'RainwaveListener'):
         request = cls(_song.album, dict(_song.items()))
         request['requester'] = requester
         return request
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<RainwaveRequest [{self}]>'
 
     @property
@@ -30,7 +30,7 @@ class RainwaveUserRequest(RainwaveSong):
     :class:`RainwaveSong` representing a song in the authenticating listener's
     requests queue."""
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<RainwaveUserRequest [{self}]>'
 
     @property
@@ -70,7 +70,7 @@ class RainwaveUserRequestQueue(list):
         """Clear all requests from the queue."""
         self._channel.clear_requests()
 
-    def reorder(self, order: List[int]):
+    def reorder(self, order: list[int]):
         """Change the order of the requests in the queue.
 
         :param order: the indices of the requests in the new order.

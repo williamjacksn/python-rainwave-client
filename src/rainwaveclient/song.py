@@ -1,12 +1,10 @@
-from typing import Dict, List, TYPE_CHECKING
+import typing
 
 from .category import RainwaveCategory
 
-if TYPE_CHECKING:
-    from .album import RainwaveAlbum
-    from .artist import RainwaveArtist
-    from .listener import RainwaveListener
-    from .schedule import RainwaveElection
+if typing.TYPE_CHECKING:
+    from . import RainwaveAlbum, RainwaveArtist, RainwaveElection, RainwaveListener
+
 
 class RainwaveSong(dict):
     """A :class:`RainwaveSong` object represents one song.
@@ -18,17 +16,17 @@ class RainwaveSong(dict):
         :attr:`RainwaveArtist.songs`, or some other object.
     """
 
-    def __init__(self, album: 'RainwaveAlbum', raw_info: Dict):
+    def __init__(self, album: 'RainwaveAlbum', raw_info: dict):
         self._album = album
         super(RainwaveSong, self).__init__(raw_info)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return self['length']
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<RainwaveSong [{self}]>'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'{self.album} // {self.title} // {self.artist_string}'
 
     @property
@@ -42,7 +40,7 @@ class RainwaveSong(dict):
         return ', '.join([artist.name for artist in self.artists])
 
     @property
-    def artists(self) -> List['RainwaveArtist']:
+    def artists(self) -> list['RainwaveArtist']:
         """A list of :class:`RainwaveArtist` objects the song is attributed to."""
         if 'artist_objects' not in self:
             self['artist_objects'] = []
@@ -63,7 +61,7 @@ class RainwaveSong(dict):
         return not self.cool
 
     @property
-    def categories(self) -> List['RainwaveCategory']:
+    def categories(self) -> list['RainwaveCategory']:
         """A list of :class:`RainwaveCategory` objects representing the
         categories the song belongs to."""
         if 'category_objects' not in self:
@@ -95,7 +93,7 @@ class RainwaveSong(dict):
         return self['fave']
 
     @fave.setter
-    def fave(self, value):
+    def fave(self, value: bool):
         value = bool(value)
         if value == self.fave:
             return
@@ -140,7 +138,7 @@ class RainwaveSong(dict):
         return self['rating_user']
 
     @rating.setter
-    def rating(self, value):
+    def rating(self, value: float):
         if self.rating == value:
             return
         d = self.album.channel.rate(self.id, value)
@@ -174,7 +172,7 @@ class RainwaveSong(dict):
         return self['rating_count']
 
     @property
-    def rating_histogram(self) -> Dict[str, int]:
+    def rating_histogram(self) -> dict[str, int]:
         """A dictionary representing the distribution of ratings given to the
         song by all listeners. For example::
 
@@ -232,11 +230,11 @@ class RainwaveCandidate(RainwaveSong):
     :class:`RainwaveSong` representing a song that is a candidate in an
     election."""
 
-    def __init__(self, album: 'RainwaveAlbum', election: 'RainwaveElection', raw_info: Dict):
+    def __init__(self, album: 'RainwaveAlbum', election: 'RainwaveElection', raw_info: dict):
         super(RainwaveCandidate, self).__init__(album, raw_info)
         self.election = election
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'<RainwaveCandidate [{self}]>'
 
     @property
