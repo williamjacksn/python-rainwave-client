@@ -28,7 +28,11 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
+          cache: 'pip'
           python-version: ${{ matrix.python_version }}
+
+      - name: Install requirements
+        run: pip install notch
 
       - name: Run tests
         run: python tests.py
