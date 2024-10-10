@@ -36,7 +36,7 @@ services:
 
   shell:
     entrypoint:
-      - /bin/sh
+      - /bin/bash
     image: ghcr.io/williamjacksn/python-rainwave-client-helper
     init: true
     volumes:
