@@ -33,7 +33,10 @@ class RainwaveChannel(dict):
 
     def __init__(self, client: 'RainwaveClient', raw_info: dict):
         self._client = client
-        super(RainwaveChannel, self).__init__(raw_info)
+        try:
+            super(RainwaveChannel, self).__init__(raw_info)
+        except ValueError:
+            raise Exception(f'Cannot create channel from raw_info {raw_info!r}')
         self._do_sync = False
         self._sync_thread = None
 
