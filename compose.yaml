@@ -51,7 +51,7 @@ services:
       PYTHONDONTWRITEBYTECODE: 1
       RW_KEY:
       RW_USER_ID:
-    image: python:3.8-slim
+    image: python:3.9-slim
     init: true
     volumes:
       - ./:/home/python/python-rainwave-client
