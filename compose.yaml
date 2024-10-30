@@ -23,6 +23,15 @@ services:
       - ./:/home/python/python-rainwave-client
     working_dir: /home/python/python-rainwave-client
 
+  pip-compile:
+    entrypoint:
+      - /home/python/venv/bin/pip-compile
+    image: ghcr.io/williamjacksn/pip-tools:py3.12
+    init: true
+    volumes:
+      - ./:/home/python/python-rainwave-client
+    working_dir: /home/python/python-rainwave-client
+
   py-build:
     entrypoint:
       - /home/python/venv/bin/python
