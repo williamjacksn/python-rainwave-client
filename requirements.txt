@@ -10,7 +10,7 @@ babel==2.16.0
     # via sphinx
 build==1.2.2.post1
     # via -r requirements.in
-certifi==2024.8.30
+certifi==2024.12.14
     # via requests
 charset-normalizer==3.4.0
     # via requests
