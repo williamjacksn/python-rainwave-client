@@ -515,21 +515,23 @@ class TestRainwaveUserRequest(unittest.TestCase):
 
     rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
     chan = rw.channels[4]
+    album = chan.albums[sys.version_info.minor]
+    song = album.songs[0]
 
     @classmethod
     def setUpClass(cls):
-        urq = cls.chan.user_requests
-        urq.clear()
-        for alb in cls.chan.albums:
-            for song in alb.songs:
-                if song.cool:
-                    song.request()
-                    return
+        in_urq = False
+        for ur in cls.chan.user_requests:
+            if ur.id == cls.song.id:
+                in_urq = True
+        if not in_urq:
+            cls.song.request()
 
     @classmethod
     def tearDownClass(cls):
-        urq = cls.chan.user_requests
-        urq.clear()
+        for ur in cls.chan.user_requests:
+            if ur.id == cls.song.id:
+                ur.delete()
 
     def test_repr(self):
         urq = self.chan.user_requests
@@ -547,13 +549,6 @@ class TestRainwaveUserRequest(unittest.TestCase):
         indices = list(range(len(urq)))
         random.shuffle(indices)
         urq.reorder(indices)
-
-    def test_request_delete(self):
-        song = self.chan.albums[sys.version_info.minor].songs[0]
-        song.request()
-        for ur in self.chan.user_requests:
-            if ur.id == song.id:
-                ur.delete()
 
 
 class TestRainwaveSchedule(unittest.TestCase):
