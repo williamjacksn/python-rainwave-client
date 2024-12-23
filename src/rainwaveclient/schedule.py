@@ -1,10 +1,10 @@
 import datetime
 import typing
 
-from .song import RainwaveCandidate
+from .song import RainwaveCandidate, RainwaveSong
 
 if typing.TYPE_CHECKING:
-    from . import RainwaveChannel, RainwaveSong
+    from . import RainwaveChannel
 
 
 class RainwaveSchedule(dict):
@@ -119,13 +119,13 @@ class RainwaveOneTimePlay(RainwaveSchedule):
         return f'{_name} Power Hour'
 
     @property
-    def song(self) -> 'RainwaveSong':
+    def song(self) -> RainwaveSong:
         """The :class:`RainwaveSong` for the event."""
         album_id = self['songs'][0]['albums'][0]['id']
         tmp_album = self.channel.get_album_by_id(album_id)
         return RainwaveSong(tmp_album, self['songs'][0])
 
     @property
-    def songs(self) -> list['RainwaveSong']:
+    def songs(self) -> list[RainwaveSong]:
         """A list containing the :class:`RainwaveSong` for the event."""
         return [self.song]
