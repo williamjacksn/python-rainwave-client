@@ -8,11 +8,11 @@ from .artist import RainwaveArtist
 from .dispatch import Signal
 from .listener import RainwaveListener
 from .request import RainwaveRequest, RainwaveUserRequest, RainwaveUserRequestQueue
-from .schedule import RainwaveElection
+from .schedule import RainwaveElection, RainwaveOneTimePlay
 from .song import RainwaveSong
 
 if typing.TYPE_CHECKING:
-    from . import RainwaveClient, RainwaveOneTimePlay, RainwaveSchedule
+    from . import RainwaveClient, RainwaveSchedule
 
 
 pre_sync = Signal()
