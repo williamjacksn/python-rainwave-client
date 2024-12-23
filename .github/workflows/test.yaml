@@ -37,5 +37,6 @@ jobs:
       - name: Run tests
         run: python tests.py
         env:
+          LOG_LEVEL: DEBUG
           RW_KEY: ${{ secrets.rw_key }}
           RW_USER_ID: ${{ vars.rw_user_id }}
