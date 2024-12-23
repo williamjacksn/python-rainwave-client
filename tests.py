@@ -1,10 +1,14 @@
 import datetime
+import logging
+import notch
 import os
 import random
 import sys
 import unittest
 
 from src import rainwaveclient
+
+log = logging.getLogger(__name__)
 
 
 if 'RW_USER_ID' in os.environ:
@@ -583,6 +587,7 @@ class TestRainwaveSchedule(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    notch.make_log('rainwave-client-testing')
     ver = sys.version_info
-    print(f'Testing on Python {ver.major}.{ver.minor}.{ver.micro}')
+    log.info(f'Testing on Python {ver.major}.{ver.minor}.{ver.micro}')
     unittest.main()
