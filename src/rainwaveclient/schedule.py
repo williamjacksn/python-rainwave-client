@@ -67,6 +67,11 @@ class RainwaveSchedule(dict):
         if self['start_actual'] is not None:
             return datetime.datetime.fromtimestamp(self['start_actual'], datetime.timezone.utc)
 
+    @property
+    def type(self) -> str:
+        """The type of event (e.g. `Election` or `OneUp`)."""
+        return self['type']
+
 
 class RainwaveElection(RainwaveSchedule):
     """A :class:`RainwaveElection` object is a subclass of
