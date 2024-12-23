@@ -482,9 +482,11 @@ class TestRainwaveCandidate(unittest.TestCase):
     def setUpClass(cls):
         cls.rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
         cls.sched_next = cls.rw.channels[4].schedule_next[0]
-        if cls.sched_next.type == 'OneUp':
-            cls.skipTest('Next event is not an election')
-        cls.cand = cls.sched_next.candidates[0]
+
+    def setUp(self):
+        if self.sched_next.type == 'OneUp':
+            self.skipTest('Next event is not an election')
+        self.cand = self.sched_next.candidates[0]
 
     def test_repr(self):
         self.assertTrue(repr(self.cand).startswith('<RainwaveCandidate '))
