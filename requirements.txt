@@ -40,7 +40,7 @@ roman-numerals-py==3.0.0
     # via sphinx
 snowballstemmer==2.2.0
     # via sphinx
-sphinx==8.2.0
+sphinx==8.2.1
     # via
     #   -r requirements.in
     #   sphinx-rtd-theme
