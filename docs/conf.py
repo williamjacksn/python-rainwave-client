@@ -91,3 +91,7 @@ html_show_sphinx = False
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'python_rainwave_client_doc'
+
+# Workaround for https://github.com/readthedocs/sphinx_rtd_theme/issues/1301
+html_static_path = ['_static']
+html_css_files = ['custom.css']
