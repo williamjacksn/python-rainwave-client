@@ -413,59 +413,59 @@ class TestRainwaveArtist(unittest.TestCase):
 
 class TestRainwaveListener(unittest.TestCase):
     rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
-    l = rw.channels[4].get_listener_by_id(3)
+    listener = rw.channels[4].get_listener_by_id(3)
 
     def test_avatar(self):
         _avatar = "https://cdn.discordapp.com/avatars/137745037898416129/81fb3f1e8ee75ec0e18855b630829440.png?size=320"
-        self.assertEqual(self.l.avatar, _avatar)
+        self.assertEqual(self.listener.avatar, _avatar)
 
     def test_color(self):
-        self.assertEqual(self.l.color, "FF0000")
+        self.assertEqual(self.listener.color, "FF0000")
 
     def test_colour(self):
-        self.assertEqual(self.l.colour, "FF0000")
+        self.assertEqual(self.listener.colour, "FF0000")
 
     def test_id(self):
-        self.assertEqual(self.l.id, 3)
+        self.assertEqual(self.listener.id, 3)
 
     def test_losing_requests(self):
-        self.assertEqual(self.l.losing_requests, 0)
+        self.assertEqual(self.listener.losing_requests, 0)
 
     def test_losing_votes(self):
-        self.assertEqual(self.l.losing_votes, 0)
+        self.assertEqual(self.listener.losing_votes, 0)
 
     def test_mind_changes(self):
-        self.assertEqual(self.l.mind_changes, 0)
+        self.assertEqual(self.listener.mind_changes, 0)
 
     def test_name(self):
-        self.assertEqual(self.l.name, "William")
+        self.assertEqual(self.listener.name, "William")
 
     def test_rank(self):
-        self.assertEqual(self.l.rank, "Mister Three")
+        self.assertEqual(self.listener.rank, "Mister Three")
 
     def test_repr(self):
-        self.assertEqual(repr(self.l), "<RainwaveListener [William]>")
+        self.assertEqual(repr(self.listener), "<RainwaveListener [William]>")
 
     def test_str(self):
-        self.assertEqual(str(self.l), "William")
+        self.assertEqual(str(self.listener), "William")
 
     def test_total_ratings(self):
-        self.assertEqual(self.l.total_ratings, 0)
+        self.assertEqual(self.listener.total_ratings, 0)
 
     def test_total_requests(self):
-        self.assertEqual(self.l.total_requests, 0)
+        self.assertEqual(self.listener.total_requests, 0)
 
     def test_total_votes(self):
-        self.assertEqual(self.l.total_votes, 0)
+        self.assertEqual(self.listener.total_votes, 0)
 
     def test_user_id(self):
-        self.assertEqual(self.l.user_id, 3)
+        self.assertEqual(self.listener.user_id, 3)
 
     def test_winning_requests(self):
-        self.assertEqual(self.l.winning_requests, 0)
+        self.assertEqual(self.listener.winning_requests, 0)
 
     def test_winning_votes(self):
-        self.assertEqual(self.l.winning_votes, 0)
+        self.assertEqual(self.listener.winning_votes, 0)
 
 
 class TestRainwaveRequest(unittest.TestCase):
