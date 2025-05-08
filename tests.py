@@ -594,7 +594,7 @@ class TestRainwaveSchedule(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    notch.make_log("rainwave-client-testing")
+    notch.configure()
     ver = sys.version_info
     log.info(f"Testing on Python {ver.major}.{ver.minor}.{ver.micro}")
     unittest.main()
