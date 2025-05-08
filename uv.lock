@@ -253,6 +253,15 @@ wheels = [
 ]
 
 [[package]]
+name = "notch"
+version = "2025.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/89/e4/b468a58c6be0c77585b51136d1bb9a978753f677e38e1e182d9ac0e42ef1/notch-2025.2.tar.gz", hash = "sha256:fedbe3d8bbaf41bf60e363b5957cf3e7734d9d5534816f04b538bbf81b0a60c0", size = 3463, upload-time = "2025-04-28T17:25:30.288Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c2/11/ef4257cbf5315308d72cf718524f566685c503493cef40ae3926f222e650/notch-2025.2-py3-none-any.whl", hash = "sha256:b8cf6d787a78b63060f8900000e45dd0247759849188ff4bfc55f06077e33614", size = 3675, upload-time = "2025-04-28T17:25:29.212Z" },
+]
+
+[[package]]
 name = "packaging"
 version = "25.0"
 source = { registry = "https://pypi.org/simple" }
@@ -276,6 +285,7 @@ source = { editable = "." }
 
 [package.dev-dependencies]
 dev = [
+    { name = "notch" },
     { name = "sphinx", version = "7.4.7", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
     { name = "sphinx", version = "8.1.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.10.*'" },
     { name = "sphinx", version = "8.2.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
@@ -286,6 +296,7 @@ dev = [
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "notch", specifier = ">=2025.2" },
     { name = "sphinx", specifier = ">=7.4.7" },
     { name = "sphinx-rtd-theme", specifier = ">=3.0.2" },
 ]

@@ -25,17 +25,12 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          cache: 'pip'
-          python-version: ${{ matrix.python_version }}
-
-      - name: Install requirements
-        run: pip install notch
-
+      - name: Install uv
+        run: sh ci/install-uv.sh
+      
       - name: Run tests
-        run: python tests.py
+        run: sh ci/test.sh
         env:
+          PYTHON_VERSION: ${{ matrix.python_version }}
           RW_KEY: ${{ secrets.rw_key }}
           RW_USER_ID: ${{ vars.rw_user_id }}
