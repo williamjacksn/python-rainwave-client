@@ -10,10 +10,10 @@ name = "python-rainwave-client"
 description = "Python client library for Rainwave"
 readme = "README.md"
 requires-python = ">=3.9"
+license = "MIT"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Programming Language :: Python :: 3",
     "Topic :: Software Development :: Libraries",
@@ -26,9 +26,6 @@ dynamic = [
 [[project.authors]]
 name = "William Jackson"
 email = "william@subtlecoolness.com"
-
-[project.license]
-file = "LICENSE"
 
 [project.urls]
 "Documentation" = "https://python-rainwave-client.subtlecoolness.com/"
