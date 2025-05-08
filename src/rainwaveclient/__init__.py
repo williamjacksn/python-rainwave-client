@@ -1,11 +1,3 @@
-__setup_name__ = "python-rainwave-client"
-__version__ = "2024.3"
-__author__ = "William Jackson"
-__author_email__ = "william@subtlecoolness.com"
-__url__ = "https://github.com/williamjacksn/python-rainwave-client"
-__description__ = "Python client library for Rainwave"
-__keywords__ = "rainwave client"
-
 from .client import RainwaveClient
 from .channel import RainwaveChannel
 from .album import RainwaveAlbum
