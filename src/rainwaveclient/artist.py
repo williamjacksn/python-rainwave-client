@@ -14,30 +14,30 @@ class RainwaveArtist(dict):
         :attr:`RainwaveSong.artists`.
     """
 
-    def __init__(self, channel: 'RainwaveChannel', raw_info: dict):
+    def __init__(self, channel: "RainwaveChannel", raw_info: dict):
         self._channel = channel
         super(RainwaveArtist, self).__init__(raw_info)
 
     def __repr__(self) -> str:
-        return f'<RainwaveArtist [{self}]>'
+        return f"<RainwaveArtist [{self}]>"
 
     def __str__(self) -> str:
         return self.name
 
     @property
-    def channel(self) -> 'RainwaveChannel':
+    def channel(self) -> "RainwaveChannel":
         """The :class:`RainwaveChannel` object associated with the artist."""
         return self._channel
 
     @property
     def id(self) -> int:
         """The ID of the artist."""
-        return self['id']
+        return self["id"]
 
     @property
     def name(self) -> str:
         """The name of the artist."""
-        return self['name']
+        return self["name"]
 
     @property
     def song_count(self) -> int:
@@ -45,13 +45,13 @@ class RainwaveArtist(dict):
         return len(self.songs)
 
     @property
-    def songs(self) -> list['RainwaveSong']:
+    def songs(self) -> list["RainwaveSong"]:
         """A list of :class:`RainwaveSong` objects attributed to the artist."""
-        if 'song_objects' not in self:
-            self['song_objects'] = []
-            for chan_id, albums in self['all_songs'].items():
+        if "song_objects" not in self:
+            self["song_objects"] = []
+            for chan_id, albums in self["all_songs"].items():
                 for album_id, album_songs in albums.items():
                     for raw_song in album_songs:
-                        song = self.channel.get_song_by_id(raw_song['id'])
-                        self['song_objects'].append(song)
-        return self['song_objects']
+                        song = self.channel.get_song_by_id(raw_song["id"])
+                        self["song_objects"].append(song)
+        return self["song_objects"]

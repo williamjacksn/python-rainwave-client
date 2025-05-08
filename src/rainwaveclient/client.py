@@ -22,10 +22,10 @@ class RainwaveClient:
     """
 
     #: The URL upon which all API calls are based.
-    base_url = 'https://rainwave.cc/api4/'
+    base_url = "https://rainwave.cc/api4/"
 
     #: The format string used to build canonical album art URLs.
-    art_fmt = 'https://rainwave.cc{0}_320.jpg'
+    art_fmt = "https://rainwave.cc{0}_320.jpg"
 
     def __init__(self, user_id: int = None, key: str = None):
         if user_id is not None:
@@ -37,9 +37,9 @@ class RainwaveClient:
         self.user_agent = uuid.uuid4().hex
 
     def __repr__(self) -> str:
-        return f'RainwaveClient(user_id={self.user_id!r}, key={self.key!r})'
+        return f"RainwaveClient(user_id={self.user_id!r}, key={self.key!r})"
 
-    def call(self, path: str, args: dict = None, method: str = 'POST') -> dict:
+    def call(self, path: str, args: dict = None, method: str = "POST") -> dict:
         # noinspection PyUnresolvedReferences
         """Make a direct call to the API if you know the necessary path and
         arguments.
@@ -61,25 +61,25 @@ class RainwaveClient:
           {'album': {'name': 'Bravely Default: Flying Fairy', ...}}
         """
 
-        path = path.lstrip('/')
-        url = f'{self.base_url}{path}'
+        path = path.lstrip("/")
+        url = f"{self.base_url}{path}"
 
         if args is None:
             args = {}
-        if 'user_id' not in args and self.user_id:
-            args['user_id'] = self.user_id
-        if 'key' not in args and self.key:
-            args['key'] = self.key
+        if "user_id" not in args and self.user_id:
+            args["user_id"] = self.user_id
+        if "key" not in args and self.key:
+            args["key"] = self.key
 
         data = urlencode(args).encode()
-        headers = {'user-agent': self.user_agent}
+        headers = {"user-agent": self.user_agent}
         req = Request(url=url, data=data, headers=headers, method=method)
         try:
-            log.debug(f'Calling {url}')
+            log.debug(f"Calling {url}")
             response = urlopen(req)
         except HTTPError as e:
             response = e
-        body = response.read().decode(encoding='utf-8')
+        body = response.read().decode(encoding="utf-8")
         api_response = json.loads(body)
         log.debug(api_response)
         return api_response
@@ -90,9 +90,9 @@ class RainwaveClient:
         :class:`RainwaveClient` object."""
 
         if self._raw_channels is None:
-            d = self.call('stations')
-            if 'stations' in d:
-                self._raw_channels = d['stations']
+            d = self.call("stations")
+            if "stations" in d:
+                self._raw_channels = d["stations"]
             else:
                 raise Exception
 

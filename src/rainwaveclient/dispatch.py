@@ -49,4 +49,5 @@ def receiver(signal, **kwargs):
 
     def decorator(func):
         signal.connect(func, **kwargs)
+
     return decorator

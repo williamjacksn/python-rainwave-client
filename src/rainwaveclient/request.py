@@ -11,18 +11,18 @@ class RainwaveRequest(RainwaveSong):
     representing a song that has been requested to play on the radio."""
 
     @classmethod
-    def request_from_song(cls, _song: RainwaveSong, requester: 'RainwaveListener'):
+    def request_from_song(cls, _song: RainwaveSong, requester: "RainwaveListener"):
         request = cls(_song.album, dict(_song.items()))
-        request['requester'] = requester
+        request["requester"] = requester
         return request
 
     def __repr__(self) -> str:
-        return f'<RainwaveRequest [{self}]>'
+        return f"<RainwaveRequest [{self}]>"
 
     @property
-    def requester(self) -> 'RainwaveListener':
+    def requester(self) -> "RainwaveListener":
         """The :class:`RainwaveListener` who made the request."""
-        return self['requester']
+        return self["requester"]
 
 
 class RainwaveUserRequest(RainwaveSong):
@@ -31,7 +31,7 @@ class RainwaveUserRequest(RainwaveSong):
     requests queue."""
 
     def __repr__(self) -> str:
-        return f'<RainwaveUserRequest [{self}]>'
+        return f"<RainwaveUserRequest [{self}]>"
 
     @property
     def blocked(self) -> bool:
@@ -44,13 +44,13 @@ class RainwaveUserRequest(RainwaveSong):
     def blocked_by_album(self) -> bool:
         """``True`` if the request is currently blocked because a song from the
         same album is in an election."""
-        return self['elec_blocked_by'] == 'album'
+        return self["elec_blocked_by"] == "album"
 
     @property
     def blocked_by_category(self) -> bool:
         """``True`` if the request is currently blocked because a song from the
         same category is in an election."""
-        return self['elec_blocked_by'] == 'group'
+        return self["elec_blocked_by"] == "group"
 
     def delete(self):
         """Remove the requested song from the authenticating listener's request
@@ -99,8 +99,8 @@ class RainwaveUserRequestQueue(list):
         """
 
         if set(order) != set(range(len(self))):
-            raise Exception('Incorrect indices.')
+            raise Exception("Incorrect indices.")
         if len(order) != len(set(order)):
-            raise Exception('Wrong number of indices.')
-        song_ids = ','.join([str(self[i].id) for i in order])
+            raise Exception("Wrong number of indices.")
+        song_ids = ",".join([str(self[i].id) for i in order])
         self._channel.reorder_requests(song_ids)
