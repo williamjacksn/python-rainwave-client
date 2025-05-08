@@ -1,7 +1,0 @@
-.idea
-__pycache__
-compose.override.yaml
-dist
-html
-http-client.private.env.json
-python_rainwave_client.egg-info

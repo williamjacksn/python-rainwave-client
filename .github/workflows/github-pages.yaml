@@ -28,8 +28,11 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
+      - name: Install uv
+        run: sh ci/install-uv.sh
+
       - name: Build documentation
-        run: docker compose run --no-TTY --user="$(id -u):$(id -g)" docs-build
+        run: sh ci/build-docs.sh
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

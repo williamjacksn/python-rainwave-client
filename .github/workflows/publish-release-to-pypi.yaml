@@ -20,8 +20,11 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v4
 
+      - name: Install uv
+        run: sh ci/install-uv.sh
+
       - name: Build the package
-        run: docker compose run --no-TTY --user="$(id -u):$(id -g)" py-build
+        run: sh ci/build.sh
 
       - name: Publish the package to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+        run: sh ci/publish.sh

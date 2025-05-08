@@ -1,10 +1,10 @@
-__setup_name__ = 'python-rainwave-client'
-__version__ = '2024.3'
-__author__ = 'William Jackson'
-__author_email__ = 'william@subtlecoolness.com'
-__url__ = 'https://github.com/williamjacksn/python-rainwave-client'
-__description__ = 'Python client library for Rainwave'
-__keywords__ = 'rainwave client'
+__setup_name__ = "python-rainwave-client"
+__version__ = "2024.3"
+__author__ = "William Jackson"
+__author_email__ = "william@subtlecoolness.com"
+__url__ = "https://github.com/williamjacksn/python-rainwave-client"
+__description__ = "Python client library for Rainwave"
+__keywords__ = "rainwave client"
 
 from .client import RainwaveClient
 from .channel import RainwaveChannel
@@ -16,3 +16,20 @@ from .song import RainwaveSong, RainwaveCandidate
 from .request import RainwaveRequest, RainwaveUserRequest
 from .request import RainwaveUserRequestQueue
 from .listener import RainwaveListener
+
+__all__ = [
+    RainwaveAlbum,
+    RainwaveArtist,
+    RainwaveCandidate,
+    RainwaveCategory,
+    RainwaveChannel,
+    RainwaveClient,
+    RainwaveElection,
+    RainwaveListener,
+    RainwaveOneTimePlay,
+    RainwaveRequest,
+    RainwaveSchedule,
+    RainwaveSong,
+    RainwaveUserRequest,
+    RainwaveUserRequestQueue,
+]
