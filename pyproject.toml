@@ -34,3 +34,9 @@ email = "william@subtlecoolness.com"
 
 [tool.setuptools.dynamic]
 version.attr = "rainwaveclient.__version__"
+
+[dependency-groups]
+dev = [
+    "sphinx>=7.4.7",
+    "sphinx-rtd-theme>=3.0.2",
+]
