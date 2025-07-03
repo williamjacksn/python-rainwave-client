@@ -1,6 +1,9 @@
 [build-system]
-requires = ["setuptools>=77.0.3"]
-build-backend = "setuptools.build_meta"
+build-backend = "uv_build"
+requires = ["uv_build>=0.7.19,<0.8.0"]
+
+[tool.uv.build-backend]
+module-name = "rainwaveclient"
 
 [project]
 name = "python-rainwave-client"
