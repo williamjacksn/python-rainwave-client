@@ -33,6 +33,7 @@ email = "william@subtlecoolness.com"
 [dependency-groups]
 dev = [
     "notch>=2025.2",
+    "ruff>=0.14.6",
     "sphinx>=7.4.7",
     "sphinx-rtd-theme>=3.0.2",
     "uv-build>=0.9.11",
