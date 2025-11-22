@@ -10,9 +10,9 @@ class RainwaveListener(dict):
     #: The :class:`RainwaveChannel` the listener belongs to.
     channel: "RainwaveChannel" = None
 
-    def __init__(self, channel: "RainwaveChannel", raw_info: dict):
+    def __init__(self, channel: "RainwaveChannel", raw_info: dict) -> None:
         self.channel = channel
-        super(RainwaveListener, self).__init__(raw_info)
+        super().__init__(raw_info)
 
     def __repr__(self) -> str:
         return f"<RainwaveListener [{self}]>"

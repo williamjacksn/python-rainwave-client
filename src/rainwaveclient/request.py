@@ -3,7 +3,7 @@ import typing
 from .song import RainwaveSong
 
 if typing.TYPE_CHECKING:
-    from . import RainwaveListener
+    from . import RainwaveChannel, RainwaveListener
 
 
 class RainwaveRequest(RainwaveSong):
@@ -11,7 +11,9 @@ class RainwaveRequest(RainwaveSong):
     representing a song that has been requested to play on the radio."""
 
     @classmethod
-    def request_from_song(cls, _song: RainwaveSong, requester: "RainwaveListener"):
+    def request_from_song(
+        cls, _song: RainwaveSong, requester: "RainwaveListener"
+    ) -> "RainwaveRequest":
         request = cls(_song.album, dict(_song.items()))
         request["requester"] = requester
         return request
@@ -52,7 +54,7 @@ class RainwaveUserRequest(RainwaveSong):
         same category is in an election."""
         return self["elec_blocked_by"] == "group"
 
-    def delete(self):
+    def delete(self) -> None:
         """Remove the requested song from the authenticating listener's request
         queue."""
         self.album.channel.delete_request(self.id)
@@ -62,15 +64,15 @@ class RainwaveUserRequestQueue(list):
     """A :class:`RainwaveUserRequestQueue` is a list-like object that supports
     explicit reordering."""
 
-    def __init__(self, channel):
+    def __init__(self, channel: "RainwaveChannel") -> None:
         self._channel = channel
-        super(RainwaveUserRequestQueue, self).__init__()
+        super().__init__()
 
-    def clear(self):
+    def clear(self) -> None:
         """Clear all requests from the queue."""
         self._channel.clear_requests()
 
-    def reorder(self, order: list[int]):
+    def reorder(self, order: list[int]) -> None:
         """Change the order of the requests in the queue.
 
         :param order: the indices of the requests in the new order.

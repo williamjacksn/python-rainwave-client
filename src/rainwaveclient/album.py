@@ -16,9 +16,9 @@ class RainwaveAlbum(dict):
         obtain one from :attr:`RainwaveChannel.albums`.
     """
 
-    def __init__(self, channel: "RainwaveChannel", raw_info: dict):
+    def __init__(self, channel: "RainwaveChannel", raw_info: dict) -> None:
         self._channel = channel
-        super(RainwaveAlbum, self).__init__(raw_info)
+        super().__init__(raw_info)
 
     def __repr__(self) -> str:
         return f"<RainwaveAlbum [{self.channel.name} // {self.name}]>"
@@ -26,7 +26,7 @@ class RainwaveAlbum(dict):
     def __str__(self) -> str:
         return f"{self.channel.name} // {self.name}"
 
-    def _update(self):
+    def _update(self) -> None:
         self.update(self.channel.get_album_by_id(self.id))
 
     @property
@@ -89,7 +89,7 @@ class RainwaveAlbum(dict):
         return self.get("fave", False)
 
     @fave.setter
-    def fave(self, value: bool):
+    def fave(self, value: bool) -> None:
         value = bool(value)
         if value == self.fave:
             return

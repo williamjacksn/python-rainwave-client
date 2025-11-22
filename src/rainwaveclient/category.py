@@ -5,7 +5,7 @@ if typing.TYPE_CHECKING:
 
 
 class RainwaveCategory:
-    def __init__(self, channel: "RainwaveChannel", category_id: int, name: str):
+    def __init__(self, channel: "RainwaveChannel", category_id: int, name: str) -> None:
         self._channel = channel
         self.category_id = category_id
         self.name = name

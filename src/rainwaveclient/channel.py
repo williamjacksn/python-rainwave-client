@@ -31,10 +31,10 @@ class RainwaveChannel(dict):
         obtain one from :attr:`RainwaveClient.channels`.
     """
 
-    def __init__(self, client: "RainwaveClient", raw_info: dict):
+    def __init__(self, client: "RainwaveClient", raw_info: dict) -> None:
         self._client = client
         try:
-            super(RainwaveChannel, self).__init__(raw_info)
+            super().__init__(raw_info)
         except ValueError:
             raise Exception(f"Cannot create channel from raw_info {raw_info!r}")
         self._do_sync = False
@@ -60,7 +60,7 @@ class RainwaveChannel(dict):
     def __str__(self) -> str:
         return f"{self.name}: {self.description}"
 
-    def _do_async_get(self):
+    def _do_async_get(self) -> None:
         if not self._stale():
             return
         d = self.client.call("info", {"sid": self.id}, method="GET")
@@ -73,7 +73,7 @@ class RainwaveChannel(dict):
             self._raw_user_requests = d["requests"]
         post_sync.send(self)
 
-    def _do_sync_thread(self):
+    def _do_sync_thread(self) -> None:
         self._do_sync = True
         while self._do_sync:
             pre_sync.send(self)
@@ -292,13 +292,9 @@ class RainwaveChannel(dict):
 
     @property
     def listeners(self) -> list["RainwaveListener"]:
-        """A list of :class:`RainwaveListener` objects listening to the
-        channel."""
-        _listeners = []
+        """A list of :class:`RainwaveListener` objects listening to the channel."""
         d = self.client.call("current_listeners", {"sid": self.id})
-        for raw_listener in d["current_listeners"]:
-            _listeners.append(RainwaveListener(self, raw_listener))
-        return _listeners
+        return [RainwaveListener(self, x) for x in d["current_listeners"]]
 
     @property
     def name(self) -> str:
@@ -366,29 +362,29 @@ class RainwaveChannel(dict):
 
     @property
     def schedule_history(self) -> list["RainwaveSchedule"]:
-        """A list of the past :class:`RainwaveSchedule` objects for the channel.
-        The events are sorted reverse-chronologically: the first event in the list was the most recent event."""
+        """A list of the past :class:`RainwaveSchedule` objects for the channel. The
+        events are sorted reverse-chronologically: the first event in the list was the
+        most recent event."""
         if self._stale():
             self._do_async_get()
         sched_history = []
         with self._sched_lock:
-            for raw_sched in self._sched_history:
-                sched_history.append(self._new_schedule(raw_sched))
+            sched_history.extend([self._new_schedule(x) for x in self._sched_history])
         return sched_history
 
     @property
     def schedule_next(self) -> list["RainwaveSchedule"]:
-        """A list of the next :class:`RainwaveSchedule` objects for the channel.
-        The events are sorted chronologically: the first event in the list will happen soonest."""
+        """A list of the next :class:`RainwaveSchedule` objects for the channel. The
+        events are sorted chronologically: the first event in the list will happen
+        soonest."""
         if self._stale():
             self._do_async_get()
         sched_next = []
         with self._sched_lock:
-            for raw_sched in self._sched_next:
-                sched_next.append(self._new_schedule(raw_sched))
+            sched_next.extend([self._new_schedule(x) for x in self._sched_next])
         return sched_next
 
-    def start_sync(self):
+    def start_sync(self) -> None:
         """Begin syncing the timeline for the channel."""
 
         self.stop_sync()
@@ -396,7 +392,7 @@ class RainwaveChannel(dict):
         self._sync_thread.daemon = True
         self._sync_thread.start()
 
-    def stop_sync(self):
+    def stop_sync(self) -> None:
         """Stop syncing the timeline for the channel."""
 
         self._do_sync = False

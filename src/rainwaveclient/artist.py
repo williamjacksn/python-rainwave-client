@@ -14,9 +14,9 @@ class RainwaveArtist(dict):
         :attr:`RainwaveSong.artists`.
     """
 
-    def __init__(self, channel: "RainwaveChannel", raw_info: dict):
+    def __init__(self, channel: "RainwaveChannel", raw_info: dict) -> None:
         self._channel = channel
-        super(RainwaveArtist, self).__init__(raw_info)
+        super().__init__(raw_info)
 
     def __repr__(self) -> str:
         return f"<RainwaveArtist [{self}]>"
@@ -49,8 +49,8 @@ class RainwaveArtist(dict):
         """A list of :class:`RainwaveSong` objects attributed to the artist."""
         if "song_objects" not in self:
             self["song_objects"] = []
-            for chan_id, albums in self["all_songs"].items():
-                for album_id, album_songs in albums.items():
+            for albums in self["all_songs"].values():
+                for album_songs in albums.values():
                     for raw_song in album_songs:
                         song = self.channel.get_song_by_id(raw_song["id"])
                         self["song_objects"].append(song)

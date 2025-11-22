@@ -16,38 +16,42 @@ To use, either register a callable using your target signal's
 """
 
 import threading
+import typing
+
+if typing.TYPE_CHECKING:
+    from .channel import RainwaveChannel
 
 
 class Signal:
     """A signal is triggered each time a particular event happens."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.receivers = set()
         self.lock = threading.Lock()
 
-    def connect(self, _receiver):
+    def connect(self, _receiver: typing.Callable) -> None:
         """Add a receiver to the signal."""
 
         with self.lock:
             self.receivers.add(_receiver)
 
-    def disconnect(self, _receiver):
+    def disconnect(self, _receiver: typing.Callable) -> None:
         """Remove a receiver from the signal."""
 
         with self.lock:
             self.receivers.remove(_receiver)
 
-    def send(self, sender, **kwargs):
+    def send(self, sender: "RainwaveChannel", **kwargs: typing.Any) -> None:  # noqa: ANN401
         """Send the signal to all connected receivers."""
 
         for _receiver in self.receivers:
             _receiver(signal=self, sender=sender, **kwargs)
 
 
-def receiver(signal, **kwargs):
+def receiver(signal: "Signal", **kwargs: typing.Any) -> typing.Callable:  # noqa: ANN401
     """Decorator for registering a signal."""
 
-    def decorator(func):
+    def decorator(func: typing.Callable) -> None:
         signal.connect(func, **kwargs)
 
     return decorator

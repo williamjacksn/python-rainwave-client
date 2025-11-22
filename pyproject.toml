@@ -1,6 +1,6 @@
 [build-system]
 build-backend = "uv_build"
-requires = ["uv_build>=0.9.11,<0.10.0"]
+requires = ["uv-build>=0.9.11,<0.10.0"]
 
 [tool.uv.build-backend]
 module-name = "rainwaveclient"
@@ -38,3 +38,6 @@ dev = [
     "sphinx-rtd-theme>=3.0.2",
     "uv-build>=0.9.11",
 ]
+
+[tool.ruff.lint]
+select = ["ANN", "E", "F", "FURB", "I", "PERF", "RUF", "S", "UP"]

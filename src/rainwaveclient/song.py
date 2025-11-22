@@ -16,9 +16,9 @@ class RainwaveSong(dict):
         :attr:`RainwaveArtist.songs`, or some other object.
     """
 
-    def __init__(self, album: "RainwaveAlbum", raw_info: dict):
+    def __init__(self, album: "RainwaveAlbum", raw_info: dict) -> None:
         self._album = album
-        super(RainwaveSong, self).__init__(raw_info)
+        super().__init__(raw_info)
 
     def __len__(self) -> int:
         return self["length"]
@@ -93,7 +93,7 @@ class RainwaveSong(dict):
         return self["fave"]
 
     @fave.setter
-    def fave(self, value: bool):
+    def fave(self, value: bool) -> None:
         value = bool(value)
         if value == self.fave:
             return
@@ -138,7 +138,7 @@ class RainwaveSong(dict):
         return self["rating_user"]
 
     @rating.setter
-    def rating(self, value: float):
+    def rating(self, value: float) -> None:
         if self.rating == value:
             return
         d = self.album.channel.rate(self.id, value)
@@ -148,7 +148,7 @@ class RainwaveSong(dict):
             raise Exception(d["rate_result"]["text"])
 
     @rating.deleter
-    def rating(self):
+    def rating(self) -> None:
         d = self.album.channel.clear_rating(self.id)
         if d["rate_result"]["success"]:
             self["rating_user"] = None
@@ -220,7 +220,7 @@ class RainwaveSong(dict):
         """The URL of more information about the song."""
         return self["url"]
 
-    def request(self):
+    def request(self) -> None:
         """Add the song to the authenticating listener's request queue."""
         self.album.channel.request_song(self.id)
 
@@ -232,8 +232,8 @@ class RainwaveCandidate(RainwaveSong):
 
     def __init__(
         self, album: "RainwaveAlbum", election: "RainwaveElection", raw_info: dict
-    ):
-        super(RainwaveCandidate, self).__init__(album, raw_info)
+    ) -> None:
+        super().__init__(album, raw_info)
         self.election = election
 
     def __repr__(self) -> str:
@@ -259,7 +259,7 @@ class RainwaveCandidate(RainwaveSong):
             return self.album.channel.get_listener_by_id(user_id)
         return None
 
-    def vote(self):
+    def vote(self) -> None:
         """Cast a vote for the candidate."""
         d = self.album.channel.vote(self.entry_id)
         if not d["vote_result"]["success"]:

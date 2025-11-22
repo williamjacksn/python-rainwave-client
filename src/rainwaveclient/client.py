@@ -1,10 +1,9 @@
 import json
 import logging
 import uuid
-
 from urllib.error import HTTPError
-from urllib.request import urlopen, Request
 from urllib.parse import urlencode
+from urllib.request import Request, urlopen
 
 from .channel import RainwaveChannel
 
@@ -27,7 +26,7 @@ class RainwaveClient:
     #: The format string used to build canonical album art URLs.
     art_fmt = "https://rainwave.cc{0}_320.jpg"
 
-    def __init__(self, user_id: int = None, key: str = None):
+    def __init__(self, user_id: int | None = None, key: str | None = None) -> None:
         if user_id is not None:
             self._user_id = int(user_id)
         if key is not None:
@@ -39,7 +38,7 @@ class RainwaveClient:
     def __repr__(self) -> str:
         return f"RainwaveClient(user_id={self.user_id!r}, key={self.key!r})"
 
-    def call(self, path: str, args: dict = None, method: str = "POST") -> dict:
+    def call(self, path: str, args: dict | None = None, method: str = "POST") -> dict:
         # noinspection PyUnresolvedReferences
         """Make a direct call to the API if you know the necessary path and
         arguments.
@@ -48,7 +47,8 @@ class RainwaveClient:
         :type path: str
         :param args: (optional) any arguments required by the API method.
         :type args: dict
-        :param method: (optional) the HTTP method to use for the API call, default `POST`
+        :param method: (optional) the HTTP method to use for the API call,
+            default `POST`
         :type method: str
         :return: The raw data returned from the API call.
         :rtype: dict
@@ -73,10 +73,10 @@ class RainwaveClient:
 
         data = urlencode(args).encode()
         headers = {"user-agent": self.user_agent}
-        req = Request(url=url, data=data, headers=headers, method=method)
+        req = Request(url=url, data=data, headers=headers, method=method)  # noqa: S310
         try:
             log.debug(f"Calling {url}")
-            response = urlopen(req)
+            response = urlopen(req)  # noqa: S310
         except HTTPError as e:
             response = e
         body = response.read().decode(encoding="utf-8")
@@ -111,7 +111,7 @@ class RainwaveClient:
         return self._key
 
     @key.setter
-    def key(self, value: str):
+    def key(self, value: str) -> None:
         self._key = value
 
     @property
@@ -121,5 +121,5 @@ class RainwaveClient:
         return self._user_id
 
     @user_id.setter
-    def user_id(self, value: int):
+    def user_id(self, value: int) -> None:
         self._user_id = value
