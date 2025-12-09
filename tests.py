@@ -402,7 +402,7 @@ class TestRainwaveArtist(unittest.TestCase):
         self.assertEqual(repr(self.a), "<RainwaveArtist [Stephane Bellanger]>")
 
     def test_song_count(self) -> None:
-        self.assertEqual(self.a.song_count, 16)
+        self.assertEqual(self.a.song_count, 12)
 
     def test_songs(self) -> None:
         self.assertIsInstance(self.a.songs, list)
@@ -417,7 +417,7 @@ class TestRainwaveListener(unittest.TestCase):
     listener = rw.channels[4].get_listener_by_id(3)
 
     def test_avatar(self) -> None:
-        _avatar = "https://cdn.discordapp.com/avatars/137745037898416129/81fb3f1e8ee75ec0e18855b630829440.png?size=320"
+        _avatar = "https://cdn.discordapp.com/avatars/137745037898416129/8ce1eddfcb8cf8ba0e5e22b920d3d8af.png?size=1024"
         self.assertEqual(self.listener.avatar, _avatar)
 
     def test_color(self) -> None:
