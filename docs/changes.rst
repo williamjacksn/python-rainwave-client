@@ -4,6 +4,14 @@
 Changes
 =======
 
+2026.0
+======
+
+Released 2026.01.07.
+
+* Remove support for Python 3.8 and 3.9
+* Raise an exception if there is a problem creating a ``RainwaveChannel`` object from the API response
+
 2024.3
 ======
 

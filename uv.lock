@@ -285,7 +285,7 @@ wheels = [
 
 [[package]]
 name = "python-rainwave-client"
-version = "2024.3"
+version = "2026.0"
 source = { editable = "." }
 
 [package.dev-dependencies]
