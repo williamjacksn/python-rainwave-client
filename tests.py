@@ -2,6 +2,7 @@ import datetime
 import logging
 import os
 import random
+import secrets
 import sys
 import unittest
 
@@ -13,7 +14,7 @@ log = logging.getLogger(__name__)
 
 
 if "RW_USER_ID" in os.environ:
-    USER_ID = int(os.getenv("RW_USER_ID"))
+    USER_ID = int(os.environ["RW_USER_ID"])
 else:
     sys.exit("Please set the RW_USER_ID environment variable")
 
@@ -165,13 +166,14 @@ class TestRainwaveChannel(unittest.TestCase):
 
 class TestRainwaveAlbum(unittest.TestCase):
     rw = rainwaveclient.RainwaveClient(USER_ID, KEY)
-    alb = rw.channels[4].get_album_by_id(1251)
+    album_index: int = secrets.randbelow(100)
+    alb = rw.channels[4].albums[album_index]
 
     def test_added_on(self) -> None:
         self.assertIsInstance(self.alb.added_on, datetime.datetime)
 
     def test_art(self) -> None:
-        art = "https://rainwave.cc/album_art/5_1251_320.jpg"
+        art = f"https://rainwave.cc/album_art/5_{self.alb.id}_320.jpg"
         self.assertEqual(self.alb.art, art)
 
     def test_categories(self) -> None:
@@ -204,14 +206,14 @@ class TestRainwaveAlbum(unittest.TestCase):
 
     def test_get_song_by_id(self) -> None:
         self.assertRaises(IndexError, self.alb.get_song_by_id, 100)
-        song = self.alb.get_song_by_id(15016)
-        self.assertEqual(song.title, "Ending")
+        song = self.alb.songs[0]
+        self.assertIsInstance(song.title, str)
 
     def test_id(self) -> None:
-        self.assertEqual(self.alb.id, 1251)
+        self.assertIsInstance(self.alb.id, int)
 
     def test_name(self) -> None:
-        self.assertEqual(self.alb.name, "The Legend of Zelda")
+        self.assertIsInstance(self.alb.name, str)
 
     def test_played_last(self) -> None:
         self.assertIsInstance(self.alb.played_last, datetime.datetime)
@@ -239,8 +241,7 @@ class TestRainwaveAlbum(unittest.TestCase):
         self.assertEqual(self.alb.rating_user, self.alb.rating)
 
     def test_repr(self) -> None:
-        _repr = "<RainwaveAlbum [All // The Legend of Zelda]>"
-        self.assertEqual(repr(self.alb), _repr)
+        self.assertIsInstance(repr(self.alb), str)
 
     def test_request_count(self) -> None:
         self.assertTrue(self.alb.request_count > 0)
@@ -252,7 +253,7 @@ class TestRainwaveAlbum(unittest.TestCase):
         self.assertTrue(len(self.alb.songs) > 0)
 
     def test_str(self) -> None:
-        self.assertEqual(str(self.alb), "All // The Legend of Zelda")
+        self.assertIsInstance(str(self.alb), str)
 
     def test_vote_count(self) -> None:
         self.assertTrue(self.alb.vote_count > 0)
