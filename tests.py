@@ -418,7 +418,7 @@ class TestRainwaveListener(unittest.TestCase):
     listener = rw.channels[4].get_listener_by_id(3)
 
     def test_avatar(self) -> None:
-        _avatar = "https://cdn.discordapp.com/avatars/137745037898416129/8ce1eddfcb8cf8ba0e5e22b920d3d8af.png?size=1024"
+        _avatar = "https://cdn.discordapp.com/avatars/137745037898416129/8ce1eddfcb8cf8ba0e5e22b920d3d8af.png?size=320"
         self.assertEqual(self.listener.avatar, _avatar)
 
     def test_color(self) -> None:
