@@ -54,7 +54,7 @@ class TestRainwaveClient(unittest.TestCase):
         self.rw.key = KEY
 
     def test_channel_count(self) -> None:
-        self.assertEqual(len(self.rw.channels), 5)
+        self.assertEqual(len(self.rw.channels), 6)
 
 
 class TestRainwaveChannel(unittest.TestCase):
