@@ -1,4 +1,4 @@
-name: Deploy documentation to GitHub Pages
+name: Publish documentation
 
 on:
   push:
@@ -11,7 +11,8 @@ concurrency:
   group: github-pages
 
 jobs:
-  deploy:
+  publish:
+    name: Publish documentation
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
