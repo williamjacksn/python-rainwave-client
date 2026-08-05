@@ -33,7 +33,7 @@ email = "william@subtlecoolness.com"
 [dependency-groups]
 dev = [
     "notch>=2025.2",
-    "ruff>=0.14.6",
+    "ruff>=0.16.1",
     "sphinx>=7.4.7",
     "sphinx-rtd-theme>=3.0.2",
     "ty>=0.0.9",
@@ -41,4 +41,4 @@ dev = [
 ]
 
 [tool.ruff.lint]
-select = ["ANN", "E", "F", "FURB", "I", "PERF", "RUF", "S", "UP"]
+extend-select = ["ANN", "Q", "RSE", "S"]

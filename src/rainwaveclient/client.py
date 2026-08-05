@@ -97,7 +97,7 @@ class RainwaveClient:
                 raise Exception
 
         if self._channels is None:
-            self._channels = list()
+            self._channels = []
             for raw_channel in self._raw_channels:
                 new_channel = RainwaveChannel(self, raw_channel)
                 self._channels.append(new_channel)
