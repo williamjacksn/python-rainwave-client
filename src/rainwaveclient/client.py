@@ -6,6 +6,7 @@ from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 from .channel import RainwaveChannel
+from .exceptions import RainwaveException
 
 log = logging.getLogger(__name__)
 
@@ -94,7 +95,7 @@ class RainwaveClient:
             if "stations" in d:
                 self._raw_channels = d["stations"]
             else:
-                raise Exception
+                raise RainwaveException
 
         if self._channels is None:
             self._channels = []

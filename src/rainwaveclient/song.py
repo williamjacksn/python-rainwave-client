@@ -1,6 +1,7 @@
 import typing
 
 from .category import RainwaveCategory
+from .exceptions import RainwaveException
 
 if typing.TYPE_CHECKING:
     from . import RainwaveAlbum, RainwaveArtist, RainwaveElection, RainwaveListener
@@ -101,7 +102,7 @@ class RainwaveSong(dict):
         if d["fave_song_result"]["success"]:
             self["fave"] = value
         else:
-            raise Exception(d["fave_song_result"]["text"])
+            raise RainwaveException(d["fave_song_result"]["text"])
 
     @property
     def id(self) -> int:
@@ -145,7 +146,7 @@ class RainwaveSong(dict):
         if d["rate_result"]["success"]:
             self["rating_user"] = value
         else:
-            raise Exception(d["rate_result"]["text"])
+            raise RainwaveException(d["rate_result"]["text"])
 
     @rating.deleter
     def rating(self) -> None:
@@ -153,7 +154,7 @@ class RainwaveSong(dict):
         if d["rate_result"]["success"]:
             self["rating_user"] = None
         else:
-            raise Exception(d["rate_result"]["text"])
+            raise RainwaveException(d["rate_result"]["text"])
 
     @property
     def rating_allowed(self) -> bool:
@@ -263,7 +264,7 @@ class RainwaveCandidate(RainwaveSong):
         """Cast a vote for the candidate."""
         d = self.album.channel.vote(self.entry_id)
         if not d["vote_result"]["success"]:
-            raise Exception(d["vote_result"]["text"])
+            raise RainwaveException(d["vote_result"]["text"])
 
     @property
     def votes(self) -> int:

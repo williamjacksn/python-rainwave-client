@@ -3,6 +3,7 @@ from .artist import RainwaveArtist
 from .category import RainwaveCategory
 from .channel import RainwaveChannel
 from .client import RainwaveClient
+from .exceptions import RainwaveException
 from .listener import RainwaveListener
 from .request import RainwaveRequest, RainwaveUserRequest, RainwaveUserRequestQueue
 from .schedule import RainwaveElection, RainwaveOneTimePlay, RainwaveSchedule
@@ -16,6 +17,7 @@ __all__ = [
     "RainwaveChannel",
     "RainwaveClient",
     "RainwaveElection",
+    "RainwaveException",
     "RainwaveListener",
     "RainwaveOneTimePlay",
     "RainwaveRequest",

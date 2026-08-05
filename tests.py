@@ -81,7 +81,7 @@ class TestRainwaveChannel(unittest.TestCase):
         self.assertEqual(self.chan.client, self.rw)
 
     def test_delete_request(self) -> None:
-        self.assertRaises(Exception, self.chan.delete_request, 1)
+        self.assertRaises(rainwaveclient.RainwaveException, self.chan.delete_request, 1)
 
     def test_description(self) -> None:
         desc = (
@@ -135,10 +135,14 @@ class TestRainwaveChannel(unittest.TestCase):
         self.assertTrue(self.chan.ogg_stream.startswith(stream))
 
     def test_reorder_requests(self) -> None:
-        self.assertRaises(Exception, self.chan.reorder_requests, [])
+        self.assertRaises(
+            rainwaveclient.RainwaveException, self.chan.reorder_requests, []
+        )
 
     def test_request_song(self) -> None:
-        self.assertRaises(Exception, self.chan.request_song, 999999)
+        self.assertRaises(
+            rainwaveclient.RainwaveException, self.chan.request_song, 999999
+        )
 
     def test_requests(self) -> None:
         self.assertTrue(len(self.chan.requests) > 0)
@@ -329,7 +333,7 @@ class TestRainwaveSong(unittest.TestCase):
         def bad_rate() -> None:
             self.song.rating = 6
 
-        self.assertRaises(Exception, bad_rate)
+        self.assertRaises(rainwaveclient.RainwaveException, bad_rate)
 
     def test_rating_set_same(self) -> None:
         self.song.rating = 3
@@ -520,7 +524,7 @@ class TestRainwaveCandidate(unittest.TestCase):
             self.skipTest(f"{int(time_left.total_seconds())} left, skipping vote test")
         try:
             self.cand.vote()
-        except Exception as e:
+        except rainwaveclient.RainwaveException as e:
             if "You must be tuned in." in str(e):
                 self.skipTest("Test user is not tuned in")
 
@@ -559,8 +563,8 @@ class TestRainwaveUserRequest(unittest.TestCase):
         urq = self.chan.user_requests
         if len(urq) < 1:
             self.skipTest("Nothing in the user request queue")
-        self.assertRaises(Exception, urq.reorder, [99])
-        self.assertRaises(Exception, urq.reorder, [98, 99])
+        self.assertRaises(rainwaveclient.RainwaveException, urq.reorder, [99])
+        self.assertRaises(rainwaveclient.RainwaveException, urq.reorder, [98, 99])
         indices = list(range(len(urq)))
         random.shuffle(indices)
         urq.reorder(indices)

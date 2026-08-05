@@ -6,6 +6,7 @@ import typing
 from .album import RainwaveAlbum
 from .artist import RainwaveArtist
 from .dispatch import Signal
+from .exceptions import RainwaveException
 from .listener import RainwaveListener
 from .request import RainwaveRequest, RainwaveUserRequest, RainwaveUserRequestQueue
 from .schedule import RainwaveElection, RainwaveOneTimePlay
@@ -36,7 +37,7 @@ class RainwaveChannel(dict):
         try:
             super().__init__(raw_info)
         except ValueError:
-            raise Exception(f"Cannot create channel from raw_info {raw_info!r}")
+            raise RainwaveException(f"Cannot create channel from raw_info {raw_info!r}")
         self._do_sync = False
         self._sync_thread = None
 
@@ -173,7 +174,7 @@ class RainwaveChannel(dict):
                 self._raw_user_requests = d["requests"]
             return d
         else:
-            raise Exception(d["delete_request_result"]["text"])
+            raise RainwaveException(d["delete_request_result"]["text"])
 
     @property
     def description(self) -> str:
@@ -319,7 +320,7 @@ class RainwaveChannel(dict):
                 self._raw_user_requests = d["requests"]
             return d
         else:
-            raise Exception(d["order_requests_result"]["text"])
+            raise RainwaveException(d["order_requests_result"]["text"])
 
     def request_song(self, song_id: int) -> dict:
         args = {"song_id": song_id, "sid": self.id}
@@ -329,7 +330,7 @@ class RainwaveChannel(dict):
                 self._raw_user_requests = d["requests"]
             return d
         else:
-            raise Exception(d["request_result"]["text"])
+            raise RainwaveException(d["request_result"]["text"])
 
     def clear_requests(self) -> dict:
         return self.client.call("clear_requests", {"sid": self.id})

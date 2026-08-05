@@ -1,5 +1,6 @@
 import typing
 
+from .exceptions import RainwaveException
 from .song import RainwaveSong
 
 if typing.TYPE_CHECKING:
@@ -101,8 +102,8 @@ class RainwaveUserRequestQueue(list):
         """
 
         if set(order) != set(range(len(self))):
-            raise Exception("Incorrect indices.")
+            raise RainwaveException("Incorrect indices.")
         if len(order) != len(set(order)):
-            raise Exception("Wrong number of indices.")
+            raise RainwaveException("Wrong number of indices.")
         song_ids = ",".join([str(self[i].id) for i in order])
         self._channel.reorder_requests(song_ids)

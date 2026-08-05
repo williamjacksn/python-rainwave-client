@@ -2,6 +2,7 @@ import datetime
 import typing
 
 from .category import RainwaveCategory
+from .exceptions import RainwaveException
 
 if typing.TYPE_CHECKING:
     from . import RainwaveChannel, RainwaveSong
@@ -97,7 +98,7 @@ class RainwaveAlbum(dict):
         if d["fave_album_result"]["success"]:
             self["fave"] = value
         else:
-            raise Exception(d["fave_album_result"]["text"])
+            raise RainwaveException(d["fave_album_result"]["text"])
 
     @property
     def fave_count(self) -> int:
