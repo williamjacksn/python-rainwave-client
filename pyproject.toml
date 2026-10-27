@@ -36,7 +36,7 @@ dev = [
     "ruff>=0.17.3",
     "sphinx>=8.1.3",
     "sphinx-rtd-theme>=3.1.0",
-    "ty>=0.0.77",
+    "ty>=0.0.92",
     "uv-build>=0.12.8",
 ]
 
