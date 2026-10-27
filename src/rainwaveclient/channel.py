@@ -1,4 +1,4 @@
-import datetime
+import datetime as dt
 import logging
 import threading
 import typing
@@ -120,9 +120,9 @@ class RainwaveChannel(dict):
 
         if len(self._sched_next) < 1:
             return True
-        now = datetime.datetime.now(datetime.timezone.utc)
+        now = dt.datetime.now(dt.timezone.utc)
         ts = self._sched_current["end"]
-        ts = datetime.datetime.fromtimestamp(ts, datetime.timezone.utc)
+        ts = dt.datetime.fromtimestamp(ts, dt.timezone.utc)
         return now > ts
 
     @property

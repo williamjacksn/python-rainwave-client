@@ -1,4 +1,4 @@
-import datetime
+import datetime as dt
 import logging
 import os
 import random
@@ -174,7 +174,7 @@ class TestRainwaveAlbum(unittest.TestCase):
     alb = rw.channels[4].albums[album_index]
 
     def test_added_on(self) -> None:
-        self.assertIsInstance(self.alb.added_on, datetime.datetime)
+        self.assertIsInstance(self.alb.added_on, dt.datetime)
 
     def test_art(self) -> None:
         art = f"https://rainwave.cc/album_art/5_{self.alb.id}_320.jpg"
@@ -190,7 +190,7 @@ class TestRainwaveAlbum(unittest.TestCase):
         self.assertIsInstance(self.alb.cool, bool)
 
     def test_cool_lowest(self) -> None:
-        self.assertIsInstance(self.alb.cool_lowest, datetime.datetime)
+        self.assertIsInstance(self.alb.cool_lowest, dt.datetime)
 
     def test_fave(self) -> None:
         self.assertFalse(self.alb.fave)
@@ -220,7 +220,7 @@ class TestRainwaveAlbum(unittest.TestCase):
         self.assertIsInstance(self.alb.name, str)
 
     def test_played_last(self) -> None:
-        self.assertIsInstance(self.alb.played_last, datetime.datetime)
+        self.assertIsInstance(self.alb.played_last, dt.datetime)
 
     @unittest.skip("Still not sure why this is not working.")
     def test_rating(self) -> None:
@@ -518,8 +518,8 @@ class TestRainwaveCandidate(unittest.TestCase):
         self.cand: rainwaveclient.RainwaveCandidate = (
             self.rw.channels[4].schedule_next[0].candidates[0]
         )
-        now = datetime.datetime.now(datetime.timezone.utc)
-        time_left: datetime.timedelta = current.end - now
+        now = dt.datetime.now(dt.timezone.utc)
+        time_left: dt.timedelta = current.end - now
         if int(time_left.total_seconds()) < 10:
             self.skipTest(f"{int(time_left.total_seconds())} left, skipping vote test")
         try:
@@ -583,18 +583,16 @@ class TestRainwaveSchedule(unittest.TestCase):
 
     def test_start(self) -> None:
         event = self.rw.channels[4].schedule_current
-        self.assertIsInstance(event.start, datetime.datetime)
+        self.assertIsInstance(event.start, dt.datetime)
 
     def test_start_actual_current(self) -> None:
         event = self.rw.channels[4].schedule_current
-        self.assertIsInstance(event.start_actual, datetime.datetime)
-        self.assertGreater(
-            datetime.datetime.now(datetime.timezone.utc), event.start_actual
-        )
+        self.assertIsInstance(event.start_actual, dt.datetime)
+        self.assertGreater(dt.datetime.now(dt.timezone.utc), event.start_actual)
 
     def test_start_actual_history(self) -> None:
         event = self.rw.channels[4].schedule_history[0]
-        self.assertIsInstance(event.start_actual, datetime.datetime)
+        self.assertIsInstance(event.start_actual, dt.datetime)
 
     def test_start_actual_next(self) -> None:
         event = self.rw.channels[4].schedule_next[0]

@@ -1,4 +1,4 @@
-import datetime
+import datetime as dt
 import typing
 
 from .category import RainwaveCategory
@@ -38,12 +38,12 @@ class RainwaveAlbum(dict):
         return self.channel.client.art_fmt.format(self["art"])
 
     @property
-    def added_on(self) -> datetime.datetime:
+    def added_on(self) -> dt.datetime:
         """A :class:`datetime.datetime` object specifying when the album was
         added to the playlist."""
         if "added_on" not in self:
             self._update()
-        return datetime.datetime.fromtimestamp(self["added_on"], datetime.timezone.utc)
+        return dt.datetime.fromtimestamp(self["added_on"], dt.timezone.utc)
 
     @property
     def categories(self) -> list["RainwaveCategory"]:
@@ -73,14 +73,12 @@ class RainwaveAlbum(dict):
         return self["cool"]
 
     @property
-    def cool_lowest(self) -> datetime.datetime:
+    def cool_lowest(self) -> dt.datetime:
         """A :class:`datetime.datetime` object specifying the earliest date and
         time a song on the album will be out of cooldown and available to play.
         If any song on the album is already available, :attr:`cool_lowest` will
         be in the past."""
-        return datetime.datetime.fromtimestamp(
-            self["cool_lowest"], datetime.timezone.utc
-        )
+        return dt.datetime.fromtimestamp(self["cool_lowest"], dt.timezone.utc)
 
     @property
     def fave(self) -> bool:
@@ -118,14 +116,12 @@ class RainwaveAlbum(dict):
         return self["name"]
 
     @property
-    def played_last(self) -> datetime.datetime:
+    def played_last(self) -> dt.datetime:
         """A :class:`datetime.datetime` object specifying the most recent date
         and time when a song on the album played."""
         if "played_last" not in self:
             self._update()
-        return datetime.datetime.fromtimestamp(
-            self["played_last"], datetime.timezone.utc
-        )
+        return dt.datetime.fromtimestamp(self["played_last"], dt.timezone.utc)
 
     @property
     def rating(self) -> float:
